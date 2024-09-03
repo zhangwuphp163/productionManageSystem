@@ -48,7 +48,8 @@ class CategoryController extends AdminController
             $actions->quickEdit();
             //$actions->disableDelete();
         });
-
+        $grid->enableDialogCreate();
+        $grid->showColumnSelector();
         $grid->tools(function (Grid\Tools $tools) {
             $tools->batch(function (Grid\Tools\BatchActions $actions) {
                 $actions->disableDelete();

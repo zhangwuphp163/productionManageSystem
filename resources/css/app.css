@@ -1,0 +1,4 @@
+.quick-edit-modal .modal-body {
+    max-height: 500px; /* 设置最大高度 */
+    overflow-y: auto; /* 如果内容超出高度，则显示滚动条 */
+}
