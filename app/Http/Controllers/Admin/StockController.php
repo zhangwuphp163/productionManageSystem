@@ -3,12 +3,15 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Category;
+use App\Models\Sku;
 use App\Models\Stock;
 use Carbon\Carbon;
 use Dcat\Admin\Form;
 use Dcat\Admin\Grid;
 use Dcat\Admin\Http\Controllers\AdminController;
 use Dcat\Admin\Http\Controllers\HasResourceActions;
+use Illuminate\Http\Request;
+use Symfony\Component\Console\Input\Input;
 
 
 class StockController extends AdminController
@@ -36,13 +39,10 @@ class StockController extends AdminController
 
 
         $grid->column('qty', "数量")->if(function ($column) {
-
-            return $column->getValue() > 0;
-        })
-
-            ->label('#222')
-            ->else()
-            ->label('danger');
+            return $this->type == 'inbound';
+        })->label('#222')->else()->display(function($qty){
+            return 0-$qty;
+        })->label('danger');
 
             /*->display(function($qty){
 
@@ -58,13 +58,22 @@ class StockController extends AdminController
         $grid->actions(function (Grid\Displayers\Actions $actions) {
             $actions->disableView();
             $actions->disableEdit();
+            $actions->quickEdit();
             //$actions->disableDelete();
         });
-
-        $grid->tools(function (Grid\Tools $tools) {
+        /*$grid->tools(function (Grid\Tools $tools) {
             $tools->batch(function (Grid\Tools\BatchActions $actions) {
-                $actions->disableDelete();
+                $actions->disableDelete(false);
             });
+        });*/
+        $grid->filter(function($filter){
+            // 展开过滤器
+            //$filter->expand(false);
+            //$filter->rightSide();
+            $filter->panel();
+            $filter->like('sku.name', '商品名称')->width(3);
+            $filter->in('type')->multipleSelect(['inbound' => '入库','outbound' => '出库'])->width(3);;
+
         });
 
         return $grid;
@@ -74,7 +83,9 @@ class StockController extends AdminController
         return Form::make(new Stock(), function (Form $form) {
             //$id = $form->getKey();
             $form->display('id', 'ID');
-            $form->text('name', "品类名称")->required();
+            $form->text('sku.name', "商品名称")->required();
+            $form->number('qty')->required();
+            $form->select('type')->options(['inbound' => '入库','outbound' => '出库'])->required();
         });
     }
 

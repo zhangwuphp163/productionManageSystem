@@ -12,6 +12,7 @@ use Dcat\Admin\Grid;
 use Dcat\Admin\Http\Controllers\AdminController;
 use Dcat\Admin\Http\Controllers\HasResourceActions;
 use Dcat\Admin\Layout\Content;
+use Dcat\Admin\Show;
 use Dcat\Admin\Widgets\Modal;
 
 class SkuController extends AdminController
@@ -30,12 +31,12 @@ class SkuController extends AdminController
 
     protected function grid()
     {
-
-        $grid = new Grid(new Sku());
+        $grid = Grid::make(new Sku(),function (Grid $grid){
+            $grid->model()->with('category');
+        });
         $grid->selector(function (Grid\Tools\Selector $selector) {
             $selector->select('category_id', '品类', Category::query()->pluck('name','id')->toArray());
         });
-        //$grid->quickSearch();
         $grid->quickSearch(function ($model, $query) {
             $model->where('name', 'like', "%{$query}%");
         });
@@ -48,14 +49,9 @@ class SkuController extends AdminController
         $grid->column('category.name', "品类名称");//->select(Category::query()->pluck('name','id')->toArray());
         $grid->column('name', "商品名称")->editable();
         $grid->stocks("在库数量")->display(function ($stocks){
-            return $stocks->sum('qty');
-        })->modal("库存详情",function($modal){
-            //dd($modal->row->stocks);
-
+            return $stocks->where('type','inbound')->sum('qty') - $stocks->where('type','outbound')->sum('qty');
         });
 
-        /*$grid->column('name', trans('admin.name'));
-        $grid->column('roles', trans('admin.roles'))->pluck('name')->label();*/
         $grid->column('created_at', "创建时间")->display(function ($created_at) {
             return Carbon::parse($created_at)->format('Y-m-d H:i:s');
         });
@@ -63,13 +59,15 @@ class SkuController extends AdminController
             return Carbon::parse($updated_at)->format('Y-m-d H:i:s');
         });
 
-        $grid->disableCreateButton();
-
+        //$grid->disableCreateButton();
+        $grid->enableDialogCreate();
+        $grid->showColumnSelector();
 
         $grid->actions(function (Grid\Displayers\Actions $actions) {
             $actions->disableView();
+            $actions->quickEdit();
+            //$actions->disableDelete();
             $actions->disableEdit();
-            $actions->disableDelete();
             $actions->append(new \App\Admin\Actions\Grid\Stock());
         });
 
@@ -79,6 +77,15 @@ class SkuController extends AdminController
             });
         });
 
+        $grid->filter(function($filter){
+            // 展开过滤器
+            //$filter->expand(false);
+            //$filter->rightSide();
+            $filter->panel();
+            $filter->like('name', '商品名称')->width(3);
+        });
+
+
         return $grid;
     }
     public function form()
@@ -87,7 +94,17 @@ class SkuController extends AdminController
             //$id = $form->getKey();
             $form->display('id', 'ID');
             $form->text('name', "商品名称")->required();
-            $form->selectTable('category_id', Category::query()->pluck('name','id'))->required();
+            $form->select('category_id','品类')->options(Category::query()->pluck('name','id'))->required();
+        });
+    }
+    protected function detail($id)
+    {
+        return Show::make($id, Sku::with(['category']), function (Show $show) {
+            $show->field('id');
+            $show->field('category.name');
+            $show->field('name');
+            $show->field('created_at');
+            $show->field('updated_at');
         });
     }
 }

@@ -41,11 +41,12 @@ class CategoryController extends AdminController
             return Carbon::parse($updated_at)->format('Y-m-d H:i:s');
         });
 
-        $grid->disableCreateButton();
+        //$grid->disableCreateButton();
         $grid->actions(function (Grid\Displayers\Actions $actions) {
             $actions->disableView();
             $actions->disableEdit();
-            $actions->disableDelete();
+            $actions->quickEdit();
+            //$actions->disableDelete();
         });
 
         $grid->tools(function (Grid\Tools $tools) {

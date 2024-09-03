@@ -23,9 +23,9 @@ class StockForm extends Form
 
         $sku = Sku::query()->find($id);
 
-        if($type == 'outbound'){
+        /*if($type == 'outbound'){
             $qty = 0 - $qty;
-        }
+        }*/
         Stock::create([
             'sku_id' => $sku->id,
             'qty' => $qty,
