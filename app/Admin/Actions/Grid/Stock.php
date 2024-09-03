@@ -2,7 +2,6 @@
 
 namespace App\Admin\Actions\Grid;
 
-use App\Admin\Forms\InboundForm;
 use App\Admin\Forms\StockForm;
 use Dcat\Admin\Grid\RowAction;
 use Dcat\Admin\Widgets\Modal;

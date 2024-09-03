@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\Category;
+use App\Admin\Extendsions\Tools\BatchAddStock;
+use App\Admin\Extendsions\Tools\BatchDeleteStock;
 use App\Models\Sku;
 use App\Models\Stock;
 use Carbon\Carbon;
@@ -10,17 +11,24 @@ use Dcat\Admin\Form;
 use Dcat\Admin\Grid;
 use Dcat\Admin\Http\Controllers\AdminController;
 use Dcat\Admin\Http\Controllers\HasResourceActions;
-use Illuminate\Http\Request;
-use Symfony\Component\Console\Input\Input;
+use Dcat\Admin\Layout\Content;
 
 
 class StockController extends AdminController
 {
     use HasResourceActions;
     protected $title = "库存管理";
+    public function index(Content $content)
+    {
+        return $content
+            ->translation($this->translation())
+            ->title($this->title())
+            ->description("列表")
+            ->body($this->grid())
+            ->view("admin.stock.index");
+    }
     protected function grid()
     {
-
         $grid = new Grid(new Stock());
         $grid->column('id', 'ID')->sortable();
         $grid->column('sku.name', "商品名称")->filter(
@@ -54,18 +62,25 @@ class StockController extends AdminController
             return Carbon::parse($updated_at)->format('Y-m-d H:i:s');
         });
 
-        $grid->disableCreateButton();
+        //$grid->disableCreateButton();
+        $grid->enableDialogCreate();
         $grid->actions(function (Grid\Displayers\Actions $actions) {
             $actions->disableView();
             $actions->disableEdit();
             $actions->quickEdit();
             //$actions->disableDelete();
         });
-        /*$grid->tools(function (Grid\Tools $tools) {
+        $grid->tools(function (Grid\Tools $tools) {
             $tools->batch(function (Grid\Tools\BatchActions $actions) {
-                $actions->disableDelete(false);
+                $actions->disableDelete();
+                $actions->add(new BatchDeleteStock('批量删除'));
+                $actions->add(new BatchAddStock('批量操作'));
             });
-        });*/
+        });
+        //$grid->tools('<a class="btn btn-primary disable-outline">测试按钮</a>');
+        //$grid->tools(new \App\Admin\Extendsions\Tools\UserGender());
+        //$grid->tools(new BatchAddStock());
+
         $grid->filter(function($filter){
             // 展开过滤器
             //$filter->expand(false);
@@ -75,6 +90,9 @@ class StockController extends AdminController
             $filter->in('type')->multipleSelect(['inbound' => '入库','outbound' => '出库'])->width(3);;
 
         });
+        //$grid->export();
+
+
 
         return $grid;
     }
@@ -83,9 +101,10 @@ class StockController extends AdminController
         return Form::make(new Stock(), function (Form $form) {
             //$id = $form->getKey();
             $form->display('id', 'ID');
-            $form->text('sku.name', "商品名称")->required();
+            $form->select('sku_id', "商品名称")->options(Sku::query()->pluck('name','id')->toArray())->required();
             $form->number('qty')->required();
             $form->select('type')->options(['inbound' => '入库','outbound' => '出库'])->required();
+            //$form->hidden('inbound_at')->default(Carbon::now());
         });
     }
 

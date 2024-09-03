@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Admin\Extendsions\Tools\BatchAddStock;
 use App\Admin\Forms\InboundForm;
+use App\Admin\Renderable\StockTable;
 use App\Models\Category;
 use App\Models\Sku;
 use App\Models\Stock;
@@ -50,6 +52,8 @@ class SkuController extends AdminController
         $grid->column('name', "商品名称")->editable();
         $grid->stocks("在库数量")->display(function ($stocks){
             return $stocks->where('type','inbound')->sum('qty') - $stocks->where('type','outbound')->sum('qty');
+        })->modal('库存详情',function($modal){
+            return StockTable::make()->payload(['sku_id' => $modal->getKey()]);
         });
 
         $grid->column('created_at', "创建时间")->display(function ($created_at) {
@@ -74,8 +78,10 @@ class SkuController extends AdminController
         $grid->tools(function (Grid\Tools $tools) {
             $tools->batch(function (Grid\Tools\BatchActions $actions) {
                 $actions->disableDelete();
+                $actions->add(new BatchAddStock("批量库存操作"));
             });
         });
+
 
         $grid->filter(function($filter){
             // 展开过滤器

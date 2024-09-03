@@ -29,7 +29,7 @@ class StockForm extends Form
         Stock::create([
             'sku_id' => $sku->id,
             'qty' => $qty,
-            'inbound_at' => Carbon::now(),
+            //'inbound_at' => Carbon::now(),
             'type' => $type
         ]);
 

@@ -17,7 +17,7 @@ class CreateStocksTable extends Migration
             $table->id();
             $table->unsignedInteger('sku_id')->index();
             $table->integer('qty')->default(0);
-            $table->timestamp('inbound_at')->index();
+            //$table->timestamp('inbound_at')->index();
             $table->string('type',32)->default('inbound')->index();
             $table->timestamps();
             $table->softDeletes();
