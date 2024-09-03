@@ -8,9 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 class Sku extends Model
 {
     use HasFactory;
-    protected $with = ['category'];
+
     public function category()
     {
         return $this->belongsTo(Category::class);
+    }
+    public function stocks(){
+        return $this->hasMany(Stock::class);
     }
 }

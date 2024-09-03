@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\SkuController;
+use App\Http\Controllers\Admin\StockController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -26,4 +27,8 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin'], function () {
     Route::get('/skus', [SkuController::class,'index'])->name('admin.skus');
     Route::post('/skus', [SkuController::class,'store'])->name('admin.skus.store');
     Route::put('/skus/{id}', [SkuController::class,'update'])->name('admin.skus.update');
+
+    Route::get('/stocks', [StockController::class,'index'])->name('admin.stocks');
+    Route::delete('/stocks/{id}', [StockController::class,'destroy'])->name('admin.stocks.destroy');
+
 });

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Admin\Forms\InboundForm;
 use App\Models\Category;
 use App\Models\Sku;
+use App\Models\Stock;
 use Carbon\Carbon;
 use Dcat\Admin\Form;
 use Dcat\Admin\Grid;
@@ -46,6 +47,13 @@ class SkuController extends AdminController
         $grid->column('id', 'ID')->sortable();
         $grid->column('category.name', "品类名称");//->select(Category::query()->pluck('name','id')->toArray());
         $grid->column('name', "商品名称")->editable();
+        $grid->stocks("在库数量")->display(function ($stocks){
+            return $stocks->sum('qty');
+        })->modal("库存详情",function($modal){
+            //dd($modal->row->stocks);
+
+        });
+
         /*$grid->column('name', trans('admin.name'));
         $grid->column('roles', trans('admin.roles'))->pluck('name')->label();*/
         $grid->column('created_at', "创建时间")->display(function ($created_at) {
@@ -62,7 +70,7 @@ class SkuController extends AdminController
             $actions->disableView();
             $actions->disableEdit();
             $actions->disableDelete();
-            $actions->append(new \App\Admin\Actions\Grid\Inbound());
+            $actions->append(new \App\Admin\Actions\Grid\Stock());
         });
 
         $grid->tools(function (Grid\Tools $tools) {
