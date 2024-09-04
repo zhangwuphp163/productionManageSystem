@@ -3,11 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Admin\Extendsions\Tools\BatchAddStock;
-use App\Admin\Forms\InboundForm;
 use App\Admin\Renderable\StockTable;
 use App\Models\Category;
 use App\Models\Sku;
-use App\Models\Stock;
 use Carbon\Carbon;
 use Dcat\Admin\Form;
 use Dcat\Admin\Grid;
@@ -15,7 +13,6 @@ use Dcat\Admin\Http\Controllers\AdminController;
 use Dcat\Admin\Http\Controllers\HasResourceActions;
 use Dcat\Admin\Layout\Content;
 use Dcat\Admin\Show;
-use Dcat\Admin\Widgets\Modal;
 
 class SkuController extends AdminController
 {
@@ -42,6 +39,8 @@ class SkuController extends AdminController
         $grid->quickSearch(function ($model, $query) {
             $model->where('name', 'like', "%{$query}%");
         });
+        //$grid->disableRowSelector();
+        $grid->rowSelector()->titleColumn("name");
         $grid->quickCreate(function (Grid\Tools\QuickCreate $create) {
             $create->select('category_id', '品类')->options(Category::query()->pluck('name','id')->toArray());
             $create->text('name', '商品名称');
@@ -78,11 +77,31 @@ class SkuController extends AdminController
         $grid->tools(function (Grid\Tools $tools) {
             $tools->batch(function (Grid\Tools\BatchActions $actions) {
                 $actions->disableDelete();
-                $actions->add(new BatchAddStock("批量库存操作"));
+                //$actions->add(new BatchAddStock("批量库存操作"));
+                $actions->disable(false);
             });
         });
 
+        //$grid->tools("<span class='btn btn-outline-primary create-form'> &nbsp;&nbsp;&nbsp;批量库存操作&nbsp;&nbsp;&nbsp; </span> &nbsp;&nbsp;");
+        $grid->tools(function (Grid\Tools $tools) {
+            $tools->append('<a href="javascript:void(0);" class="btn btn-outline-primary batch-edit">&nbsp;&nbsp;&nbsp;批量编辑&nbsp;&nbsp;&nbsp;</a>');
+        });
 
+
+        /*$grid->script('init', "
+            $('.batch-edit').on('click', function () {
+            alert(213);
+                var ids = [];
+                $('.grid-row-checkbox.checked').each(function () {
+                    ids.push($(this).data('id'));
+                });
+
+                // 使用ids进行进一步操作，如打开模态框并显示这些ID
+                console.log(ids);
+                // 示例：打开模态框，并传递ids到模态框中
+                // $('#myModal').modal('show').find('#selected-ids').val(ids.join(','));
+            });
+        ");*/
         $grid->filter(function($filter){
             // 展开过滤器
             //$filter->expand(false);
@@ -90,8 +109,10 @@ class SkuController extends AdminController
             $filter->panel();
             $filter->like('name', '商品名称')->width(3);
         });
+        $grid->tableCollapse(false);
+        //$grid->simplePaginate();
 
-
+        //Form::make()
         return $grid;
     }
     public function form()
