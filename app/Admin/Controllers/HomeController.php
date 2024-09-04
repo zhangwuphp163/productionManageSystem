@@ -2,6 +2,7 @@
 
 namespace App\Admin\Controllers;
 
+use App\Admin\Metrics\Charts\ChartStocks;
 use App\Admin\Metrics\Examples;
 use App\Http\Controllers\Controller;
 use Dcat\Admin\Http\Controllers\Dashboard;
@@ -18,11 +19,12 @@ class HomeController extends Controller
             ->description('Description...')
             ->body(function (Row $row) {
                 $row->column(6, function (Column $column) {
-                    $column->row(Dashboard::title());
-                    $column->row(new Examples\Tickets());
+                    //$column->row(Dashboard::title());
+                    $column->row(new ChartStocks());
+                    //$column->row(new Examples\Tickets());
                 });
 
-                $row->column(6, function (Column $column) {
+                /*$row->column(6, function (Column $column) {
                     $column->row(function (Row $row) {
                         $row->column(6, new Examples\NewUsers());
                         $row->column(6, new Examples\NewDevices());
@@ -30,7 +32,7 @@ class HomeController extends Controller
 
                     $column->row(new Examples\Sessions());
                     $column->row(new Examples\ProductOrders());
-                });
+                });*/
             });
     }
 }

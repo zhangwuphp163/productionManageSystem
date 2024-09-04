@@ -74,13 +74,16 @@ return  '<div class="vs-checkbox-con vs-checkbox-primary checkbox-grid checkbox-
         })->modal('库存详情',function($modal){
             return StockTable::make()->payload(['sku_id' => $modal->getKey()]);
         });
+        $grid->column('code', "商品代码")->editable();
+        $grid->column('barcode', "商品条码")->editable();//->qrcode();
+        $grid->column('description', "商品描述")->editable();
 
         $grid->column('created_at', "创建时间")->display(function ($created_at) {
             return Carbon::parse($created_at)->format('Y-m-d H:i:s');
         });
-        $grid->column('updated_at', "更新时间")->display(function ($updated_at) {
+        /*$grid->column('updated_at', "更新时间")->display(function ($updated_at) {
             return Carbon::parse($updated_at)->format('Y-m-d H:i:s');
-        });
+        });*/
 
         //$grid->disableCreateButton();
         $grid->enableDialogCreate();
@@ -142,6 +145,9 @@ return  '<div class="vs-checkbox-con vs-checkbox-primary checkbox-grid checkbox-
             //$id = $form->getKey();
             $form->display('id', 'ID');
             $form->text('name', "商品名称")->required();
+            $form->text('code', "商品代码");
+            $form->text('barcode', "商品条码");
+            $form->text('description', "商品描述");
             $form->select('category_id','品类')->options(Category::query()->pluck('name','id'))->required();
         });
     }
