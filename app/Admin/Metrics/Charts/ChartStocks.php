@@ -2,7 +2,6 @@
 
 namespace App\Admin\Metrics\Charts;
 
-use App\Admin\Actions\Grid\Stock;
 use App\Models\Sku;
 use Dcat\Admin\Widgets\Metrics\Round;
 use Illuminate\Http\Request;
@@ -17,7 +16,12 @@ class ChartStocks extends Round
         parent::init();
         $this->title('商品库存出入情况');
         $this->chartLabels(['入库', '出库']);
-        $this->dropdown(Sku::query()->pluck('name','id')->toArray());
+        $data[0] = "全部";
+        $skus = Sku::query()->pluck('name','id')->toArray();
+        foreach ($skus as $key => $sku) {
+            $data[$key] = $sku;
+        }
+        $this->dropdown($data);
     }
 
     /**
