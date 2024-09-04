@@ -42,5 +42,6 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin'], function () {
     Route::delete('/stocks/{id}', [StockController::class,'destroy'])->name('admin.stocks.destroy');
     Route::get('/stocks/create', [StockController::class,'create'])->name('admin.stocks.create');
     Route::post('/stocks', [StockController::class,'store'])->name('admin.stocks.store');
+    Route::post('/stocks/batch', [StockController::class,'batch'])->name('admin.stocks.batch');
 
 });

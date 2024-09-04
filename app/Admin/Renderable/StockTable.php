@@ -12,22 +12,14 @@ class StockTable extends LazyRenderable
     public function grid(): Grid
     {
         return Grid::make(new \App\Models\Stock(['sku']), function (Grid $grid) {
-            $grid->model()->where('sku_id',$this->payload['sku_id']);
+            $grid->model()->where('sku_id',$this->payload['sku_id'])->orderBy('created_at','desc');
             $grid->column('id');
             $grid->column('sku.name');
-            $grid->column('sku.name', "商品名称")->filter(
-                Grid\Column\Filter\Like::make()->setColumnName('sku.name')
-            );;
+            $grid->column('sku.name', "商品名称");
             $grid->column('type', "库存类型")->using(['inbound' => '入库', 'outbound' => '出库'])->label([
                 'inbound' => 'primary',
                 'outbound' => 'danger'
-            ])->filter(
-                Grid\Column\Filter\In::make([
-                    'inbound' => '入库',
-                    'outbound' => '出库'
-                ])
-            );
-
+            ]);
 
             $grid->column('qty', "数量")->if(function ($column) {
                 return $this->type == 'inbound';
@@ -40,9 +32,7 @@ class StockTable extends LazyRenderable
             $grid->column('updated_at', "更新时间")->display(function ($updated_at) {
                 return Carbon::parse($updated_at)->format('Y-m-d H:i:s');
             });
-
-
-
+            $grid->disableRowSelector();
             $grid->paginate(5);
             $grid->disableActions();
 

@@ -13,6 +13,8 @@ use Dcat\Admin\Http\Controllers\AdminController;
 use Dcat\Admin\Http\Controllers\HasResourceActions;
 use Dcat\Admin\Layout\Content;
 use Dcat\Admin\Show;
+use Dcat\Admin\Widgets\Checkbox;
+use Dcat\Admin\Widgets\Modal;
 
 class SkuController extends AdminController
 {
@@ -20,16 +22,18 @@ class SkuController extends AdminController
     protected $title = "商品管理";
     public function index(Content $content)
     {
+        $modal = Modal::make()->body("debug");
         return $content
             ->translation($this->translation())
             ->title($this->title())
             ->description("商品列表")
             ->body($this->grid())
-            ->view("admin.sku.index");
+            ->view("admin.sku.index")->with('modal',$modal);
     }
 
     protected function grid()
     {
+
         $grid = Grid::make(new Sku(),function (Grid $grid){
             $grid->model()->with('category');
         });
@@ -39,8 +43,24 @@ class SkuController extends AdminController
         $grid->quickSearch(function ($model, $query) {
             $model->where('name', 'like', "%{$query}%");
         });
-        //$grid->disableRowSelector();
-        $grid->rowSelector()->titleColumn("name");
+        /*$grid->disableRowSelector();
+        $grid->rowSelector(function(Grid\Tools\RowSelector $selector){
+            return "debug";
+        });
+        $grid->column('custom_checkbox', '<div class="vs-checkbox-con vs-checkbox-primary checkbox-grid checkbox-grid-header">
+    <input type="checkbox" class="select-all grid-select-all">
+    <span class="vs-checkbox"><span class="vs-checkbox--check"><i class="vs-icon feather icon-check"></i></span></span>
+</div>')->display(function () {
+
+return  '<div class="vs-checkbox-con vs-checkbox-primary checkbox-grid checkbox-grid-column">
+    <input type="checkbox" class="grid-row-checkbox" data-id="'.$this->id.'" data-label="'.$this->name.'">
+    <span class="vs-checkbox"><span class="vs-checkbox--check"><i class="vs-icon feather icon-check"></i></span></span>
+</div>';
+
+
+
+        })->style('width: 50px;'); // 设置列宽*/
+        //$grid->rowSelector()->titleColumn("name");
         $grid->quickCreate(function (Grid\Tools\QuickCreate $create) {
             $create->select('category_id', '品类')->options(Category::query()->pluck('name','id')->toArray());
             $create->text('name', '商品名称');
@@ -84,7 +104,8 @@ class SkuController extends AdminController
 
         //$grid->tools("<span class='btn btn-outline-primary create-form'> &nbsp;&nbsp;&nbsp;批量库存操作&nbsp;&nbsp;&nbsp; </span> &nbsp;&nbsp;");
         $grid->tools(function (Grid\Tools $tools) {
-            $tools->append('<a href="javascript:void(0);" class="btn btn-outline-primary batch-edit">&nbsp;&nbsp;&nbsp;批量编辑&nbsp;&nbsp;&nbsp;</a>');
+            $tools->append('<a href="javascript:void(0);" class="btn btn-outline-primary batch-edit" data-batch-type="inbound" data-title="批量入库操作">&nbsp;&nbsp;&nbsp;<i class="fa fa-opera"></i> 批量入库操作&nbsp;&nbsp;&nbsp;</a>');
+            $tools->append('<a href="javascript:void(0);" class="btn btn-outline-danger batch-edit" data-batch-type="outbound" data-title="批量出库操作">&nbsp;&nbsp;&nbsp;<i class="fa fa-inbox"></i> 批量出库操作&nbsp;&nbsp;&nbsp;</a>');
         });
 
 

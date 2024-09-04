@@ -12,6 +12,7 @@ use Dcat\Admin\Grid;
 use Dcat\Admin\Http\Controllers\AdminController;
 use Dcat\Admin\Http\Controllers\HasResourceActions;
 use Dcat\Admin\Layout\Content;
+use Illuminate\Http\Request;
 
 
 class StockController extends AdminController
@@ -106,6 +107,29 @@ class StockController extends AdminController
             $form->select('type')->options(['inbound' => '入库','outbound' => '出库'])->required();
             //$form->hidden('inbound_at')->default(Carbon::now());
         });
+    }
+
+    public function batch(Request $request)
+    {
+        try {
+            $type = $request->get('type','inbound');
+            foreach ($request->get('rows', []) as $row) {
+                Stock::create([
+                    'sku_id' => $row['id'],
+                    'qty' => $row['qty'],
+                    'type' => $type
+                ]);
+            }
+            return [
+                'status' => 0,
+                'msg' => '批量操作成功'
+            ];
+        }catch (\Exception $e){
+            return [
+                'status' => 1,
+                'msg' => $e->getMessage()
+            ];
+        }
     }
 
 }
