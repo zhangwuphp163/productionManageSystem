@@ -15,10 +15,9 @@ class ChartStocks extends Round
     protected function init()
     {
         parent::init();
-
         $this->title('商品库存出入情况');
         $this->chartLabels(['入库', '出库']);
-        $this->dropdown(array_merge(['0'=>'全部'],Sku::query()->pluck('name','id')->toArray()));
+        $this->dropdown(Sku::query()->pluck('name','id')->toArray());
     }
 
     /**
