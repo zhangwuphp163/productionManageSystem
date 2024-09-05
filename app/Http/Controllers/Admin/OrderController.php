@@ -15,10 +15,10 @@ use Dcat\Admin\Layout\Content;
 use Illuminate\Http\Request;
 
 
-class StockController extends AdminController
+class OrderController extends AdminController
 {
     use HasResourceActions;
-    protected $title = "库存管理";
+    protected $title = "订单管理";
     public function index(Content $content)
     {
         return $content
