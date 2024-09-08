@@ -1,11 +1,11 @@
-<?php 
+<?php
 return [
     'labels' => [
-        'Order' => 'Order',
-        'order' => 'Order',
+        'Order' => '订单',
+        'order' => '订单',
     ],
     'fields' => [
-        'image' => 'image',
+        'image' => '图片',
     ],
     'options' => [
     ],
