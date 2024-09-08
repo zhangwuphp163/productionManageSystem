@@ -33,6 +33,7 @@ class OrderController extends AdminController
     protected function grid()
     {
         return Grid::make(new \App\Models\Order(), function (Grid $grid) {
+            $grid->model()->orderBy('id','desc');
             $grid->column('id')->sortable();
             $grid->column('order_number',"订单号")->sortable()->filter();
             $grid->column('order_date',"订单日期")->sortable()->filter(Grid\Column\Filter\Equal::make()->date());

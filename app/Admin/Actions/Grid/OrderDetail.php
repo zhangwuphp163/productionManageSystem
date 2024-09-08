@@ -24,7 +24,11 @@ class OrderDetail extends RowAction
                         $show->field(mb_substr($row["label"],0,64))->value($row["optionValue"]);
                         //$show->field($row["optionValue"]);
                     }elseif ($row["customizationType"] == "TextPrinting" && isset($row["fill"])){
-                        $show->field(mb_substr($row["label"],0,64))->value($row["fill"]);
+                        $show->field(mb_substr($row["label"],0,64))->value($row["fill"])->unescape()->as(function ($avatar) {
+
+                            return "<div style='background: {$avatar};width:20px;height:20px;'></div>{$avatar}";
+
+                        });
                     }elseif ($row["customizationType"] == "TextPrinting" && isset($row["text"])){
                         $show->field(mb_substr($row["label"],0,64))->value($row["text"]);
                     }
