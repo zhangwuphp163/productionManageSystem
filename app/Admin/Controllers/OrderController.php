@@ -40,7 +40,7 @@ class OrderController extends AdminController
             $grid->column('receive_name',"收货人")->filter();
             $grid->column('images',"订单图片")->display(function ($pictures){
                 return $pictures?\GuzzleHttp\json_decode($pictures, true):[];
-            })->image();
+            })->image('',100,100);
             $grid->column('created_at')->sortable()->filter(Grid\Column\Filter\Between::make()->date());
             $grid->column('updated_at')->sortable()->filter(Grid\Column\Filter\Gt::make()->datetime());
             //$grid->enableDialogCreate();
