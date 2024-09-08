@@ -4,8 +4,10 @@ namespace App\Admin\Controllers;
 
 use App\Admin\Repositories\Order;
 use Dcat\Admin\Actions\Action;
+use Dcat\Admin\Admin;
 use Dcat\Admin\Form;
 use Dcat\Admin\Grid;
+use Dcat\Admin\Http\Auth\Permission;
 use Dcat\Admin\Http\JsonResponse;
 use Dcat\Admin\Layout\Content;
 use Dcat\Admin\Show;
@@ -14,6 +16,7 @@ use Dcat\Admin\Support\Zip;
 use Dcat\Admin\Traits\HasUploadedFile;
 use Faker\Core\Uuid;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -42,17 +45,25 @@ class OrderController extends AdminController
             $grid->column('updated_at')->sortable()->filter(Grid\Column\Filter\Gt::make()->datetime());
             //$grid->enableDialogCreate();
             $grid->disableCreateButton();
+            if (!Admin::user()->can('order-edit')){
+                $grid->disableRowSelector();
+            }
+
             $grid->filter(function (Grid\Filter $filter) {
                 $filter->equal('id');
             });
             $grid->actions(function (Grid\Displayers\Actions $actions) {
                 $actions->append(new \App\Admin\Actions\Grid\OrderDetail());
             });
+
             $grid->actions(function (Grid\Displayers\Actions $actions) {
                 $actions->disableView();
-                $actions->quickEdit();
                 $actions->disableDelete();
                 $actions->disableEdit();
+                //dd(Permission::check('order-edit'));
+                if (Admin::user()->can('order-edit')){
+                    $actions->quickEdit();
+                }
             });
         });
     }
