@@ -93,6 +93,7 @@ class OrderController extends AdminController
     protected function form()
     {
         return Form::make(new Order(), function (Form $form) {
+            $form->date("order_date","订单日期");
             $form->text("receive_name","收货人");
             $form->text("receive_phone","收货人电话");
             $form->textarea("receive_address","收货地址");
