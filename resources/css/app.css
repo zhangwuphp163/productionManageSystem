@@ -2,3 +2,7 @@
     max-height: 500px; /* 设置最大高度 */
     overflow-y: auto; /* 如果内容超出高度，则显示滚动条 */
 }
+.modal-dialog {
+    max-height: calc(100vh - 100px); /* 调整为视口高度的90%，预留一些空间给顶部和底部 */
+    margin: 50px auto; /* 根据需要调整垂直居中 */
+}

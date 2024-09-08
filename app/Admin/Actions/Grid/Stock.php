@@ -16,6 +16,8 @@ class Stock extends RowAction
         $form = StockForm::make()->payload(['id' => $this->getKey(),'name' => $this->row("name")]);
         return Modal::make()
             ->lg()
+            ->scrollable()
+            ->style("height:600px;")
             ->title("库存操作")
             ->body($form)
             ->button($this->title);

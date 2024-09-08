@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\SkuController;
 use App\Http\Controllers\Admin\StockController;
+use App\Admin\Controllers\OrderController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -43,5 +44,15 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin'], function () {
     Route::get('/stocks/create', [StockController::class,'create'])->name('admin.stocks.create');
     Route::post('/stocks', [StockController::class,'store'])->name('admin.stocks.store');
     Route::post('/stocks/batch', [StockController::class,'batch'])->name('admin.stocks.batch');
+
+    Route::get('/orders', [OrderController::class,'index'])->name('admin.orders');
+    Route::post('/orders', [OrderController::class,'store'])->name('admin.orders.store');
+
+    Route::get('/orders/batch', [OrderController::class,'batch'])->name('admin.orders.batch');
+    Route::post('/orders/upload', [OrderController::class,'upload'])->name('admin.orders.upload');
+    Route::get('/orders/{id}/edit', [OrderController::class,'edit'])->name('admin.orders.edit');
+    Route::put('/orders/{id}', [OrderController::class,'update'])->name('admin.orders.update');
+    Route::delete('/orders/{id}', [OrderController::class,'destroy'])->name('admin.orders.destroy');
+    Route::get('/orders/create', [OrderController::class,'create'])->name('admin.orders.create');
 
 });

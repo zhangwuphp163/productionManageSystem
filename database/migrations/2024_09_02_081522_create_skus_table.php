@@ -21,6 +21,7 @@ class CreateSkusTable extends Migration
             $table->string('barcode')->index()->nullable();
             $table->string('description')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
