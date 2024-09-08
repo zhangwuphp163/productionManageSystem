@@ -20,7 +20,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return redirect('/admin');
 });
-Route::group(['namespace' => 'Admin', 'prefix' => 'admin'], function () {
+Route::group(['namespace' => 'Admin', 'prefix' => 'admin','middleware' => 'admin.permission'], function () {
     Route::get('/categories', [CategoryController::class,'index'])->name('admin.categories');
     Route::get('/categories/create', [CategoryController::class,'create'])->name('admin.categories.create');
     Route::post('/categories', [CategoryController::class,'store'])->name('admin.categories.store');
