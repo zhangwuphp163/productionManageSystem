@@ -54,5 +54,6 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin','middleware' => 'admin
     Route::put('/orders/{id}', [OrderController::class,'update'])->name('admin.orders.update');
     Route::delete('/orders/{id}', [OrderController::class,'destroy'])->name('admin.orders.destroy');
     Route::get('/orders/create', [OrderController::class,'create'])->name('admin.orders.create');
+    Route::post('/orders/print-label', [OrderController::class,'printLabel'])->name('admin.orders.print-label');
 
 });

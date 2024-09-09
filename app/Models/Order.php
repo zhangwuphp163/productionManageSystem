@@ -21,7 +21,9 @@ class Order extends Model
         "receive_phone",
         "receive_address",
         "delivery_date",
-        "tracking_number"
+        "tracking_number",
+        "remarks",
+        "design_images"
     ];
 
 }

@@ -16,6 +16,8 @@ class AddDeliveryDateAndTrackingNumberInOrdersTable extends Migration
         Schema::table('orders', function (Blueprint $table) {
             $table->string('tracking_number')->nullable()->after('status')->index();
             $table->date('delivery_date')->nullable()->after('tracking_number')->index();
+            $table->text('remarks')->nullable();
+            $table->json('design_images')->nullable();
         });
     }
 
@@ -29,6 +31,8 @@ class AddDeliveryDateAndTrackingNumberInOrdersTable extends Migration
         Schema::table('orders', function (Blueprint $table) {
             $table->dropColumn("tracking_number");
             $table->dropColumn("delivery_date");
+            $table->dropColumn("remarks");
+            $table->dropColumn("design_images");
         });
     }
 }

@@ -24,6 +24,15 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class OrderController extends AdminController
 {
+    public function index(Content $content)
+    {
+        return $content
+            ->translation($this->translation())
+            ->title($this->title())
+            //->description("列表")
+            ->body($this->grid())
+            ->view("admin.order.index");
+    }
 
     /**
      * Make a grid builder.
@@ -41,7 +50,11 @@ class OrderController extends AdminController
             $grid->column('delivery_date',"发货日期")->sortable()->filter(Grid\Column\Filter\Equal::make()->date());
             $grid->column('quantity',"数量")->sortable()->filter();
             $grid->column('receive_name',"收货人")->filter();
+            $grid->column('remarks',"备注");
             $grid->column('images',"订单图片")->display(function ($pictures){
+                return $pictures?\GuzzleHttp\json_decode($pictures, true):[];
+            })->image('',100,100);
+            $grid->column('design_images',"设计图片")->display(function ($pictures){
                 return $pictures?\GuzzleHttp\json_decode($pictures, true):[];
             })->image('',100,100);
             $grid->column('created_at')->sortable()->filter(Grid\Column\Filter\Between::make()->date());
@@ -67,6 +80,9 @@ class OrderController extends AdminController
                 if (Admin::user()->can('order-edit')){
                     $actions->quickEdit();
                 }
+            });
+            $grid->tools(function (Grid\Tools $tools) {
+                $tools->append('<a href="javascript:void(0);" class="btn btn-outline-primary batch-print" data-batch-type="inbound" data-title="批量打印出库单">&nbsp;&nbsp;&nbsp;<i class="fa fa-print"></i> 批量打印出库单&nbsp;&nbsp;&nbsp;</a>');
             });
         });
     }
@@ -97,11 +113,12 @@ class OrderController extends AdminController
     {
         return Form::make(new Order(), function (Form $form) {
             $form->date("order_date","订单日期");
+            $form->date("delivery_date","发货日期");
+            $form->text("remarks","备注");
             $form->text("receive_name","收货人");
             $form->text("receive_phone","收货人电话");
             $form->textarea("receive_address","收货地址");
             $form->text("tracking_number","发货单号");
-            $form->date("delivery_date","发货日期");
         });
     }
     public function upload(Request $request)
@@ -175,5 +192,14 @@ class OrderController extends AdminController
             ->title($this->title())
             ->description($this->description()['index'] ?? trans('admin.list'))
             ->body($this->batchUploadForm());
+    }
+
+    public function printLabel(Request $request)
+    {
+        return [
+            'status' => 0,
+            'msg' => 'success',
+            'url' => 'debug'
+        ];
     }
 }

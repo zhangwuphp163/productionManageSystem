@@ -22,13 +22,12 @@ class SkuController extends AdminController
     protected $title = "商品管理";
     public function index(Content $content)
     {
-        $modal = Modal::make()->body("debug");
         return $content
             ->translation($this->translation())
             ->title($this->title())
             ->description("商品列表")
             ->body($this->grid())
-            ->view("admin.sku.index")->with('modal',$modal);
+            ->view("admin.sku.index");
     }
 
     protected function grid()
