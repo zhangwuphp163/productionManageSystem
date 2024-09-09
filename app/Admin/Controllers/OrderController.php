@@ -37,6 +37,8 @@ class OrderController extends AdminController
             $grid->column('id')->sortable();
             $grid->column('order_number',"订单号")->sortable()->filter();
             $grid->column('order_date',"订单日期")->sortable()->filter(Grid\Column\Filter\Equal::make()->date());
+            $grid->column('tracking_number',"发货单号")->sortable()->filter();
+            $grid->column('delivery_date',"发货日期")->sortable()->filter(Grid\Column\Filter\Equal::make()->date());
             $grid->column('quantity',"数量")->sortable()->filter();
             $grid->column('receive_name',"收货人")->filter();
             $grid->column('images',"订单图片")->display(function ($pictures){
@@ -98,6 +100,8 @@ class OrderController extends AdminController
             $form->text("receive_name","收货人");
             $form->text("receive_phone","收货人电话");
             $form->textarea("receive_address","收货地址");
+            $form->text("tracking_number","发货单号");
+            $form->date("delivery_date","发货日期");
         });
     }
     public function upload(Request $request)
