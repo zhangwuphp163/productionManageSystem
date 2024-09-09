@@ -73,8 +73,9 @@ class OrderController extends AdminController
                 return $pictures?\GuzzleHttp\json_decode($pictures, true):[];
             })->image('',100,100);
             $grid->column('created_at')->sortable()->filter(Grid\Column\Filter\Between::make()->date());
-            $grid->column('updated_at')->sortable()->filter(Grid\Column\Filter\Gt::make()->datetime());
+            /*$grid->column('updated_at')->sortable()->filter(Grid\Column\Filter\Gt::make()->datetime());*/
             //$grid->enableDialogCreate();
+            $grid->showColumnSelector();
             $grid->disableCreateButton();
             if (!Admin::user()->can('order-edit')){
                 $grid->disableRowSelector();
