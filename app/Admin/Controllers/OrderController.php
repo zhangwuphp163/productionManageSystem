@@ -45,6 +45,21 @@ class OrderController extends AdminController
             $grid->model()->orderBy('id','desc');
             $grid->column('id')->sortable();
             $grid->column('order_number',"订单号")->sortable()->filter();
+            /*$grid->column('status',"订单进度")->sortable()->using(\App\Models\Order::$statues)->label([
+                'new' => 'default',
+                'opening_board' => 'yellow',
+                'production_completed' => 'green',
+                'posted' => '#493deb',
+                'shipped' => 'blue',
+                'cancel' => 'danger',
+            ])->select(\App\Models\Order::$statues,true)->filter(
+                Grid\Column\Filter\In::make(\App\Models\Order::$statues)
+            );*/
+            $grid->column('status',"订单进度")->sortable()->select(\App\Models\Order::$statues,true)->filter(
+                Grid\Column\Filter\In::make(\App\Models\Order::$statues)
+            )->display(function ($status) {
+                return $status;
+            });
             $grid->column('order_date',"订单日期")->sortable()->filter(Grid\Column\Filter\Equal::make()->date());
             $grid->column('tracking_number',"发货单号")->sortable()->filter();
             $grid->column('delivery_date',"发货日期")->sortable()->filter(Grid\Column\Filter\Equal::make()->date());
@@ -112,6 +127,7 @@ class OrderController extends AdminController
     protected function form()
     {
         return Form::make(new Order(), function (Form $form) {
+            $form->select("status","生产进度")->options(\App\Models\Order::$statues)->default($form->model()->status);
             $form->date("order_date","订单日期");
             $form->date("delivery_date","发货日期");
             $form->text("remarks","备注");

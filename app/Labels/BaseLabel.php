@@ -33,13 +33,4 @@ abstract class BaseLabel extends \TCPDF
         $this->pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);*/
     }
 
-    public function extras()
-    {
-        return [];
-    }
-
-    public function attributes()
-    {
-        return [];
-    }
 }

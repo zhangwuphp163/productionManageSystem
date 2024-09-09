@@ -25,5 +25,13 @@ class Order extends Model
         "remarks",
         "design_images"
     ];
+    public static $statues = [
+        'new' => '可生产',
+        'opening_board' => '开板中',
+        'production_completed' => '生产完成',
+        'posted' => '可贴单',
+        'shipped' => '已发货',
+        'cancel' => '已取消',
+    ];
 
 }
