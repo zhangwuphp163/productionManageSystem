@@ -20,6 +20,8 @@ class Order extends Model
         "receive_name",
         "receive_phone",
         "receive_address",
+        "delivery_date",
+        "tracking_number"
     ];
 
 }
