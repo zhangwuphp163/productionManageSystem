@@ -4,6 +4,7 @@ namespace App\Admin\Controllers;
 
 use App\Admin\Actions\Grid\ResignImageUpload;
 use App\Admin\Repositories\Order;
+use App\Labels\OrderLabel;
 use Dcat\Admin\Actions\Action;
 use Dcat\Admin\Admin;
 use Dcat\Admin\Form;
@@ -222,10 +223,16 @@ class OrderController extends AdminController
 
     public function printLabel(Request $request)
     {
+        $label = new OrderLabel(['ids' => $request->get('ids')]);
+        $pdf = $label->generate();
+        $labelFilename = \Illuminate\Support\Str::uuid();
+        $labelFilename =  $labelFilename . ".pdf";
+        $filepath = storage_path("app/public/labels/" . $labelFilename);
+        $pdf->Output($filepath, 'F');
         return [
             'status' => 0,
             'msg' => 'success',
-            'url' => 'debug'
+            'url' => asset("storage/labels/" . $labelFilename)
         ];
     }
 

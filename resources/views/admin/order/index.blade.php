@@ -24,6 +24,7 @@
             success:function (res) {
                 if(res.status === 0){
                     toastr.success(res.msg);
+                    window.open(res.url)
                 }else{
                     toastr.error(res.msg);
                 }
