@@ -14,6 +14,9 @@
 $app = new Illuminate\Foundation\Application(
     $_ENV['APP_BASE_PATH'] ?? dirname(__DIR__)
 );
+if (!defined('K_PATH_FONTS')) {
+    define('K_PATH_FONTS', __DIR__ . '/../resources/fonts/');
+}
 
 /*
 |--------------------------------------------------------------------------
