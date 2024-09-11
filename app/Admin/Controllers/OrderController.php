@@ -46,7 +46,24 @@ class OrderController extends AdminController
         return Grid::make(new \App\Models\Order(), function (Grid $grid) {
             $grid->model()->orderBy('id','desc');
             $grid->column('id')->sortable();
+            $grid->column('order_date',"订单日期")->sortable()->filter(Grid\Column\Filter\Equal::make()->date());
             $grid->column('order_number',"订单号")->sortable()->filter();
+            $grid->column('images',"订单图片")->display(function ($pictures){
+                return $pictures?\GuzzleHttp\json_decode($pictures, true):[];
+            })->image('',100,100);
+            $grid->column('design_images',"设计图片")->display(function ($pictures){
+                return $pictures?\GuzzleHttp\json_decode($pictures, true):[];
+            })->image('',100,100);
+            $grid->column('status',"订单进度")->sortable()->select(\App\Models\Order::$statues,true)->filter(
+                Grid\Column\Filter\In::make(\App\Models\Order::$statues)
+            )->display(function ($status) {
+                return $status;
+            });
+            $grid->column('delivery_date',"发货日期")->sortable()->filter(Grid\Column\Filter\Equal::make()->date());
+            $grid->column('tracking_number',"发货单号")->sortable()->filter();
+            $grid->column('quantity',"数量")->sortable()->filter();
+            $grid->column('receive_name',"收货人")->filter();
+            $grid->column('remarks',"备注");
             /*$grid->column('status',"订单进度")->sortable()->using(\App\Models\Order::$statues)->label([
                 'new' => 'default',
                 'opening_board' => 'yellow',
@@ -57,23 +74,7 @@ class OrderController extends AdminController
             ])->select(\App\Models\Order::$statues,true)->filter(
                 Grid\Column\Filter\In::make(\App\Models\Order::$statues)
             );*/
-            $grid->column('status',"订单进度")->sortable()->select(\App\Models\Order::$statues,true)->filter(
-                Grid\Column\Filter\In::make(\App\Models\Order::$statues)
-            )->display(function ($status) {
-                return $status;
-            });
-            $grid->column('order_date',"订单日期")->sortable()->filter(Grid\Column\Filter\Equal::make()->date());
-            $grid->column('tracking_number',"发货单号")->sortable()->filter();
-            $grid->column('delivery_date',"发货日期")->sortable()->filter(Grid\Column\Filter\Equal::make()->date());
-            $grid->column('quantity',"数量")->sortable()->filter();
-            $grid->column('receive_name',"收货人")->filter();
-            $grid->column('remarks',"备注");
-            $grid->column('images',"订单图片")->display(function ($pictures){
-                return $pictures?\GuzzleHttp\json_decode($pictures, true):[];
-            })->image('',100,100);
-            $grid->column('design_images',"设计图片")->display(function ($pictures){
-                return $pictures?\GuzzleHttp\json_decode($pictures, true):[];
-            })->image('',100,100);
+
             $grid->column('created_at')->sortable()->filter(Grid\Column\Filter\Between::make()->date());
             /*$grid->column('updated_at')->sortable()->filter(Grid\Column\Filter\Gt::make()->datetime());*/
             //$grid->enableDialogCreate();

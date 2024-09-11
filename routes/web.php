@@ -48,7 +48,6 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin','middleware' => 'admin
 
     Route::get('/orders', [OrderController::class,'index'])->name('admin.orders');
     Route::post('/orders', [OrderController::class,'store'])->name('admin.orders.store');
-
     Route::get('/orders/batch', [OrderController::class,'batch'])->name('admin.orders.batch');
     Route::post('/orders/upload', [OrderController::class,'upload'])->name('admin.orders.upload');
     Route::get('/orders/{id}/edit', [OrderController::class,'edit'])->name('admin.orders.edit');
@@ -57,8 +56,9 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin','middleware' => 'admin
     Route::get('/orders/create', [OrderController::class,'create'])->name('admin.orders.create');
     Route::post('/orders/print-label', [OrderController::class,'printLabel'])->name('admin.orders.print-label');
 
-
     Route::put('/orders/upload-design-image/{id}', [OrderController::class,'uploadDesignImage'])->name('admin.orders.upload-design-image');
     Route::put('/orders/update-design-image/{id}', [OrderController::class,'updateDesignImage'])->name('admin.upload.update-design-image');
+
+    Route::get('/upload', [UploadController::class,'index'])->name('admin.upload.index');
 
 });
