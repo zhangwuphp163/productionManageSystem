@@ -133,6 +133,9 @@ class OrderController extends AdminController
     protected function form()
     {
         return Form::make(new Order(), function (Form $form) {
+            $form->multipleImage("images","订单图片")->uniqueName()->saving(function ($paths){
+                return json_encode($paths);
+            })->autoUpload();
             $form->select("status","生产进度")->options(\App\Models\Order::$statues)->default($form->model()->status);
             $form->date("order_date","订单日期");
             $form->date("delivery_date","发货日期");
