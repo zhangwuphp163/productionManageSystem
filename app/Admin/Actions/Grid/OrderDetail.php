@@ -10,7 +10,8 @@ use Dcat\Admin\Widgets\Modal;
 class OrderDetail extends RowAction
 {
 
-    protected $title = '<i class="fa fa-eye"></i>';
+    protected $title = '<button href="#" class="btn btn-info btn-xs" style="width: 150px;"><i class="fa fa-info"></i> 订单详情</button>';
+    //protected $title = '<i class="fa fa-info"></i>';
 
     public function render()
     {
@@ -100,6 +101,7 @@ class OrderDetail extends RowAction
 
         });
         return Modal::make()
+            ->scrollable()
             ->xl()
             ->title("订单详情")
             ->body($form)

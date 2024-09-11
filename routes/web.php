@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\SkuController;
 use App\Http\Controllers\Admin\StockController;
 use App\Admin\Controllers\OrderController;
+use App\Admin\Controllers\UploadController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -55,5 +56,9 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin','middleware' => 'admin
     Route::delete('/orders/{id}', [OrderController::class,'destroy'])->name('admin.orders.destroy');
     Route::get('/orders/create', [OrderController::class,'create'])->name('admin.orders.create');
     Route::post('/orders/print-label', [OrderController::class,'printLabel'])->name('admin.orders.print-label');
+
+
+    Route::put('/orders/upload-design-image/{id}', [OrderController::class,'uploadDesignImage'])->name('admin.orders.upload-design-image');
+    Route::put('/orders/update-design-image/{id}', [OrderController::class,'updateDesignImage'])->name('admin.upload.update-design-image');
 
 });

@@ -2,6 +2,7 @@
 
 namespace App\Admin\Controllers;
 
+use App\Admin\Actions\Grid\ResignImageUpload;
 use App\Admin\Repositories\Order;
 use Dcat\Admin\Actions\Action;
 use Dcat\Admin\Admin;
@@ -24,6 +25,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class OrderController extends AdminController
 {
+    use HasUploadedFile;
     public function index(Content $content)
     {
         return $content
@@ -86,7 +88,9 @@ class OrderController extends AdminController
             });
             $grid->actions(function (Grid\Displayers\Actions $actions) {
                 $actions->append(new \App\Admin\Actions\Grid\OrderDetail());
+                $actions->append(new \App\Admin\Actions\Grid\ResignImageUpload());
             });
+
 
             $grid->actions(function (Grid\Displayers\Actions $actions) {
                 $actions->disableView();
@@ -100,6 +104,7 @@ class OrderController extends AdminController
             $grid->tools(function (Grid\Tools $tools) {
                 $tools->append('<a href="javascript:void(0);" class="btn btn-outline-primary batch-print" data-batch-type="inbound" data-title="批量打印出库单">&nbsp;&nbsp;&nbsp;<i class="fa fa-print"></i> 批量打印出库单&nbsp;&nbsp;&nbsp;</a>');
             });
+            $grid->option("quick_edit_button",'编辑');
         });
     }
 
@@ -218,5 +223,14 @@ class OrderController extends AdminController
             'msg' => 'success',
             'url' => 'debug'
         ];
+    }
+
+    public function uploadDesignImage($id)
+    {
+        return ResignImageUpload::form($id)->update($id);
+    }
+    public function updateDesignImage($id)
+    {
+        return ResignImageUpload::form($id)->update($id,null,"orders");
     }
 }
