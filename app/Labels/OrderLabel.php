@@ -79,7 +79,7 @@ class OrderLabel
         if(!empty($order->design_images)){
             $images = json_decode($order->design_images);
             if(isset($images[0])){
-                $pdf->Image(asset("storage/uploads/{$images[0]}"), $x = 125, $y = 20, $w = 80, $h = 0, $type = 'JPG', $link = '', $align = 'C');
+                $pdf->Image(asset("storage/uploads/{$images[0]}"), $x = 125, $y = 20, $w = 80, $h = 0, $type = '', $link = '', $align = 'C');
             }
         }
 
