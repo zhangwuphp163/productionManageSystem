@@ -57,7 +57,7 @@ class MobileOrderController
             });
             $show->field('delivery_date','订单打包日期');
             $show->field('receive_name','收货人');
-            $show->field('receive_address','收货地址')->as(function(){
+            $show->field('receive_address','收货地址')->unescape()->as(function(){
                 return str_replace("\r\n","<br/>",$this->receive_address);
             });
             $show->field('remarks','客户备注');
