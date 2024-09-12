@@ -198,7 +198,8 @@ class OrderController extends AdminController
                 'order_data' => json_encode($jsonData),
                 'images' => json_encode($images)
             ];
-            \App\Models\Order::create($orderData);
+            $order = \App\Models\Order::create($orderData);
+            \App\Models\Order::createOrderAttrData($order);
         }
     }
 

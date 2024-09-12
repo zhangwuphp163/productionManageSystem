@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\StockController;
 use App\Admin\Controllers\OrderController;
 use App\Admin\Controllers\UploadController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Mobile\MobileOrderController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,6 +22,8 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return redirect('/admin');
 });
+Route::get('/mobile/order', [MobileOrderController::class,'index'])->name('mobile.order');
+
 Route::group(['namespace' => 'Admin', 'prefix' => 'admin','middleware' => 'admin.permission'], function () {
     Route::get('/categories', [CategoryController::class,'index'])->name('admin.categories');
     Route::get('/categories/create', [CategoryController::class,'create'])->name('admin.categories.create');

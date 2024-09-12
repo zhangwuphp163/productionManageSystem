@@ -14,7 +14,7 @@ class UploadController extends AdminController
 
     public function index(Content $content)
     {
-        $label = new OrderLabel(['ids' => [2,3]]);
+        $label = new OrderLabel(['ids' => [5]]);
 
         $pdf = $label->generate();
         $labelFilename = \Illuminate\Support\Str::uuid();

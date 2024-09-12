@@ -27,7 +27,8 @@ class OrderLabel
         $pdf->SetAutoPageBreak(FALSE, PDF_MARGIN_BOTTOM);
         $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
         $pdf->setFont("notosansuniversal", "", 15);
-        $orders = \App\Models\Order::query()->whereIn('id', $this->ids)->get();
+
+        $orders = \App\Models\Order::query()->with('attr')->whereIn('id', $this->ids)->get();
         foreach ($orders as $order){
             $pdf->AddPage("P");
             $this->setContents($pdf,$order);
@@ -35,7 +36,7 @@ class OrderLabel
         return $pdf;
     }
 
-    public function setContents(&$pdf,$order)
+    public function setContents(\TCPDF &$pdf,$order)
     {
         $data = self::getAttributes($order);
 
@@ -103,6 +104,19 @@ class OrderLabel
         $pdf->writeHTMLCell(165,15,60,260,$order->tracking_number,0,0,false,true,"L");
         $pdf->write1DBarcode($order->tracking_number, 'C128', 100, 270, 140, 25, '', $barcode_style,'C');
 
+        $barcode_style = array(
+            //'position' => 'C',
+            //'align' => 'C',
+            'border' => 0,
+            'vpadding' => 0,
+            'hpadding' => 0,
+            'fgcolor' => array(0,0,0),
+            'bgcolor' => false, //array(255,255,255)
+            'module_width' => 1.55, // width of a single module in points
+            'module_height' => 1.55 // height of a single module in points
+        );
+        $pdf->write2DBarcode(asset("mobile/order?order_number={$order->order_number}"), 'QRCODE,M', 150, 100, 30, 30, $barcode_style, 'L');
+
         $pdf->Line(0,15,297,15);
         $pdf->Line(45,0,45,297);
         $pdf->Line(120,0,120,135);
@@ -130,20 +144,34 @@ class OrderLabel
             'shape' => '',
             'color' => '',
         ];
-        if(!empty($order->order_data)){
-            $orderData = json_decode($order->order_data,true);
-            foreach ($orderData['customizationInfo']['version3.0']['surfaces'][0]['areas'] as $row) {
-                if(isset($row['label'])){
-                    if (strpos($row["label"], "Sign Length") !== false){
-                        $data['size'] = $row["optionValue"]??"";
-                    }elseif ($row["label"] == "Acrylic Board Shape"){
-                        $data['shape'] = $row["optionValue"]??"";
-                    }elseif (isset($row['fill'])){
-                        $data['color'] = $row["colorName"]??"";
+        if(empty($order->attr)){
+            if(!empty($order->order_data)){
+                $orderData = json_decode($order->order_data,true);
+                foreach ($orderData['customizationInfo']['version3.0']['surfaces'][0]['areas'] as $row) {
+                    if(isset($row['label'])){
+                        if (strpos($row["label"], "Sign Length") !== false){
+                            $data['size'] = $row["optionValue"]??"";
+                        }elseif ($row["label"] == "Acrylic Board Shape"){
+                            $data['shape'] = $row["optionValue"]??"";
+                        }elseif (isset($row['fill'])){
+                            $data['color'] = $row["colorName"]??"";
+                        }
                     }
                 }
             }
+        }else{
+            foreach (json_decode($order->attr->color,true) as $color) {
+                if($color['type'] == "ColorCustomization"){
+                    $data['color'] = $color['colorSelection']['name'];
+                }
+            }
+            $shape = json_decode($order->attr->shape,true);
+            $data['shape'] = $shape['displayValue'];
+            $size = json_decode($order->attr->size,true);
+            $data['size'] = $size['displayValue'];
+
         }
+
         return $data;
     }
 
