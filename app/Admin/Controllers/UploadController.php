@@ -20,7 +20,7 @@ class UploadController extends AdminController
         $labelFilename = \Illuminate\Support\Str::uuid();
         $labelFilename =  $labelFilename . ".pdf";
         $filepath = storage_path("app/public/labels/" . $labelFilename);
-        $pdf->Output($filepath, 'F');
+        $pdf->Output($filepath, 'I');
         return asset("storage/labels/" . $labelFilename);
     }
 

@@ -60,8 +60,7 @@ class OrderLabel
         $pdf->writeHTMLCell(75,15,45,35,"6V",0,0,false,true,"C");
         $pdf->writeHTMLCell(75,15,45,65,"USB",0,0,false,true,"C");
         $pdf->writeHTMLCell(75,15,45,80,"标准安装包",0,0,false,true,"C");
-        $pdf->writeHTMLCell(75,15,45,95,"特殊要求",0,0,false,true,"C");
-        $pdf->writeHTMLCell(75,15,45,110,"邀评卡（暂无）",0,0,false,true,"C");
+        $pdf->writeHTMLCell(75,15,45,95,"邀评卡（暂无）",0,0,false,true,"C");
         $pdf->writeHTMLCell(75,15,45,125,"6MM",0,0,false,true,"C");
 
         $pdf->writeHTMLCell(75,15,45,5,$order->order_date,0,0,false,true,"C");
@@ -102,9 +101,9 @@ class OrderLabel
             'stretchtext' => 6,
             'label' => $order->tracking_number
         );
-        $pdf->writeHTMLCell(165,15,45,260,$order->tracking_number,0,0,false,true,"C");
+        $pdf->writeHTMLCell(165,15,60,260,$order->tracking_number,0,0,false,true,"L");
         $pdf->write1DBarcode($order->tracking_number, 'C128', 100, 270, 140, 25, '', $barcode_style,'C');
-
+        
         $pdf->Line(0,15,297,15);
         $pdf->Line(45,0,45,297);
         $pdf->Line(120,0,120,135);
