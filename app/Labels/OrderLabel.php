@@ -76,14 +76,13 @@ class OrderLabel
         $pdf->writeHTMLCell(75,15,45,140,$data['size'],0,0,false,true,"C");
         $pdf->writeHTMLCell(75,15,45,110,$data['shape'],0,0,false,true,"C");
 
-        if(!empty($order->images)){
-            $images = json_decode($order->images);
+        if(!empty($order->design_images)){
+            $images = json_decode($order->design_images);
             if(isset($images[0])){
                 $pdf->Image(asset("storage/uploads/{$images[0]}"), $x = 125, $y = 20, $w = 80, $h = 0, $type = 'JPG', $link = '', $align = 'C');
             }
         }
 
-        $pdf->Image("images/0cca2a53-9906-03a9-daf4-c17019a3eb40.jpg");
         $barcode_style = array(
             'position' => 'C',
             'align' => 'C',
@@ -103,7 +102,7 @@ class OrderLabel
         );
         $pdf->writeHTMLCell(165,15,60,260,$order->tracking_number,0,0,false,true,"L");
         $pdf->write1DBarcode($order->tracking_number, 'C128', 100, 270, 140, 25, '', $barcode_style,'C');
-        
+
         $pdf->Line(0,15,297,15);
         $pdf->Line(45,0,45,297);
         $pdf->Line(120,0,120,135);
