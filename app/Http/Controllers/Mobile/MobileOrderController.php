@@ -47,13 +47,13 @@ class MobileOrderController
             $show->field('order_number','订单号');
             $show->field('tracking_number','快递单号');
             $show->field('color','颜色')->as(function (){
-                return  $this->attr->custom_color;
+                return  $this->attr->custom_color??'';
             });
             $show->field('shape','形状')->as(function (){
-                return  $this->attr->custom_shape;
+                return  $this->attr->custom_shape??'';
             });
             $show->field('size','尺寸')->as(function (){
-                return  $this->attr->custom_size;
+                return  $this->attr->custom_size??'';
             });
             $show->field('delivery_date','订单打包日期');
             $show->field('receive_name','收货人');
