@@ -26,8 +26,8 @@ class MobileOrderController
             ->title("订单详情")
             ->header('')
             ->description('')
-            ->row(Form::make(null,function (Form $form) use ($order){
-                $form->text("order_number","订单号")->default($order->order_number);
+            ->row(Form::make(null,function (Form $form) use ($orderNumber){
+                $form->text("order_number","订单号")->default($orderNumber);
                 $form->button("<i class='fa fa-search'> 查 询</i>");
 
 
