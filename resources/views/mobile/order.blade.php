@@ -11,11 +11,11 @@
     {!! Dcat\Admin\Admin::asset()->headerJsToHtml() !!}
     {!! Dcat\Admin\Admin::asset()->cssToHtml() !!}
     <style>
-        .box-body{color:#0a0a0a !important}
+        .label{color:#414750 !important;font-size: 15px;}
     </style>
 </head>
 <body>
-    <div class="wrapper" style="color: #0a0a0a !important;">
+    <div class="wrapper">
         <div class="content-body" id="app" >
             {!! $content !!}
         </div>
