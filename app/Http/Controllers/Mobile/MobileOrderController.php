@@ -41,26 +41,26 @@ class MobileOrderController
     {
         return Show::make($id,new \App\Models\Order(), function (Show $show) {
             $show->with(['attr']);
-            $show->field('images')->image()->label('订单图片');
-            $show->field('design_images')->image()->label('设计图');
-            $show->field('order_date')->label('订单日期');
-            $show->field('order_number')->label('订单号');
-            $show->field('tracking_number')->label('快递单号');
-            /*$show->field('color')->label('颜色')->as(function (){
+            $show->field('images','订单图片')->image();
+            $show->field('design_images','设计图')->image();
+            $show->field('order_date','订单日期');
+            $show->field('order_number','订单号');
+            $show->field('tracking_number','快递单号');
+            $show->field('color','颜色')->as(function (){
                 return  $this->attr->custom_color;
             });
-            $show->field('shape')->label('形状')->as(function (){
+            $show->field('shape','形状')->as(function (){
                 return  $this->attr->custom_shape;
             });
-            $show->field('size')->label('尺寸')->as(function (){
+            $show->field('size','尺寸')->as(function (){
                 return  $this->attr->custom_size;
-            });*/
-            $show->field('delivery_date')->label('订单打包日期');
-            $show->field('receive_name')->label('收货人');
-            $show->field('receive_address')->label('收货地址')->as(function(){
+            });
+            $show->field('delivery_date','订单打包日期');
+            $show->field('receive_name','收货人');
+            $show->field('receive_address','收货地址')->as(function(){
                 return str_replace("\r\n","<br/>",$this->receive_address);
             });
-            $show->field('remarks')->label('客户备注');
+            $show->field('remarks','客户备注');
             $show->disableDeleteButton();
             $show->disableEditButton();
             $show->disableListButton();
