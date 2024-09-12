@@ -57,7 +57,9 @@ class MobileOrderController
             });*/
             $show->field('delivery_date')->label('订单打包日期');
             $show->field('receive_name')->label('收货人');
-            $show->field('receive_address')->label('收货地址');
+            $show->field('receive_address')->label('收货地址')->as(function(){
+                return str_replace("\r\n","<br/>",$this->receive_address);
+            });
             $show->field('remarks')->label('客户备注');
             $show->disableDeleteButton();
             $show->disableEditButton();
