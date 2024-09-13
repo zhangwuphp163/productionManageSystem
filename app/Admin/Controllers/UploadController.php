@@ -3,6 +3,8 @@
 namespace App\Admin\Controllers;
 
 use App\Labels\OrderLabel;
+use App\Labels\SkuLabel;
+use App\Models\Sku;
 use Dcat\Admin\Http\Controllers\AdminController;
 use Dcat\Admin\Layout\Content;
 use Dcat\Admin\Traits\HasUploadedFile;
@@ -14,7 +16,8 @@ class UploadController extends AdminController
 
     public function index(Content $content)
     {
-        $label = new OrderLabel(['ids' => [5]]);
+        //$label = new OrderLabel(['ids' => [5]]);
+        $label = new SkuLabel(['ids' => [1]]);
 
         $pdf = $label->generate();
         $labelFilename = \Illuminate\Support\Str::uuid();

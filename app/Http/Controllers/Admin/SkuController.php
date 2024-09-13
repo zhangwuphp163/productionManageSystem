@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Admin\Extendsions\Tools\BatchAddStock;
 use App\Admin\Renderable\StockTable;
+use App\Labels\OrderLabel;
+use App\Labels\SkuLabel;
 use App\Models\Category;
 use App\Models\Sku;
 use Carbon\Carbon;
@@ -15,6 +17,7 @@ use Dcat\Admin\Layout\Content;
 use Dcat\Admin\Show;
 use Dcat\Admin\Widgets\Checkbox;
 use Dcat\Admin\Widgets\Modal;
+use Illuminate\Http\Request;
 
 class SkuController extends AdminController
 {
@@ -106,6 +109,7 @@ return  '<div class="vs-checkbox-con vs-checkbox-primary checkbox-grid checkbox-
 
         //$grid->tools("<span class='btn btn-outline-primary create-form'> &nbsp;&nbsp;&nbsp;批量库存操作&nbsp;&nbsp;&nbsp; </span> &nbsp;&nbsp;");
         $grid->tools(function (Grid\Tools $tools) {
+            $tools->append('<a href="javascript:void(0);" class="btn btn-outline-primary batch-print" data-batch-type="inbound" data-title="批量打印条码‘ ijokpl xcvb   vcvdbnfghb/.  ">&nbsp;&nbsp;&nbsp;<i class="fa fa-print"></i> 批量打印条码&nbsp;&nbsp;&nbsp;</a>');
             $tools->append('<a href="javascript:void(0);" class="btn btn-outline-primary batch-edit" data-batch-type="inbound" data-title="批量入库操作">&nbsp;&nbsp;&nbsp;<i class="fa fa-opera"></i> 批量入库操作&nbsp;&nbsp;&nbsp;</a>');
             $tools->append('<a href="javascript:void(0);" class="btn btn-outline-danger batch-edit" data-batch-type="outbound" data-title="批量出库操作">&nbsp;&nbsp;&nbsp;<i class="fa fa-inbox"></i> 批量出库操作&nbsp;&nbsp;&nbsp;</a>');
         });
@@ -159,5 +163,20 @@ return  '<div class="vs-checkbox-con vs-checkbox-primary checkbox-grid checkbox-
             $show->field('created_at');
             $show->field('updated_at');
         });
+    }
+
+    public function printLabel(Request $request)
+    {
+        $label = new SkuLabel(['ids' => $request->get('ids')]);
+        $pdf = $label->generate();
+        $labelFilename = \Illuminate\Support\Str::uuid();
+        $labelFilename =  $labelFilename . ".pdf";
+        $filepath = storage_path("app/public/labels/" . $labelFilename);
+        $pdf->Output($filepath, 'F');
+        return [
+            'status' => 0,
+            'msg' => 'success',
+            'url' => asset("storage/labels/" . $labelFilename)
+        ];
     }
 }
