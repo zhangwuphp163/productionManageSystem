@@ -28,6 +28,11 @@ Route::get('/', function () {
 Route::get('/mobile/order', [MobileOrderController::class,'index'])->name('mobile.order');
 
 Route::group(['namespace' => 'Admin', 'prefix' => 'admin','middleware' => 'admin.permission'], function () {
+
+    \App\Admin\Controllers\StoreController::routes('/stores', '\App\Admin\Controllers\StoreController');
+    \App\Admin\Controllers\AsnController::routes('/asns', '\App\Admin\Controllers\AsnController');
+    \App\Admin\Controllers\ProductController::routes('/products', '\App\Admin\Controllers\ProductController');
+
     Route::get('/shelf', [LocationShelfController::class,'index'])->name('admin.shelf');
     Route::get('/shelf/create', [LocationShelfController::class,'create'])->name('admin.shelf.create');
     Route::post('/shelf', [LocationShelfController::class,'store'])->name('admin.shelf.store');

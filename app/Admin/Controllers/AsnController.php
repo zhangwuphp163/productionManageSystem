@@ -3,6 +3,7 @@
 namespace App\Admin\Controllers;
 
 use App\Admin\Repositories\Asn;
+use App\Libraries\RouteServer;
 use App\Models\AsnItem;
 use App\Models\Sku;
 use Dcat\Admin\Form;
@@ -13,6 +14,7 @@ use Psy\Util\Str;
 
 class AsnController extends AdminController
 {
+    use RouteServer;
     /**
      * Make a grid builder.
      *
