@@ -6,6 +6,7 @@ return [
     ],
     'fields' => [
         'name' => '名称',
+        'status' => '状态',
         'model' => '型号',
         'barcode' => '条码',
         'title' => '标题',

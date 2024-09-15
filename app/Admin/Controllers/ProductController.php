@@ -31,6 +31,7 @@ class ProductController extends AdminController
             //$grid->combine("outer",['outer_box_length','outer_box_width','outer_box_height','outer_box_packing_qty','outer_box_gross_weight']);
             $grid->column('store.name','店铺')->sortable()->width("80");//->filter();
             $grid->column('name')->copyable()->filter()->width("80");
+            $grid->column('status')->filter()->width("80");
             $grid->column('model')->filter()->width("100");
             $grid->column('barcode')->copyable()->filter()->width("80");
             $grid->column('title')->filter()->width("100");
