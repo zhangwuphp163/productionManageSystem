@@ -4,6 +4,8 @@ namespace App\Admin\Controllers;
 
 use App\Admin\Repositories\Product;
 use App\Libraries\RouteServer;
+use App\Models\Category;
+use App\Models\Store;
 use Dcat\Admin\Form;
 use Dcat\Admin\Grid;
 use Dcat\Admin\Show;
@@ -22,10 +24,11 @@ class ProductController extends AdminController
      */
     protected function grid()
     {
-        return Grid::make(new Product(), function (Grid $grid) {
-            $grid->column('id')->sortable();
+        $grid =  Grid::make(new Product(['store']), function (Grid $grid) {
+            //$grid->column('id')->sortable();
             //$grid->combine("inner",['inner_box_length','inner_box_width','inner_box_height','inner_box_packing_qty','inner_box_gross_weight']);
             //$grid->combine("outer",['outer_box_length','outer_box_width','outer_box_height','outer_box_packing_qty','outer_box_gross_weight']);
+            $grid->column('store.name','店铺')->sortable()->filter();
             $grid->column('name')->sortable()->filter();
             $grid->column('model')->filter();
             $grid->column('barcode')->filter();
@@ -54,6 +57,10 @@ class ProductController extends AdminController
             });*/
             $grid->showColumnSelector();
         });
+            $grid->selector(function (Grid\Tools\Selector $selector) {
+            $selector->select('store_id', '店铺', Store::query()->pluck('name','id')->toArray());
+        });
+            return $grid;
     }
 
     /**
@@ -72,6 +79,7 @@ class ProductController extends AdminController
                 $show->width(5)->email;
             });*/
             $show->field('name');
+            $show->field('store.name');
             $show->field('model');
             $show->field('barcode');
             $show->field('title');
@@ -107,6 +115,7 @@ class ProductController extends AdminController
     {
         return Form::make(new Product(), function (Form $form) {
             $form->column(6,function (Form $form){
+                $form->select('store_id',"店铺")->options(Store::query()->pluck('name','id'))->required();
                 $form->text('name')->required();
                 $form->text('model')->required();
                 $form->text('barcode');

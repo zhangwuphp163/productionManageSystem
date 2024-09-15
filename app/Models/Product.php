@@ -10,4 +10,8 @@ class Product extends Model
 {
 	use HasDateTimeFormatter;
     use SoftDeletes;
+    public function store(){
+        return $this->belongsTo(Store::class);
     }
+
+}
