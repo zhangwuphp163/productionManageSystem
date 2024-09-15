@@ -120,7 +120,7 @@ class ProductController extends AdminController
                 $form->text('model')->required();
                 $form->text('barcode');
                 $form->text('title');
-                $form->text('norms');
+                $form->textarea('norms');
                 $form->text('material');
                 $form->text('technology');
                 $form->text('color');
