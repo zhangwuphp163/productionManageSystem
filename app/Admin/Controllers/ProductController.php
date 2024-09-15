@@ -6,6 +6,7 @@ use App\Admin\Repositories\Product;
 use App\Libraries\RouteServer;
 use App\Models\Category;
 use App\Models\Store;
+use Dcat\Admin\Admin;
 use Dcat\Admin\Form;
 use Dcat\Admin\Grid;
 use Dcat\Admin\Show;
@@ -28,39 +29,60 @@ class ProductController extends AdminController
             //$grid->column('id')->sortable();
             //$grid->combine("inner",['inner_box_length','inner_box_width','inner_box_height','inner_box_packing_qty','inner_box_gross_weight']);
             //$grid->combine("outer",['outer_box_length','outer_box_width','outer_box_height','outer_box_packing_qty','outer_box_gross_weight']);
-            $grid->column('store.name','店铺')->sortable()->filter();
-            $grid->column('name')->sortable()->filter();
-            $grid->column('model')->filter();
-            $grid->column('barcode')->filter();
-            $grid->column('title')->filter();
+            $grid->column('store.name','店铺')->sortable()->width("80");//->filter();
+            $grid->column('name')->copyable()->filter()->width("80");
+            $grid->column('model')->filter()->width("100");
+            $grid->column('barcode')->copyable()->filter()->width("80");
+            $grid->column('title')->filter()->width("100");
             $grid->column('product_images')->display(function ($pictures){
                 return $pictures?\GuzzleHttp\json_decode($pictures, true):[];
             })->image('',100,100);;
             $grid->column('size_images')->display(function ($pictures){
                 return $pictures?\GuzzleHttp\json_decode($pictures, true):[];
             })->image('',100,100);;
-            $grid->column('norms');
-            $grid->column('material');
-            $grid->column('technology');
-            $grid->column('color');
-            $grid->column('remarks');
-            $grid->column('attachment')->display(function ($pictures){
+            $grid->column('norms')->display(function ($norms){
+                return str_replace("\r\n","<br/>",$norms);
+            })->width("120");
+            $grid->column('material')->width("80");
+            $grid->column('technology')->width("80");
+            $grid->column('color')->width("80");
+            $grid->column('remarks')->width("80");
+            /*$grid->column('attachment')->display(function ($pictures){
                 return $pictures?\GuzzleHttp\json_decode($pictures, true):[];
-            })->image('',100,100);;
+            })->image('',100,100);*/
+            $grid->column('inner_box','内箱')->display(function(){
+                return "长*宽*高:".implode("*",[$this->inner_box_length,$this->inner_box_width,$this->inner_box_height])."<br/>装箱数(支):{$this->inner_box_packing_qty}<br/>毛重(kg):{$this->inner_box_gross_weight}";
+            })->width("120");
+            $grid->column('outer_box','外箱')->display(function(){
+                return "长*宽*高:".implode("*",[$this->outer_box_length,$this->outer_box_width,$this->outer_box_height])."<br/>装箱数(支):{$this->outer_box_packing_qty}<br/>毛重(kg):{$this->outer_box_gross_weight}";
+            })->width("120");
             $grid->column('production_detail_images')->display(function ($pictures){
                 return $pictures?\GuzzleHttp\json_decode($pictures, true):[];
             })->image('',100,100);
 
             /*$grid->filter(function (Grid\Filter $filter) {
                 $filter->equal('id');
-
             });*/
             $grid->showColumnSelector();
         });
             $grid->selector(function (Grid\Tools\Selector $selector) {
             $selector->select('store_id', '店铺', Store::query()->pluck('name','id')->toArray());
         });
-            return $grid;
+        $grid->actions(function (Grid\Displayers\Actions $actions) {
+            if(!empty($this->attachment)){
+                $attachment = json_decode($this->attachment,true);
+                if(!empty($attachment)){
+                    $url = asset("/storage/uploads/{$attachment[0]}");
+                    $actions->append("<a href='".$url."' target='_blank'><i class='fa fa-book'></i> 说明书</a>");
+                }
+            }
+
+
+            /*if (Admin::user()->can('order-edit')){
+                $actions->quickEdit();
+            }*/
+        });
+        return $grid;
     }
 
     /**
@@ -136,7 +158,7 @@ class ProductController extends AdminController
                 $form->multipleImage('production_detail_images')->autoUpload()->uniqueName()->saving(function ($paths){
                     return json_encode($paths);
                 });
-                $form->multipleFile('attachment')->autoUpload()->uniqueName()->saving(function ($paths){
+                $form->multipleFile('attachment')->accept('pdf')->autoUpload()->uniqueName()->saving(function ($paths){
                     return json_encode($paths);
                 });
             });
