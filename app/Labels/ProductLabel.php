@@ -21,7 +21,7 @@ class ProductLabel
     }
     function generate() {
         $pdf = new ClearPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-        $pdf->SetMargins(4, 0, 4);
+        $pdf->SetMargins(2, 0, 2);
         $pdf->SetHeaderMargin(0);
         $pdf->SetFooterMargin(0);
         $pdf->SetAutoPageBreak(FALSE, PDF_MARGIN_BOTTOM);
@@ -48,9 +48,9 @@ class ProductLabel
                 'stretchtext' => 1,
                 'label' => $sku->barcode
             );
-            $pdf->write1DBarcode($sku->barcode, 'C128', 0, 2, 45, 16, '', $barcode_style,'C');
-            $pdf->setFontSize(10);
-            $pdf->writeHTMLCell(50,12,1,17,$sku->title,0,0,false,true,"L");
+            $pdf->write1DBarcode($sku->barcode, 'C128', 0, 2, 50, 16, '', $barcode_style,'C');
+            $pdf->setFontSize(9);
+            $pdf->writeHTMLCell(50,12,1,18,$sku->title,0,0,false,true,"L");
 
 
         }
