@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="chrome=1,IE=edge">
     <meta name="renderer" content="webkit">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <title>订单详情</title>
+    <title>商品详情</title>
     {!! Dcat\Admin\Admin::asset()->headerJsToHtml() !!}
     {!! Dcat\Admin\Admin::asset()->cssToHtml() !!}
     <style>
@@ -23,14 +23,14 @@
 </body>
 <script>
     $(".fa-search").click(function (){
-        var orderNumber = $("input[name='order_number']").val();
-        location.href = "order?order_number="+orderNumber;
+        var barcode = $("input[name='barcode']").val();
+        location.href = "sku?barcode="+barcode;
     });
-    $("input[name='order_number']").keypress(function(e){
-        if(e.code = 13){
+    $("input[name='barcode']").keypress(function(e){
+        if(e.code === 13){
             e.preventDefault();
-            var orderNumber = $("input[name='order_number']").val();
-            location.href = "order?order_number="+orderNumber;
+            var barcode = $("input[name='barcode']").val();
+            location.href = "sku?barcode="+barcode;
         }
 
     });

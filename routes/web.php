@@ -7,6 +7,7 @@ use App\Admin\Controllers\OrderController;
 use App\Admin\Controllers\UploadController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Mobile\MobileOrderController;
+use App\Http\Controllers\Mobile\MobileSkuController;
 use App\Admin\Controllers\LocationShelfController;
 use App\Admin\Controllers\LocationController;
 use App\Admin\Controllers\AsnController;
@@ -25,13 +26,20 @@ use App\Admin\Controllers\AsnController;
 Route::get('/', function () {
     return redirect('/admin');
 });
-Route::get('/mobile/order', [MobileOrderController::class,'index'])->name('mobile.order');
+Route::group(['namespace' => 'Admin', 'prefix' => 'mobile'], function () {
+    Route::get('/order', [MobileOrderController::class,'index'])->name('mobile.order');
+    Route::get('/sku', [MobileSkuController::class,'index'])->name('mobile.sku');
+});
+
 
 Route::group(['namespace' => 'Admin', 'prefix' => 'admin','middleware' => 'admin.permission'], function () {
 
     \App\Admin\Controllers\StoreController::routes('/stores', '\App\Admin\Controllers\StoreController');
     \App\Admin\Controllers\ProductController::routes('/products', '\App\Admin\Controllers\ProductController');
-    Route::post('/products/print-label', [\App\Admin\Controllers\ProductController::class,'printLabel'])->name('admin.products.print-label');
+    Route::post('/products/batch-copy', [\App\Admin\Controllers\ProductController::class,'batchCopy'])->name('admin.products.batch-copy');
+
+    \App\Admin\Controllers\StoreSkuController::routes('/store-skus', '\App\Admin\Controllers\StoreSkuController');
+    Route::post('/store-skus/print-label', [\App\Admin\Controllers\StoreSkuController::class,'printLabel'])->name('admin.store-skus.print-label');
 
     \App\Admin\Controllers\AsnController::routes('/asns', '\App\Http\Controllers\Admin\Controllers\AsnController');
     \App\Admin\Controllers\LocationShelfController::routes('/shelf', '\App\Http\Controllers\Admin\LocationShelfController');

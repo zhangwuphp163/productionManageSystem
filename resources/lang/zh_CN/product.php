@@ -15,6 +15,7 @@ return [
         'norms' => '规格尺寸MM',
         'material' => '材质',
         'technology' => '工艺',
+        'price' => '出厂价',
         'color' => '颜色',
         'remarks' => '备注',
         'attachment' => '附件',

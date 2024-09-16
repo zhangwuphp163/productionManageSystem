@@ -1,8 +1,7 @@
 @include('admin::layouts.content')
-@include('admin.modals.confirm')
 <script type="text/javascript">
 
-    $('.batch-copy').on('click', function () {
+    $('.batch-print-barcode').on('click', function () {
         var ids = [];
         $('.grid-row-checkbox').each(function () {
             if($(this).is(':checked')){
@@ -10,12 +9,12 @@
             }
         });
         if(ids.length === 0){
-            toastr.error("请选择要复制的产品");
+            toastr.error("请选择要打印的产品条码");
             return;
         }
         $.ajax({
             method:'POST',
-            url:"/admin/products/batch-copy",
+            url:"/admin/store-skus/print-label",
             data:{
                 ids:ids
             },
@@ -25,7 +24,7 @@
             success:function (res) {
                 if(res.status === 0){
                     toastr.success(res.msg);
-                    window.location.reload()
+                    window.open(res.url)
                 }else{
                     toastr.error(res.msg);
                 }

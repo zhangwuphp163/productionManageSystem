@@ -14,6 +14,7 @@ use Dcat\Admin\Grid;
 use Dcat\Admin\Layout\Content;
 use Dcat\Admin\Show;
 use Dcat\Admin\Http\Controllers\AdminController;
+use Dcat\Admin\Widgets\Modal;
 use Illuminate\Config\Repository;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Http\Request;
@@ -53,6 +54,7 @@ class ProductController extends AdminController
             $grid->column('material')->width("80");
             $grid->column('technology')->width("80");
             $grid->column('color')->width("80");
+            $grid->column('price')->width("80");
             $grid->column('remarks')->width("80");
             /*$grid->column('attachment')->display(function ($pictures){
                 return $pictures?\GuzzleHttp\json_decode($pictures, true):[];
@@ -72,9 +74,7 @@ class ProductController extends AdminController
             });*/
             $grid->showColumnSelector();
         });
-            $grid->selector(function (Grid\Tools\Selector $selector) {
-            $selector->select('store_id', '店铺', Store::query()->pluck('name','id')->toArray());
-        });
+
         $grid->actions(function (Grid\Displayers\Actions $actions) {
             if(!empty($this->attachment)){
                 $attachment = json_decode($this->attachment,true);
@@ -90,7 +90,7 @@ class ProductController extends AdminController
             }*/
         });
         $grid->tools(function (Grid\Tools $tools) {
-            $tools->append('<a href="javascript:void(0);" class="btn btn-outline-primary batch-print-barcode" data-title="批量打印条码">&nbsp;&nbsp;&nbsp;<i class="fa fa-print"></i> 批量打印条码&nbsp;&nbsp;&nbsp;</a>');
+            $tools->append('<a href="javascript:void(0);" class="btn btn-outline-primary batch-copy" data-title="批量复制产品">&nbsp;&nbsp;&nbsp;<i class="fa fa-print"></i> 批量复制产品&nbsp;&nbsp;&nbsp;</a>');
         });
         return $grid;
     }
@@ -185,18 +185,29 @@ class ProductController extends AdminController
         });
     }
 
-    public function printLabel(Request $request)
+    public function batchCopy(Request $request)
     {
-        $label = new ProductLabel(['ids' => $request->get('ids')]);
-        $pdf = $label->generate();
-        $labelFilename = \Illuminate\Support\Str::uuid();
-        $labelFilename =  $labelFilename . ".pdf";
-        $filepath = storage_path("app/public/labels/" . $labelFilename);
-        $pdf->Output($filepath, 'F');
-        return [
-            'status' => 0,
-            'msg' => 'success',
-            'url' => asset("storage/labels/" . $labelFilename)
-        ];
+        try {
+            $ids = $request->get('ids');
+            $products = \App\Models\Product::query()->whereIn('id',$ids)->get();
+            foreach ($products as $product){
+                $newProduct = $product->replicate([
+                    'product_images',
+                    'size_images',
+                    'attachment',
+                    'production_detail_images'
+                ]);
+                $newProduct->save();
+            }
+            return [
+                'status' => 0,
+                'msg' => 'success'
+            ];
+        }catch (\Exception $exception){
+            return [
+                'status' => 1,
+                'msg' => $exception->getMessage()
+            ];
+        }
     }
 }
