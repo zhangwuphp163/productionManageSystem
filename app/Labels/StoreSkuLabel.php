@@ -48,9 +48,9 @@ class StoreSkuLabel
                 'stretchtext' => 1,
                 'label' => $sku->barcode
             );
-            $pdf->write1DBarcode($sku->barcode, 'C128', 0, 2, 50, 18, '', $barcode_style,'C');
+            $pdf->write1DBarcode($sku->barcode, 'C128', 0, 2, 46, 18, '', $barcode_style,'C');
             $pdf->setFontSize(7);
-            $pdf->writeHTMLCell(50,12,1,20,$sku->title,0,0,false,true,"L");
+            $pdf->writeHTMLCell(46,12,1,20,$sku->title,0,0,false,true,"L");
 
 
         }

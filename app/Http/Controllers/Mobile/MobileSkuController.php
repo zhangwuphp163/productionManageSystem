@@ -42,8 +42,8 @@ class MobileSkuController
             $product = $show->model()->product;
             $store = $show->model()->store;
             $show->field('store.name','店铺');
-            $show->field('store.title','标题');
-            $show->field('store.barcode','商品条码');
+            $show->field('title','标题');
+            $show->field('barcode','商品条码');
             $show->field('product.name',trans('product.fields.name'));
             $show->field('product.model',trans('product.fields.model'));
             $show->field('product.norms',trans('product.fields.norms'));
