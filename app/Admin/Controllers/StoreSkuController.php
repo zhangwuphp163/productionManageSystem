@@ -35,7 +35,7 @@ class StoreSkuController extends AdminController
      */
     protected function grid()
     {
-        return Grid::make(new StoreSku(['store']), function (Grid $grid) {
+        return Grid::make(new StoreSku(['store','product']), function (Grid $grid) {
             //$grid->column('id')->sortable();
             $grid->column('store.name','店铺')->sortable()->width("80");
             $grid->column('title',trans('product.fields.title'));
@@ -65,7 +65,7 @@ class StoreSkuController extends AdminController
             $grid->column('outer_box','外箱')->display(function(){
                 return "长*宽*高:".implode("*",[$this->product->outer_box_length,$this->product->outer_box_width,$this->product->outer_box_height])."<br/>装箱数(支):{$this->product->outer_box_packing_qty}<br/>毛重(kg):{$this->product->outer_box_gross_weight}";
             })->width("120");
-            $grid->column('->product.production_detail_images',trans('product.fields.production_detail_images'))->display(function ($pictures){
+            $grid->column('product.production_detail_images',trans('product.fields.production_detail_images'))->display(function ($pictures){
                 return $pictures?\GuzzleHttp\json_decode($pictures, true):[];
             })->image('',100,100);
 
