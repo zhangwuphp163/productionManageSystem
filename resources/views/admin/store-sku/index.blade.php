@@ -16,7 +16,8 @@
             method:'POST',
             url:"/admin/store-skus/print-label",
             data:{
-                ids:ids
+                ids:ids,
+                type:$(this).data('type')
             },
             beforeSend:function(){
                 $("btn").attr("disabled",true);
