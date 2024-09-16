@@ -138,8 +138,8 @@ class StoreSkuController extends AdminController
             //$form->display('id');
             $form->select('store_id',"店铺")->options(\App\Models\Store::query()->pluck('name','id'))->required();
             $form->select('product_id',"产品")->options(\App\Models\Product::query()->pluck('name','id'))->required();
-            $form->text('title');
-            $form->text('barcode');
+            $form->text('title','标题');
+            $form->text('barcode','条码');
 
             /*$form->display('created_at');
             $form->display('updated_at');*/

@@ -21,7 +21,7 @@ class StoreSkuBoxLabel
     }
     function generate() {
         $pdf = new ClearPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-        $pdf->SetMargins(2, 0, 2);
+        $pdf->SetMargins(1, 0, 1);
         $pdf->SetHeaderMargin(0);
         $pdf->SetFooterMargin(0);
         $pdf->SetAutoPageBreak(FALSE, PDF_MARGIN_BOTTOM);
@@ -33,26 +33,9 @@ class StoreSkuBoxLabel
             $pdf->AddPage("L",[$this->page_width,$this->page_height]);
             $pdf->setFontSize(18);
             $pdf->writeHTMLCell(50,12,1,3,$sku->store->name,0,0,false,true,"C");
-            $barcode_style = array(
-                'position' => 'C',
-                'align' => 'C',
-                'stretch' => false,
-                'fitwidth' => false,
-                'cellfitalign' => '',
-                'border' => 0,
-                'hpadding' => 'auto',
-                'vpadding' => '0',
-                'fgcolor' => array(0, 0, 0),
-                'bgcolor' => false, //array(255,255,255),
-                'text' => true,
-                'font' => 'notosansuniversal',
-                'fontsize' => 10,
-                'stretchtext' => 1,
-                'label' => $sku->store->name
-            );
-            //$pdf->write1DBarcode($sku->barcode, 'C128', 0, 2, 50, 18, '', $barcode_style,'C');
+
             $pdf->setFontSize(10);
-            $pdf->writeHTMLCell(50,12,1,15,$sku->product->name,0,0,false,true,"C");
+            $pdf->writeHTMLCell(35,12,2,15,$sku->product->name,0,0,false,true,"L");
 
             $barcode_style = array(
                 //'position' => 'C',
@@ -65,7 +48,7 @@ class StoreSkuBoxLabel
                 'module_width' => 1, // width of a single module in points
                 'module_height' => 1 // height of a single module in points
             );
-            $pdf->write2DBarcode(asset("mobile/sku?barcode={$sku->barcode}"), 'QRCODE,M', 40, 20, 12, '', $barcode_style, 'R',true);
+            $pdf->write2DBarcode(asset("mobile/sku?barcode={$sku->barcode}"), 'QRCODE,M', 36, 15, 13, '', $barcode_style, 'R',true);
 
         }
         return $pdf;
