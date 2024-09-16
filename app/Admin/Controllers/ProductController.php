@@ -3,6 +3,7 @@
 namespace App\Admin\Controllers;
 
 use App\Admin\Repositories\Product;
+use App\Admin\Repositories\StoreSku;
 use App\Labels\OrderLabel;
 use App\Labels\ProductLabel;
 use App\Libraries\RouteServer;
@@ -41,6 +42,10 @@ class ProductController extends AdminController
     {
         $grid =  Grid::make(new Product(['store']), function (Grid $grid) {
             $grid->column('name')->copyable()->filter()->width("80");
+            $grid->column('band-stores','已绑的店铺')->display(function (){
+                $storeIds = \App\Models\StoreSku::query()->where('product_id',$this->id)->pluck('store_id')->toArray();
+                return Store::query()->whereIn('id',$storeIds)->get()->implode("name","<br/>");
+            });
             $grid->column('model')->filter()->width("100");
             $grid->column('product_images')->display(function ($pictures){
                 return $pictures?\GuzzleHttp\json_decode($pictures, true):[];
@@ -91,6 +96,7 @@ class ProductController extends AdminController
         });
         $grid->tools(function (Grid\Tools $tools) {
             $tools->append('<a href="javascript:void(0);" class="btn btn-outline-primary batch-copy" data-title="批量复制产品">&nbsp;&nbsp;&nbsp;<i class="fa fa-print"></i> 批量复制产品&nbsp;&nbsp;&nbsp;</a>');
+            $tools->append('<a href="javascript:void(0);" class="btn btn-outline-primary batch-add-store" data-title="批量添加到店铺">&nbsp;&nbsp;&nbsp;<i class="fa fa-plus"></i> 批量添加到店铺&nbsp;&nbsp;&nbsp;</a>');
         });
         return $grid;
     }

@@ -12,6 +12,12 @@ class StoreSku extends Model
     use SoftDeletes;
 
     protected $table = 'store_skus';
+    protected $fillable = [
+        'store_id',
+        'product',
+        'title',
+        'barcode'
+    ];
 
     public function store(){
         return $this->belongsTo(Store::class);

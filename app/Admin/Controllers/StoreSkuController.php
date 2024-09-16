@@ -2,19 +2,19 @@
 
 namespace App\Admin\Controllers;
 
-use App\Admin\Repositories\Store;
+use App\Admin\Repositories\Product;
 use App\Admin\Repositories\StoreSku;
-use App\Labels\ProductLabel;
 use App\Labels\StoreSkuBoxLabel;
 use App\Labels\StoreSkuLabel;
 use App\Libraries\RouteServer;
-use Dcat\Admin\Admin;
+use App\Models\Store;
 use Dcat\Admin\Form;
 use Dcat\Admin\Grid;
 use Dcat\Admin\Layout\Content;
 use Dcat\Admin\Show;
 use Dcat\Admin\Http\Controllers\AdminController;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class StoreSkuController extends AdminController
@@ -118,14 +118,12 @@ class StoreSkuController extends AdminController
      */
     protected function detail($id)
     {
-        return Show::make($id, new StoreSku(), function (Show $show) {
-            $show->field('id');
-            $show->field('store_id');
-            $show->field('product_id');
-            $show->field('title');
-            $show->field('barcode');
-            $show->field('created_at');
-            $show->field('updated_at');
+        return Show::make($id, new StoreSku(['store','product']), function (Show $show) {
+            $show->model()->with("product");
+            $show->field('store.name','店铺');
+            $show->field('product.name','产品名称');
+            $show->field('title','标题');
+            $show->field('barcode','条码');
         });
     }
 
@@ -168,4 +166,37 @@ class StoreSkuController extends AdminController
             'url' => asset("storage/labels/" . $labelFilename)
         ];
     }
+    public function batchAddProduct(Request $request)
+    {
+        try {
+            $ids = $request->get('ids');
+            $store_id = $request->get('store_id','');
+            DB::beginTransaction();
+            $store = Store::query()->whereId($store_id)->first();
+            $products = \App\Models\Product::query()->whereIn('id',$ids)->get();
+            foreach ($products as $product){
+                $storeSku = \App\Models\StoreSku::query()->where('product_id',$product->id)->where('store_id',$store_id)->first();
+                if($storeSku){
+                    throw new \Exception("店铺【{$store->name}】已经添加了产品【{$product->name}】");
+                }
+                \App\Models\StoreSku::create([
+                    'store_id' => $store->id,
+                    'product_id' => $product->id
+                ]);
+            }
+            DB::commit();
+
+            return [
+                'status' => 0,
+                'msg' => 'success'
+            ];
+        }catch (\Exception $exception){
+            DB::rollBack();
+            return [
+                'status' => 1,
+                'msg' => $exception->getMessage()
+            ];
+        }
+    }
+
 }

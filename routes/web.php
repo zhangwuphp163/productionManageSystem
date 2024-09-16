@@ -8,9 +8,6 @@ use App\Admin\Controllers\UploadController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Mobile\MobileOrderController;
 use App\Http\Controllers\Mobile\MobileSkuController;
-use App\Admin\Controllers\LocationShelfController;
-use App\Admin\Controllers\LocationController;
-use App\Admin\Controllers\AsnController;
 
 /*
 |--------------------------------------------------------------------------
@@ -40,6 +37,7 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin','middleware' => 'admin
 
     \App\Admin\Controllers\StoreSkuController::routes('/store-skus', '\App\Admin\Controllers\StoreSkuController');
     Route::post('/store-skus/print-label', [\App\Admin\Controllers\StoreSkuController::class,'printLabel'])->name('admin.store-skus.print-label');
+    Route::post('/store-skus/batch-add-product', [\App\Admin\Controllers\StoreSkuController::class,'batchAddProduct'])->name('admin.store-skus.batch-add-product');
 
     \App\Admin\Controllers\AsnController::routes('/asns', '\App\Http\Controllers\Admin\Controllers\AsnController');
     \App\Admin\Controllers\LocationShelfController::routes('/shelf', '\App\Http\Controllers\Admin\LocationShelfController');
