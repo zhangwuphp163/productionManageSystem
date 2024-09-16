@@ -6,6 +6,7 @@ use App\Admin\Extendsions\Tools\BatchAddStock;
 use App\Admin\Renderable\StockTable;
 use App\Labels\OrderLabel;
 use App\Labels\SkuLabel;
+use App\Libraries\RouteServer;
 use App\Models\Category;
 use App\Models\Sku;
 use Carbon\Carbon;
@@ -22,6 +23,7 @@ use Illuminate\Http\Request;
 class SkuController extends AdminController
 {
     use HasResourceActions;
+    use RouteServer;
     protected $title = "商品管理";
     public function index(Content $content)
     {

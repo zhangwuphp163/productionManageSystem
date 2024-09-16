@@ -3,6 +3,7 @@
 namespace App\Admin\Controllers;
 
 use App\Admin\Repositories\Location;
+use App\Libraries\RouteServer;
 use App\Models\LocationShelf;
 use Dcat\Admin\Form;
 use Dcat\Admin\Grid;
@@ -11,6 +12,7 @@ use Dcat\Admin\Http\Controllers\AdminController;
 
 class LocationController extends AdminController
 {
+    use RouteServer;
     /**
      * Make a grid builder.
      *

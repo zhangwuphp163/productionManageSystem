@@ -17,7 +17,7 @@ class CreateStoresTable extends Migration
             $table->increments('id');
             $table->string('country')->index()->default('');
             $table->string('name')->index()->default('');
-            $table->string('code',32)->index()->default('');
+            //$table->string('code',32)->index()->default('');
             $table->timestamps();
             $table->softDeletes();
         });

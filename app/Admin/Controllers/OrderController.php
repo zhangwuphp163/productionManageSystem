@@ -5,6 +5,7 @@ namespace App\Admin\Controllers;
 use App\Admin\Actions\Grid\ResignImageUpload;
 use App\Admin\Repositories\Order;
 use App\Labels\OrderLabel;
+use App\Libraries\RouteServer;
 use Dcat\Admin\Actions\Action;
 use Dcat\Admin\Admin;
 use Dcat\Admin\Form;
@@ -27,6 +28,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 class OrderController extends AdminController
 {
     use HasUploadedFile;
+    use RouteServer;
     public function index(Content $content)
     {
         return $content

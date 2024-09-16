@@ -3,6 +3,7 @@
 namespace App\Admin\Controllers;
 
 use App\Admin\Repositories\LocationShelf;
+use App\Libraries\RouteServer;
 use Dcat\Admin\Form;
 use Dcat\Admin\Grid;
 use Dcat\Admin\Show;
@@ -10,6 +11,7 @@ use Dcat\Admin\Http\Controllers\AdminController;
 
 class LocationShelfController extends AdminController
 {
+    use RouteServer;
     /**
      * Make a grid builder.
      *

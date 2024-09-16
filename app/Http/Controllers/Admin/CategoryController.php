@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Libraries\RouteServer;
 use App\Models\Category;
 use Carbon\Carbon;
 use Dcat\Admin\Form;
@@ -14,6 +15,7 @@ use Dcat\Admin\Http\Repositories\Administrator;
 class CategoryController extends AdminController
 {
     use HasResourceActions;
+    use RouteServer;
     protected $title = "品类管理";
     protected function grid()
     {

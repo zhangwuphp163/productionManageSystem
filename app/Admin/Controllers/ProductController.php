@@ -3,21 +3,34 @@
 namespace App\Admin\Controllers;
 
 use App\Admin\Repositories\Product;
+use App\Labels\OrderLabel;
+use App\Labels\ProductLabel;
 use App\Libraries\RouteServer;
 use App\Models\Category;
 use App\Models\Store;
 use Dcat\Admin\Admin;
 use Dcat\Admin\Form;
 use Dcat\Admin\Grid;
+use Dcat\Admin\Layout\Content;
 use Dcat\Admin\Show;
 use Dcat\Admin\Http\Controllers\AdminController;
 use Illuminate\Config\Repository;
 use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
+use Ramsey\Uuid\Uuid;
 
 class ProductController extends AdminController
 {
     use RouteServer;
+    public function index(Content $content)
+    {
+        return $content
+            ->translation($this->translation())
+            ->title($this->title())
+            ->body($this->grid())
+            ->view("admin.product.index");
+    }
     /**
      * Make a grid builder.
      *
@@ -82,6 +95,9 @@ class ProductController extends AdminController
             /*if (Admin::user()->can('order-edit')){
                 $actions->quickEdit();
             }*/
+        });
+        $grid->tools(function (Grid\Tools $tools) {
+            $tools->append('<a href="javascript:void(0);" class="btn btn-outline-primary batch-print-barcode" data-title="批量打印条码">&nbsp;&nbsp;&nbsp;<i class="fa fa-print"></i> 批量打印条码&nbsp;&nbsp;&nbsp;</a>');
         });
         return $grid;
     }
@@ -178,5 +194,20 @@ class ProductController extends AdminController
                 $form->number('outer_box_packing_qty');
             });
         });
+    }
+
+    public function printLabel(Request $request)
+    {
+        $label = new ProductLabel(['ids' => $request->get('ids')]);
+        $pdf = $label->generate();
+        $labelFilename = \Illuminate\Support\Str::uuid();
+        $labelFilename =  $labelFilename . ".pdf";
+        $filepath = storage_path("app/public/labels/" . $labelFilename);
+        $pdf->Output($filepath, 'F');
+        return [
+            'status' => 0,
+            'msg' => 'success',
+            'url' => asset("storage/labels/" . $labelFilename)
+        ];
     }
 }

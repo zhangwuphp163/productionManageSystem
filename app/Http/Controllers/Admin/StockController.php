@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Admin\Extendsions\Tools\BatchAddStock;
 use App\Admin\Extendsions\Tools\BatchDeleteStock;
+use App\Libraries\RouteServer;
 use App\Models\Sku;
 use App\Models\Stock;
 use Carbon\Carbon;
@@ -18,6 +19,7 @@ use Illuminate\Http\Request;
 class StockController extends AdminController
 {
     use HasResourceActions;
+    use RouteServer;
     protected $title = "库存管理";
     public function index(Content $content)
     {

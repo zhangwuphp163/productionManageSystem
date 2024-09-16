@@ -23,7 +23,7 @@ class StoreController extends AdminController
             $grid->column('id')->sortable();
             $grid->column('country','国家');
             $grid->column('name');
-            $grid->column('code','店铺代码');
+            //$grid->column('code','店铺代码');
             $grid->column('created_at');
             $grid->column('updated_at')->sortable();
 
@@ -47,7 +47,7 @@ class StoreController extends AdminController
             $show->field('id');
             $show->field('country');
             $show->field('name');
-            $show->field('code');
+            //$show->field('code');
             $show->field('created_at');
             $show->field('updated_at');
         });
@@ -64,7 +64,7 @@ class StoreController extends AdminController
             $form->display('id');
             $form->text('country');
             $form->text('name');
-            $form->text('code');
+            //$form->text('code');
 
             $form->display('created_at');
             $form->display('updated_at');

@@ -14,6 +14,7 @@ trait RouteServer
         Route::get("/{$prefix}/{id}/edit", [$controller,'edit'])->name("admin.{$prefix}.edit");
         Route::put("/{$prefix}/{id}", [$controller,'update'])->name("admin.{$prefix}.update");
         Route::delete("/{$prefix}/{id}", [$controller,'destroy'])->name("admin.{$prefix}.destroy");
+        Route::get("/{$prefix}/{id}", [$controller,'detail'])->name("admin.{$prefix}.detail");
     }
 
 }
