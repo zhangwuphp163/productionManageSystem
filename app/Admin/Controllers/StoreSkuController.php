@@ -106,6 +106,8 @@ class StoreSkuController extends AdminController
                 $tools->append('<a href="javascript:void(0);" class="btn btn-outline-primary batch-print" data-title="批量打印条码" data-type="barcode">&nbsp;&nbsp;&nbsp;<i class="fa fa-print"></i> 批量打印条码&nbsp;&nbsp;&nbsp;</a>');
                 $tools->append('<a href="javascript:void(0);" class="btn btn-outline-primary batch-print" data-title="批量打印装箱码" data-type="box">&nbsp;&nbsp;&nbsp;<i class="fa fa-inbox"></i> 批量打印装箱码&nbsp;&nbsp;&nbsp;</a>');
             });
+            $grid->scrollbarX();
+            //$grid->fixColumns(1);
         });
     }
 

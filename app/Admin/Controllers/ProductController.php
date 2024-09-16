@@ -98,6 +98,7 @@ class ProductController extends AdminController
             $tools->append('<a href="javascript:void(0);" class="btn btn-outline-primary batch-copy" data-title="批量复制产品">&nbsp;&nbsp;&nbsp;<i class="fa fa-print"></i> 批量复制产品&nbsp;&nbsp;&nbsp;</a>');
             $tools->append('<a href="javascript:void(0);" class="btn btn-outline-primary batch-add-store" data-title="批量添加到店铺">&nbsp;&nbsp;&nbsp;<i class="fa fa-plus"></i> 批量添加到店铺&nbsp;&nbsp;&nbsp;</a>');
         });
+        $grid->scrollbarX();
         return $grid;
     }
 

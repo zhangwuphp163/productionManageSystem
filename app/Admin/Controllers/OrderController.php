@@ -109,7 +109,10 @@ class OrderController extends AdminController
                 $tools->append('<a href="javascript:void(0);" class="btn btn-outline-primary batch-print" data-batch-type="inbound" data-title="批量打印出库单">&nbsp;&nbsp;&nbsp;<i class="fa fa-print"></i> 批量打印出库单&nbsp;&nbsp;&nbsp;</a>');
             });
             $grid->option("quick_edit_button",'编辑');
+            $grid->scrollbarX();
+            
         });
+
     }
 
     /**
