@@ -110,7 +110,7 @@ class OrderController extends AdminController
             });
             $grid->option("quick_edit_button",'编辑');
             $grid->scrollbarX();
-            
+
         });
 
     }

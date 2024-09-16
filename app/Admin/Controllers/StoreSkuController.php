@@ -38,8 +38,8 @@ class StoreSkuController extends AdminController
         return Grid::make(new StoreSku(['store','product']), function (Grid $grid) {
             //$grid->column('id')->sortable();
             $grid->column('store.name','店铺')->sortable()->width("80");
-            $grid->column('title',trans('product.fields.title'));
-            $grid->column('barcode',trans('product.fields.barcode'));
+            $grid->column('title',trans('product.fields.title'))->editable();
+            $grid->column('barcode',trans('product.fields.barcode'))->editable();
             $grid->column('product.name',trans('product.fields.name'))->copyable()->filter()->width("80");
             $grid->column('product.model',trans('product.fields.model'))->filter()->width("100");
             $grid->column('product.product_images',trans('product.fields.product_images'))->display(function ($pictures){
@@ -77,7 +77,10 @@ class StoreSkuController extends AdminController
             $grid->column('updated_at')->sortable();*/
 
             $grid->filter(function (Grid\Filter $filter) {
-                $filter->equal('id');
+                //$filter->expand(false);
+                $filter->panel();
+                $filter->like('title')->width(3);
+                $filter->equal('barcode')->width(3);
 
             });
             $grid->selector(function (Grid\Tools\Selector $selector) {

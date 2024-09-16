@@ -41,12 +41,12 @@ class ProductController extends AdminController
     protected function grid()
     {
         $grid =  Grid::make(new Product(['store']), function (Grid $grid) {
-            $grid->column('name')->copyable()->filter()->width("80");
+            $grid->column('name')->editable()->width("80");
             $grid->column('band-stores','已绑的店铺')->display(function (){
                 $storeIds = \App\Models\StoreSku::query()->where('product_id',$this->id)->pluck('store_id')->toArray();
                 return Store::query()->whereIn('id',$storeIds)->get()->implode("name","<br/>");
             });
-            $grid->column('model')->filter()->width("100");
+            $grid->column('model')->editable()->width("100");
             $grid->column('product_images')->display(function ($pictures){
                 return $pictures?\GuzzleHttp\json_decode($pictures, true):[];
             })->image('',100,100);;
@@ -74,9 +74,12 @@ class ProductController extends AdminController
                 return $pictures?\GuzzleHttp\json_decode($pictures, true):[];
             })->image('',100,100);
 
-            /*$grid->filter(function (Grid\Filter $filter) {
-                $filter->equal('id');
-            });*/
+            $grid->filter(function (Grid\Filter $filter) {
+                $filter->expand(false);
+                $filter->panel();
+                $filter->equal('name')->width(3);
+                $filter->equal('model')->width(3);
+            });
             $grid->showColumnSelector();
         });
 
