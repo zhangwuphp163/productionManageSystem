@@ -45,10 +45,10 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin','middleware' => 'admin
     Route::post('/stocks/batch', [StockController::class,'batch'])->name('admin.stocks.batch');
 
 
-    OrderController::routes('/orders', '\App\Admin\Controllers\OrderController');
     Route::get('/orders/batch', [OrderController::class,'batch'])->name('admin.orders.batch');
     Route::post('/orders/upload', [OrderController::class,'upload'])->name('admin.orders.upload');
     Route::post('/orders/print-label', [OrderController::class,'printLabel'])->name('admin.orders.print-label');
+    OrderController::routes('/orders', '\App\Admin\Controllers\OrderController');
 
     Route::put('/orders/upload-design-image/{id}', [OrderController::class,'uploadDesignImage'])->name('admin.orders.upload-design-image');
     Route::put('/orders/update-design-image/{id}', [OrderController::class,'updateDesignImage'])->name('admin.upload.update-design-image');
