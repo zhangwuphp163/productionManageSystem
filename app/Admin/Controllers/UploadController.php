@@ -22,8 +22,8 @@ class UploadController extends AdminController
     {
         //$label = new OrderLabel(['ids' => [5]]);
         //$label = new ProductLabel(['ids' => [1]]);
-        $label = new StoreSkuBoxLabel(['ids' => [1]]);
-        //$label = new SkuLabel(['ids' => [1]]);
+        //$label = new StoreSkuBoxLabel(['ids' => [1]]);
+        $label = new SkuLabel(['ids' => [1]]);
 
         $pdf = $label->generate();
 

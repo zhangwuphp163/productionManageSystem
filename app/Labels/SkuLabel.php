@@ -48,7 +48,7 @@ class SkuLabel
                 'stretchtext' => 1,
                 'label' => $sku->barcode
             );
-            $pdf->write1DBarcode($sku->barcode, 'C128', 0, 1, 40, 15, '', $barcode_style,'C');
+            $pdf->write1DBarcode($sku->barcode, 'C128', 0, 1, 42, 15, '', $barcode_style,'C');
             //$pdf->te(40,8,0,10,'123',0,0,false,false,"C");
             $pdf->Text(0,15,$sku->name,0,false,true,0,0,'C');
 
