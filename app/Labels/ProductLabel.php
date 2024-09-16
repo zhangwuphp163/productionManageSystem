@@ -44,12 +44,14 @@ class ProductLabel
                 'bgcolor' => false, //array(255,255,255),
                 'text' => true,
                 'font' => 'notosansuniversal',
-                'fontsize' => 12,
+                'fontsize' => 10,
                 'stretchtext' => 1,
                 'label' => $sku->barcode
             );
-            $pdf->write1DBarcode($sku->barcode, 'C128', 0, 3, 45, 20, '', $barcode_style,'C');
-            $pdf->Text(0,23,$sku->title,0,false,true,0,0,'C');
+            $pdf->write1DBarcode($sku->barcode, 'C128', 0, 2, 45, 16, '', $barcode_style,'C');
+            $pdf->setFontSize(10);
+            $pdf->writeHTMLCell(50,12,1,17,$sku->title,0,0,false,true,"L");
+
 
         }
         return $pdf;
