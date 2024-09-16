@@ -1,7 +1,7 @@
 @include('admin::layouts.content')
 <script type="text/javascript">
 
-    $('.batch-print-barcode').on('click', function () {
+    $('.batch-print').on('click', function () {
         var ids = [];
         $('.grid-row-checkbox').each(function () {
             if($(this).is(':checked')){
