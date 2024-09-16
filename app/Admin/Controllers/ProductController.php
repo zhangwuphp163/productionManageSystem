@@ -39,15 +39,8 @@ class ProductController extends AdminController
     protected function grid()
     {
         $grid =  Grid::make(new Product(['store']), function (Grid $grid) {
-            //$grid->column('id')->sortable();
-            //$grid->combine("inner",['inner_box_length','inner_box_width','inner_box_height','inner_box_packing_qty','inner_box_gross_weight']);
-            //$grid->combine("outer",['outer_box_length','outer_box_width','outer_box_height','outer_box_packing_qty','outer_box_gross_weight']);
-            $grid->column('store.name','店铺')->sortable()->width("80");//->filter();
             $grid->column('name')->copyable()->filter()->width("80");
-            $grid->column('status')->filter()->width("80");
             $grid->column('model')->filter()->width("100");
-            $grid->column('barcode')->copyable()->filter()->width("80");
-            $grid->column('title')->filter()->width("100");
             $grid->column('product_images')->display(function ($pictures){
                 return $pictures?\GuzzleHttp\json_decode($pictures, true):[];
             })->image('',100,100);;
@@ -118,14 +111,12 @@ class ProductController extends AdminController
                 $show->width(5)->email;
             });*/
             $show->field('name');
-            $show->field('store.name');
             $show->field('model');
-            $show->field('barcode');
-            $show->field('title');
             $show->field('norms');
             $show->field('material');
             $show->field('technology');
             $show->field('color');
+            $show->field('price');
             $show->field('remarks');
             $show->field('inner_box_length');
             $show->field('inner_box_width');
@@ -154,15 +145,13 @@ class ProductController extends AdminController
     {
         return Form::make(new Product(), function (Form $form) {
             $form->column(6,function (Form $form){
-                $form->select('store_id',"店铺")->options(Store::query()->pluck('name','id'))->required();
                 $form->text('name')->required();
                 $form->text('model')->required();
-                $form->text('barcode');
-                $form->text('title');
                 $form->textarea('norms');
                 $form->text('material');
                 $form->text('technology');
                 $form->text('color');
+                $form->decimal('price');
                 $form->text('remarks');
             });
             $form->column(6,function (Form $form){

@@ -15,18 +15,15 @@ class CreateProductsTable extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('store_id')->index();
-            $table->string('status')->index()->default('sale')->nullable();
             $table->string('name')->index()->default('')->nullable();
             $table->string('model')->index()->default('')->nullable();
-            $table->string('barcode')->index()->default('')->nullable();
-            $table->string('title')->index()->default('')->nullable();
             $table->json('product_images')->nullable();
             $table->json('size_images')->nullable();
             $table->text("norms")->nullable();
             $table->string('material')->nullable();
             $table->string('technology')->nullable();
             $table->string('color')->nullable();
+            $table->decimal('price',8,2)->nullable();
             $table->decimal('inner_box_length',6,1)->nullable();
             $table->decimal('inner_box_width',6,1)->nullable();
             $table->decimal('inner_box_height',6,1)->nullable();
