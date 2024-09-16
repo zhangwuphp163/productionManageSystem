@@ -7,14 +7,16 @@
     "require": {
         "php": "^7.3|^8.0",
         "ext-json": "*",
+        "barryvdh/laravel-ide-helper": "^2.8.1",
         "dcat/laravel-admin": "2.*",
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.0.1",
-        "laravel/framework": "^8.75",
+        "laravel/framework": "^v8.83.27",
         "laravel/sanctum": "^2.11",
         "laravel/tinker": "^2.5",
-        "tecnickcom/tcpdf": "^6.7",
-        "barryvdh/laravel-ide-helper":"^2.8.1"
+        "maatwebsite/excel": "3.1.58",
+        "phpoffice/phpspreadsheet": "^1.29.1",
+        "tecnickcom/tcpdf": "^6.7"
     },
     "require-dev": {
         "facade/ignition": "^2.5",
@@ -59,7 +61,8 @@
     "config": {
         "optimize-autoloader": true,
         "preferred-install": "dist",
-        "sort-packages": true
+        "sort-packages": true,
+        "platform-check": false
     },
     "minimum-stability": "dev",
     "prefer-stable": true
