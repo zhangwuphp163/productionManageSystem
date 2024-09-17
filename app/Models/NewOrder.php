@@ -44,7 +44,7 @@ class NewOrder extends Model
         'variant_attribute',
         'unit_price',
         'qty',
-        'remarks',
+        'sku_remarks',
 
         'receiver_username',
         'receiver_email',
