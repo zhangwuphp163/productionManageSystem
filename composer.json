@@ -8,6 +8,7 @@
         "php": "^7.3|^8.0",
         "ext-json": "*",
         "barryvdh/laravel-ide-helper": "^2.8.1",
+        "dcat/easy-excel": "^1.1",
         "dcat/laravel-admin": "2.*",
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.0.1",

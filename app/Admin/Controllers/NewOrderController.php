@@ -3,11 +3,13 @@
 namespace App\Admin\Controllers;
 
 use App\Admin\Actions\DownloadOrderTemplate;
+use App\Admin\Actions\Grid\NewOrderResignImageUpload;
 use App\Admin\Actions\Grid\ResignImageUpload;
 use App\Admin\Forms\OrderImportForm;
 use App\Admin\Repositories\Order;
 use App\Labels\OrderLabel;
 use App\Libraries\RouteServer;
+use App\Models\NewOrder;
 use Dcat\Admin\Actions\Action;
 use Dcat\Admin\Admin;
 use Dcat\Admin\Form;
@@ -28,7 +30,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
-class OrderController extends AdminController
+class NewOrderController extends AdminController
 {
     use HasUploadedFile;
     use RouteServer;
@@ -49,11 +51,10 @@ class OrderController extends AdminController
      */
     protected function grid()
     {
-        return Grid::make(new \App\Models\Order(), function (Grid $grid) {
+        return Grid::make(new \App\Models\NewOrder(), function (Grid $grid) {
             $grid->model()->orderBy('id','desc');
             $grid->column('id')->sortable();
-            $grid->column('order_date',"订单日期")->sortable()->filter(Grid\Column\Filter\Equal::make()->date());
-            $grid->column('order_number',"订单号")->sortable()->filter();
+            $grid->column('platform_number');
             $grid->column('images',"订单图片")->display(function ($pictures){
                 return $pictures?\GuzzleHttp\json_decode($pictures, true):[];
             })->image('',100,100);
@@ -65,25 +66,67 @@ class OrderController extends AdminController
             )->display(function ($status) {
                 return $status;
             });
-            $grid->column('delivery_date',"发货日期")->sortable()->filter(Grid\Column\Filter\Equal::make()->date());
-            $grid->column('tracking_number',"发货单号")->sortable()->filter();
-            $grid->column('quantity',"数量")->sortable()->filter();
-            $grid->column('receive_name',"收货人")->filter();
-            $grid->column('remarks',"备注");
-            /*$grid->column('status',"订单进度")->sortable()->using(\App\Models\Order::$statues)->label([
-                'new' => 'default',
-                'opening_board' => 'yellow',
-                'production_completed' => 'green',
-                'posted' => '#493deb',
-                'shipped' => 'blue',
-                'cancel' => 'danger',
-            ])->select(\App\Models\Order::$statues,true)->filter(
-                Grid\Column\Filter\In::make(\App\Models\Order::$statues)
-            );*/
+            $grid->column('platform');
+            $grid->column('store');
+            $grid->column('site');
+            $grid->column('order_at');
+            $grid->column('payment_at');
+            $grid->column('delivery_deadline');
+            $grid->column('delivery_at');
+            $grid->column('currency');
+            $grid->column('total_amount');
+            $grid->column('total_sku_amount');
+            $grid->column('customer_paid_freight');
+            $grid->column('outbound_cost');
 
-            $grid->column('created_at')->sortable()->filter(Grid\Column\Filter\Between::make()->date());
-            /*$grid->column('updated_at')->sortable()->filter(Grid\Column\Filter\Gt::make()->datetime());*/
-            //$grid->enableDialogCreate();
+            $grid->column('sku');
+            $grid->column('sku_name');
+            $grid->column('m_sku');
+            $grid->column('asin');
+            $grid->column('order_sku_id');
+            $grid->column('sku_title')->width(120);
+            $grid->column('variant_attribute');
+            $grid->column('unit_price');
+            $grid->column('qty');
+            $grid->column('remarks',"备注")->display(function ($remarks){
+                return str_replace("\n","<br/>",$remarks);
+            });
+
+            $grid->column('receiver_username');
+            $grid->column('receiver_email');
+            $grid->column('receiver_remarks');
+            $grid->column('receiver_name');
+            $grid->column('receiver_phone');
+            $grid->column('receiver_country');
+            $grid->column('receiver_provider');
+            $grid->column('receiver_city');
+            $grid->column('receiver_district');
+            $grid->column('receiver_postcode');
+            $grid->column('receiver_house_number');
+            $grid->column('receiver_address_type');
+            $grid->column('receiver_company');
+            $grid->column('receiver_address1');
+            $grid->column('receiver_address2');
+            $grid->column('receiver_address3');
+            $grid->column('logistics_provider');
+            $grid->column('delivery_warehouse');
+            $grid->column('logistics_method');
+            $grid->column('waybill_number');
+            $grid->column('tracking_number');
+            $grid->column('tag_number');
+            $grid->column('estimated_weight');
+            $grid->column('estimated_length');
+            $grid->column('estimated_width');
+            $grid->column('estimated_height');
+            $grid->column('estimated_cost_weight');
+            $grid->column('estimated_shipping_cost');
+
+
+
+
+
+            $grid->column('customer_remarks');
+
             $grid->showColumnSelector();
             $grid->disableCreateButton();
             if (!Admin::user()->can('order-edit')){
@@ -94,8 +137,8 @@ class OrderController extends AdminController
                 $filter->equal('id');
             });
             $grid->actions(function (Grid\Displayers\Actions $actions) {
-                $actions->append(new \App\Admin\Actions\Grid\OrderDetail());
-                $actions->append(new \App\Admin\Actions\Grid\ResignImageUpload());
+                //$actions->append(new \App\Admin\Actions\Grid\OrderDetail());
+                $actions->append(new \App\Admin\Actions\Grid\NewOrderResignImageUpload());
             });
 
 
@@ -105,13 +148,13 @@ class OrderController extends AdminController
                 $actions->disableEdit();
                 //dd(Permission::check('order-edit'));
                 if (Admin::user()->can('order-edit')){
-                    $actions->quickEdit();
+                    //$actions->quickEdit();
                 }
             });
-            $grid->tools(function (Grid\Tools $tools) {
-                $tools->append('<a href="javascript:void(0);" class="btn btn-outline-primary batch-print" data-batch-type="inbound" data-title="批量打印出库单">&nbsp;&nbsp;&nbsp;<i class="fa fa-print"></i> 批量打印出库单&nbsp;&nbsp;&nbsp;</a>');
-            });
             /*$grid->tools(function (Grid\Tools $tools) {
+                $tools->append('<a href="javascript:void(0);" class="btn btn-outline-primary batch-print" data-batch-type="inbound" data-title="批量打印出库单">&nbsp;&nbsp;&nbsp;<i class="fa fa-print"></i> 批量打印出库单&nbsp;&nbsp;&nbsp;</a>');
+            });*/
+            $grid->tools(function (Grid\Tools $tools) {
                 $tools->append(Modal::make()
                     // 大号弹窗
                     ->lg()
@@ -121,14 +164,15 @@ class OrderController extends AdminController
                     ->button('<button class="btn btn-primary"><i class="feather icon-upload"></i> 导入数据</button>')
                     // 弹窗内容
                     ->body(OrderImportForm::make()));
-                $tools->append('<a href="javascript:void(0);" class="btn btn-outline-primary btn-export" data-batch-type="inbound" data-title="导出数据">&nbsp;&nbsp;&nbsp;<i class="fa fa-download"></i> 导出数据&nbsp;&nbsp;&nbsp;</a>');
+                //$tools->append('<a href="javascript:void(0);" class="btn btn-outline-primary btn-export" data-batch-type="inbound" data-title="导出数据">&nbsp;&nbsp;&nbsp;<i class="fa fa-download"></i> 导出数据&nbsp;&nbsp;&nbsp;</a>');
 
                 // $tools->append(DownloadOrderTemplate::make()->setKey('test_question'));
 
-            });*/
+            });
 
-            $grid->option("quick_edit_button",'编辑');
+            //$grid->option("quick_edit_button",'编辑');
             $grid->scrollbarX();
+            $grid->fixColumns(0,-1);
 
         });
 
@@ -143,7 +187,7 @@ class OrderController extends AdminController
      */
     protected function detail($id)
     {
-        return Show::make($id, new Order(), function (Show $show) {
+        return Show::make($id, new NewOrder(), function (Show $show) {
             $show->field('id');
             $show->field('images');
             $show->field('created_at');
@@ -158,7 +202,7 @@ class OrderController extends AdminController
      */
     protected function form()
     {
-        return Form::make(new Order(), function (Form $form) {
+        return Form::make(new NewOrder(), function (Form $form) {
             $form->multipleImage("images","订单图片")->uniqueName()->saving(function ($paths){
                 return json_encode($paths);
             })->autoUpload();
@@ -263,10 +307,10 @@ class OrderController extends AdminController
 
     public function uploadDesignImage($id)
     {
-        return ResignImageUpload::form($id)->update($id);
+        return NewOrderResignImageUpload::form($id)->update($id);
     }
     public function updateDesignImage($id)
     {
-        return ResignImageUpload::form($id)->update($id,null,"orders");
+        return NewOrderResignImageUpload::form($id)->update($id,null,"new-orders");
     }
 }

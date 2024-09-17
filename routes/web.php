@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\SkuController;
 use App\Http\Controllers\Admin\StockController;
 use App\Admin\Controllers\OrderController;
+use App\Admin\Controllers\NewOrderController;
 use App\Admin\Controllers\UploadController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Mobile\MobileOrderController;
@@ -49,6 +50,14 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin','middleware' => 'admin
 
     StockController::routes('/stocks', '\App\Http\Controllers\Admin\StockController');
     Route::post('/stocks/batch', [StockController::class,'batch'])->name('admin.stocks.batch');
+
+    Route::get('/new-orders/batch', [NewOrderController::class,'batch'])->name('admin.new-orders.batch');
+    Route::post('/new-orders/upload', [NewOrderController::class,'upload'])->name('admin.new-orders.upload');
+    Route::post('/new-orders/print-label', [NewOrderController::class,'printLabel'])->name('admin.new-orders.print-label');
+    Route::put('/new-orders/upload-design-image/{id}', [NewOrderController::class,'uploadDesignImage'])->name('admin.new-orders.upload-design-image');
+    Route::put('/new-orders/update-design-image/{id}', [NewOrderController::class,'updateDesignImage'])->name('admin.new-orders.update-design-image');
+
+    NewOrderController::routes('/new-orders', '\App\Admin\Controllers\NewOrderController');
 
 
     Route::get('/orders/batch', [OrderController::class,'batch'])->name('admin.orders.batch');
