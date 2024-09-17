@@ -64,7 +64,7 @@ class OrderImportForm extends Form
             'variant_attribute' => $row['变体属性']??null,
             'unit_price' => $row['单价']??null,
             'qty' => $row['数量']??1,
-            'remarks' => $row['商品备注']??null,
+            'sku_remarks' => $row['商品备注']??null,
 
             'receiver_username' => $row['买家姓名']??null,
             'receiver_email' => $row['买家邮箱']??null,
