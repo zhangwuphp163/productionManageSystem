@@ -88,7 +88,7 @@ class NewOrderController extends AdminController
             $grid->column('variant_attribute');
             $grid->column('unit_price');
             $grid->column('qty');
-            $grid->column('remarks',"备注")->display(function ($remarks){
+            $grid->column('sku_remarks',"备注")->display(function ($remarks){
                 return str_replace("\n","<br/>",$remarks);
             });
 
