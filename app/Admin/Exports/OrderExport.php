@@ -9,8 +9,14 @@ use Maatwebsite\Excel\Concerns\WithHeadings;
 class OrderExport implements FromCollection,WithHeadings
 {
 
+    protected $ids;
+    public function __construct($ids = [])
+    {
+        $this->ids = $ids;
+    }
     public function collection()
     {
+
         $orders = NewOrder::query()->select([
             "platform_number",
             "logistics_method",
@@ -26,7 +32,7 @@ class OrderExport implements FromCollection,WithHeadings
             "estimated_length",
             "estimated_width",
             "estimated_height"
-        ])->get();
+        ])->whereIn('id',$this->ids)->get();
         $data = [];
         /** @var NewOrder $order */
         foreach ($orders as $order) {
@@ -40,6 +46,8 @@ class OrderExport implements FromCollection,WithHeadings
                 implode(",",array_filter([$order->receiver_address1,$order->receiver_address2,$order->receiver_address3])),
                 $order->receiver_phone,
                 $order->receiver_email,
+                $order->receiver_postcode,
+                $order->estimated_weight,
                 "",
                 "IOSS",
                 "",

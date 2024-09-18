@@ -169,7 +169,7 @@ class NewOrderController extends AdminController
                 //$tools->append('<a href="javascript:void(0);" class="btn btn-outline-primary btn-export" data-batch-type="inbound" data-title="导出数据">&nbsp;&nbsp;&nbsp;<i class="fa fa-download"></i> 导出数据&nbsp;&nbsp;&nbsp;</a>');
 
                 // $tools->append(DownloadOrderTemplate::make()->setKey('test_question'));
-                $tools->append('<a href="'.route('admin.new-orders.export').'" class="btn btn-sm btn-success" target="_blank"><i class="fa fa-download"></i> 导出勾选的订单</a>');
+                $tools->append('<button class="btn btn-outline-danger btn-export" >&nbsp;&nbsp;&nbsp;<i class="fa fa-download"></i> 导出勾选的订单&nbsp;&nbsp;&nbsp;</button>');
 
 
             });
@@ -318,8 +318,10 @@ class NewOrderController extends AdminController
         return NewOrderResignImageUpload::form($id)->update($id,null,"new-orders");
     }
 
-    public function export()
+    public function export(Request $request)
     {
-        return \Maatwebsite\Excel\Facades\Excel::download(new OrderExport(), date("Ymdhis").'-order.xlsx');
+        $ids = $request->get("ids");
+        $ids = explode(",", $ids);
+        return \Maatwebsite\Excel\Facades\Excel::download(new OrderExport($ids), date("Ymdhis").'-order.xlsx');
     }
 }
