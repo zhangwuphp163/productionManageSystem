@@ -45,6 +45,7 @@ class OrderImageImportForm extends Form
                                 $images[] = "images/".$filename;
                             }
                         }
+                        dd($images);
                         if(!empty($images)){
                             $newOrder->images = json_encode($images);
                             $newOrder->save();
