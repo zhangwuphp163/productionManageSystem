@@ -11,7 +11,7 @@ return [
     | login page.
     |
     */
-    'name' => 'ERP',
+    'name' => 'I P O',
 
     /*
     |--------------------------------------------------------------------------
@@ -88,7 +88,7 @@ return [
     | Html title for all pages.
     |
     */
-    'title' => 'ERP',
+    'title' => 'I P O',
 
     /*
     |--------------------------------------------------------------------------
@@ -322,13 +322,14 @@ return [
         'sidebar_collapsed' => false,
 
         // light, primary, dark
-        'sidebar_style' => 'dark',
+        'sidebar_style' => 'light',
 
         //'dark_mode_switch' => false,
         'dark_mode_switch' => false,
 
         // bg-primary, bg-info, bg-warning, bg-success, bg-danger, bg-dark
-        'navbar_color' => 'bg-dark',
+        //'navbar_color' => 'bg-dark',
+        'navbar_color' => '#ccc',
     ],
 
     /*
