@@ -58,12 +58,13 @@ class NewOrderController extends AdminController
             $grid->model()->orderBy('id','desc');
             $grid->column('id')->sortable();
             $grid->column('platform_number');
+            $grid->column('system_number');
             $grid->column('images',"订单图片")->display(function ($pictures){
                 return $pictures?\GuzzleHttp\json_decode($pictures, true):[];
-            })->image('',100,100);
+            })->image('',80,80);
             $grid->column('design_images',"设计图片")->display(function ($pictures){
                 return $pictures?\GuzzleHttp\json_decode($pictures, true):[];
-            })->image('',100,100);
+            })->image('',80,80);
             $grid->column('status',"订单进度")->sortable()->select(\App\Models\Order::$statues,true)->filter(
                 Grid\Column\Filter\In::make(\App\Models\Order::$statues)
             )->display(function ($status) {
@@ -93,7 +94,7 @@ class NewOrderController extends AdminController
             $grid->column('qty');
             $grid->column('sku_remarks',"备注")->display(function ($remarks){
                 return str_replace("\n","<br/>",$remarks);
-            });
+            })->width(180);
 
             $grid->column('receiver_username');
             $grid->column('receiver_email');
