@@ -56,11 +56,11 @@ class ProductController extends AdminController
             $grid->column('norms')->display(function ($norms){
                 return str_replace("\r\n","<br/>",$norms);
             })->width("120");
-            $grid->column('material')->width("80");
-            $grid->column('technology')->width("80");
-            $grid->column('color')->width("80");
-            $grid->column('price')->width("80");
-            $grid->column('remarks')->width("80");
+            $grid->column('material')->editable()->width("80");
+            $grid->column('technology')->editable()->width("80");
+            $grid->column('color')->editable()->width("80");
+            $grid->column('price')->editable()->width("80");
+            $grid->column('remarks')->editable()->width("80");
             /*$grid->column('attachment')->display(function ($pictures){
                 return $pictures?\GuzzleHttp\json_decode($pictures, true):[];
             })->image('',100,100);*/
