@@ -34,9 +34,7 @@ class OrderImageImportForm extends Form
                 foreach (File::directories($extractPath) as $dir) {
                     $pathData = explode('/', $dir);
                     $systemNumber = end($pathData);
-                    dd($systemNumber);
                     $newOrder = NewOrder::query()->where('system_number', $systemNumber)->first();
-                    dd($newOrder);
                     if(!empty($newOrder)){
                         $images = [];
                         foreach (File::files($dir) as $file) {
@@ -47,7 +45,6 @@ class OrderImageImportForm extends Form
                                 $images[] = "images/".$filename;
                             }
                         }
-                        dd($images);
                         if(!empty($images)){
                             $newOrder->images = json_encode($images);
                             $newOrder->save();
