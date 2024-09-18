@@ -5,6 +5,7 @@ namespace App\Admin\Controllers;
 use App\Admin\Actions\DownloadOrderTemplate;
 use App\Admin\Actions\Grid\NewOrderResignImageUpload;
 use App\Admin\Actions\Grid\ResignImageUpload;
+use App\Admin\Exports\OrderExport;
 use App\Admin\Forms\OrderImportForm;
 use App\Admin\Repositories\Order;
 use App\Labels\OrderLabel;
@@ -22,6 +23,7 @@ use Dcat\Admin\Http\Controllers\AdminController;
 use Dcat\Admin\Support\Zip;
 use Dcat\Admin\Traits\HasUploadedFile;
 use Dcat\Admin\Widgets\Modal;
+use Dcat\EasyExcel\Excel;
 use Faker\Core\Uuid;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -167,6 +169,8 @@ class NewOrderController extends AdminController
                 //$tools->append('<a href="javascript:void(0);" class="btn btn-outline-primary btn-export" data-batch-type="inbound" data-title="导出数据">&nbsp;&nbsp;&nbsp;<i class="fa fa-download"></i> 导出数据&nbsp;&nbsp;&nbsp;</a>');
 
                 // $tools->append(DownloadOrderTemplate::make()->setKey('test_question'));
+                $tools->append('<a href="'.route('admin.new-orders.export').'" class="btn btn-sm btn-success" target="_blank"><i class="fa fa-download"></i> 导出勾选的订单</a>');
+
 
             });
 
@@ -312,5 +316,10 @@ class NewOrderController extends AdminController
     public function updateDesignImage($id)
     {
         return NewOrderResignImageUpload::form($id)->update($id,null,"new-orders");
+    }
+
+    public function export()
+    {
+        return \Maatwebsite\Excel\Facades\Excel::download(new OrderExport(), date("Ymdhis").'-order.xlsx');
     }
 }
