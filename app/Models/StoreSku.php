@@ -14,7 +14,7 @@ class StoreSku extends Model
     protected $table = 'store_skus';
     protected $fillable = [
         'store_id',
-        'product',
+        'product_id',
         'title',
         'barcode'
     ];
