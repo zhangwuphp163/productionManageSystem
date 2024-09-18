@@ -37,29 +37,29 @@ class OrderExport implements FromCollection,WithHeadings
         /** @var NewOrder $order */
         foreach ($orders as $order) {
             $data[] = [
-                $order->platform_number,
-                $order->logistics_method,
-                $order->receiver_country,
-                $order->receiver_name,
-                $order->receiver_provider,
-                $order->receiver_city,
-                implode(",",array_filter([$order->receiver_address1,$order->receiver_address2,$order->receiver_address3])),
-                $order->receiver_phone,
-                $order->receiver_email,
-                $order->receiver_postcode,
+                (string)$order->platform_number,
+                (string)$order->logistics_method,
+                (string)$order->receiver_country,
+                (string)$order->receiver_name,
+                (string)$order->receiver_provider,
+                (string)$order->receiver_city,
+                (string)implode(",",array_filter([$order->receiver_address1,$order->receiver_address2,$order->receiver_address3])),
+                (string)$order->receiver_phone,
+                (string)$order->receiver_email,
+                (string)$order->receiver_postcode,
                 $order->estimated_weight,
-                "",
                 "IOSS",
                 "",
-                $order->m_sku,
-                $order->sku_name,
+                "",
+                (string)$order->m_sku,
+                (string)$order->sku_name,
                 "",
                 "",
                 "1",
                 $order->estimated_length,
                 $order->estimated_width,
                 $order->estimated_height
-                ];
+            ];
         }
         return  collect($data);
     }
