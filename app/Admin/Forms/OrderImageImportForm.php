@@ -35,6 +35,7 @@ class OrderImageImportForm extends Form
                     $pathData = explode('/', $dir);
                     $systemNumber = end($pathData);
                     $newOrder = NewOrder::query()->where('system_number', $systemNumber)->first();
+                    dd($newOrder);
                     if(!empty($newOrder)){
                         $images = [];
                         foreach (File::files($dir) as $file) {
