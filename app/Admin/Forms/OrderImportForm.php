@@ -170,6 +170,6 @@ class OrderImportForm extends Form
             ->uniqueName()
             ->autoUpload()
             ->move('/import')
-            ->help('支持xls,xlsx');
+            ->help('支持xls,xlsx,csv');
     }
 }

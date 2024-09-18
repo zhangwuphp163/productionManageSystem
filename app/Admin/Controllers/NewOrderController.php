@@ -6,6 +6,7 @@ use App\Admin\Actions\DownloadOrderTemplate;
 use App\Admin\Actions\Grid\NewOrderResignImageUpload;
 use App\Admin\Actions\Grid\ResignImageUpload;
 use App\Admin\Exports\OrderExport;
+use App\Admin\Forms\OrderImageImportForm;
 use App\Admin\Forms\OrderImportForm;
 use App\Admin\Repositories\Order;
 use App\Labels\OrderLabel;
@@ -166,6 +167,16 @@ class NewOrderController extends AdminController
                     ->button('<button class="btn btn-primary"><i class="feather icon-upload"></i> 导入数据</button>')
                     // 弹窗内容
                     ->body(OrderImportForm::make()));
+                $tools->append(Modal::make()
+                    // 大号弹窗
+                    ->lg()
+                    // 弹窗标题
+                    ->title('导入订单图片')
+                    // 按钮
+                    ->button('<button class="btn btn-success"><i class="feather icon-image"></i> 导入订单图片</button>')
+                    // 弹窗内容
+                    ->body(OrderImageImportForm::make()));
+
                 //$tools->append('<a href="javascript:void(0);" class="btn btn-outline-primary btn-export" data-batch-type="inbound" data-title="导出数据">&nbsp;&nbsp;&nbsp;<i class="fa fa-download"></i> 导出数据&nbsp;&nbsp;&nbsp;</a>');
 
                 // $tools->append(DownloadOrderTemplate::make()->setKey('test_question'));
