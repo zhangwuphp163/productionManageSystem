@@ -53,9 +53,10 @@ class ProductController extends AdminController
             $grid->column('size_images')->display(function ($pictures){
                 return $pictures?\GuzzleHttp\json_decode($pictures, true):[];
             })->image('',100,100);;
-            $grid->column('norms')->display(function ($norms){
+            $grid->column('norms')->textarea()->width("150");
+               /* ->display(function ($norms){
                 return str_replace("\r\n","<br/>",$norms);
-            })->textarea()->width("150");
+            })*/
             $grid->column('material')->editable()->width("80");
             $grid->column('technology')->editable()->width("80");
             $grid->column('color')->editable()->width("80");
