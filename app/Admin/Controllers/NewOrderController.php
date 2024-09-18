@@ -57,8 +57,11 @@ class NewOrderController extends AdminController
         return Grid::make(new \App\Models\NewOrder(), function (Grid $grid) {
             $grid->model()->orderBy('id','desc');
             $grid->column('id')->sortable();
-            $grid->column('platform_number');
-            $grid->column('system_number');
+            $grid->column('平台/系统单号')->display(function(){
+                return $this->platform_number.'<br/>'.$this->system_number;
+            });
+            /*$grid->column('platform_number');
+            $grid->column('system_number');*/
             $grid->column('images',"订单图片")->display(function ($pictures){
                 return $pictures?\GuzzleHttp\json_decode($pictures, true):[];
             })->image('',80,80);
@@ -70,9 +73,12 @@ class NewOrderController extends AdminController
             )->display(function ($status) {
                 return $status;
             });
-            $grid->column('platform');
+            $grid->column('平台/店铺/站点')->display(function(){
+                return $this->platform.'<br/>'.$this->store.'<br/>'.$this->site;
+            });
+            /*$grid->column('platform');
             $grid->column('store');
-            $grid->column('site');
+            $grid->column('site');*/
             $grid->column('order_at');
             $grid->column('payment_at');
             $grid->column('delivery_deadline');
@@ -88,13 +94,13 @@ class NewOrderController extends AdminController
             $grid->column('m_sku');
             $grid->column('asin');
             $grid->column('order_sku_id');
-            $grid->column('sku_title')->width(120);
+            $grid->column('sku_title')->limit(50);
             $grid->column('variant_attribute');
             $grid->column('unit_price');
             $grid->column('qty');
             $grid->column('sku_remarks',"备注")->display(function ($remarks){
                 return str_replace("\n","<br/>",$remarks);
-            })->width(180);
+            });
 
             $grid->column('receiver_username');
             $grid->column('receiver_email');
@@ -118,10 +124,14 @@ class NewOrderController extends AdminController
             $grid->column('waybill_number');
             $grid->column('tracking_number');
             $grid->column('tag_number');
-            $grid->column('estimated_weight');
+            $grid->column('预估-重量(kg)<br/>尺寸-长*宽*高(cm)')->display(function(){
+                return $this->estimated_weight."<br/>".implode("*",[$this->estimated_length,$this->estimated_width,$this->estimated_height]);
+
+            });
+           /* $grid->column('estimated_weight');
             $grid->column('estimated_length');
             $grid->column('estimated_width');
-            $grid->column('estimated_height');
+            $grid->column('estimated_height');*/
             $grid->column('estimated_cost_weight');
             $grid->column('estimated_shipping_cost');
 
