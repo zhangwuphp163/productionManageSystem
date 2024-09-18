@@ -65,8 +65,8 @@ class NewOrderController extends AdminController
             $grid->column('design_images',"设计图片")->display(function ($pictures){
                 return $pictures?\GuzzleHttp\json_decode($pictures, true):[];
             })->image('',80,80);
-            $grid->column('status',"订单进度")->sortable()->select(\App\Models\Order::$statues,true)->filter(
-                Grid\Column\Filter\In::make(\App\Models\Order::$statues)
+            $grid->column('status',"订单进度")->sortable()->select(\App\Models\NewOrder::$statues,true)->filter(
+                Grid\Column\Filter\In::make(\App\Models\NewOrder::$statues)
             )->display(function ($status) {
                 return $status;
             });
@@ -141,7 +141,7 @@ class NewOrderController extends AdminController
                 $filter->equal('id');
             });
             $grid->actions(function (Grid\Displayers\Actions $actions) {
-                //$actions->append(new \App\Admin\Actions\Grid\OrderDetail());
+                $actions->append("<br/>");
                 $actions->append(new \App\Admin\Actions\Grid\NewOrderResignImageUpload());
             });
 
@@ -152,7 +152,7 @@ class NewOrderController extends AdminController
                 $actions->disableEdit();
                 //dd(Permission::check('order-edit'));
                 if (Admin::user()->can('order-edit')){
-                    //$actions->quickEdit();
+                    $actions->quickEdit();
                 }
             });
             /*$grid->tools(function (Grid\Tools $tools) {
@@ -219,17 +219,24 @@ class NewOrderController extends AdminController
     protected function form()
     {
         return Form::make(new NewOrder(), function (Form $form) {
-            $form->multipleImage("images","订单图片")->uniqueName()->saving(function ($paths){
-                return json_encode($paths);
-            })->autoUpload();
-            $form->select("status","生产进度")->options(\App\Models\Order::$statues)->default($form->model()->status);
-            $form->date("order_date","订单日期");
-            $form->date("delivery_date","发货日期");
-            $form->text("remarks","备注");
-            $form->text("receive_name","收货人");
-            $form->text("receive_phone","收货人电话");
-            $form->textarea("receive_address","收货地址");
-            $form->text("tracking_number","发货单号");
+            $form->tab('订单信息', function (Form $form) {
+                $form->multipleImage("images","订单图片")->uniqueName()->saving(function ($paths){
+                    return json_encode($paths);
+                })->autoUpload();
+                $form->select("status","生产进度")->options(\App\Models\NewOrder::$statues)->default($form->model()->status);
+                $form->datetime("order_at","订购日期");
+                $form->datetime("delivery_at","发货日期");
+                $form->text("order_remarks","订单备注");
+            });
+            $form->tab('订单地址信息', function (Form $form) {
+                $form->text("receiver_name","收货人");
+                $form->text("receiver_phone","收货人电话");
+                //$form->text("receiver_address1","收货地址");
+            });
+            $form->tab('订单发货信息', function (Form $form) {
+                $form->text("tracking_number","发货单号");
+            });
+
         });
     }
     public function upload(Request $request)

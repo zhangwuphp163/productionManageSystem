@@ -76,4 +76,13 @@ class NewOrder extends Model
         'estimated_cost_weight',
         'estimated_shipping_cost',
     ];
+
+    public static $statues = [
+        '可生产' => '可生产',
+        '开板中' => '开板中',
+        '生产完成' => '生产完成',
+        '可贴单' => '可贴单',
+        '已发货' => '已发货',
+        '已取消' => '已取消',
+    ];
 }
