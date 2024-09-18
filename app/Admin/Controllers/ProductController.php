@@ -40,8 +40,11 @@ class ProductController extends AdminController
      */
     protected function grid()
     {
-        $grid =  Grid::make(new Product(['store']), function (Grid $grid) {
-            $grid->model()->orderBy('priority', 'desc');
+        $grid =  Grid::make(new Product(['category']), function (Grid $grid) {
+            $grid->selector(function (Grid\Tools\Selector $selector) {
+                $selector->select('category_id', '品类', \App\Models\Category::query()->pluck('name','id')->toArray());
+            });
+            $grid->column('category.name','品类');
             $grid->column('name')->editable()->width("80");
             $grid->column('band-stores','已绑的店铺')->display(function (){
                 $storeIds = \App\Models\StoreSku::query()->where('product_id',$this->id)->pluck('store_id')->toArray();
@@ -83,7 +86,6 @@ class ProductController extends AdminController
                 $filter->equal('model')->width(3);
             });
             $grid->showColumnSelector();
-            $grid->column('priority')->editable()->width("50");
         });
 
         $grid->actions(function (Grid\Displayers\Actions $actions) {
@@ -117,12 +119,13 @@ class ProductController extends AdminController
      */
     protected function detail($id)
     {
-        return Show::make($id, new Product(), function (Show $show) {
+        return Show::make($id, new Product(['category']), function (Show $show) {
             /*$show->row(function (Show\Row $show) {
                 $show->width(3)->id;
                 $show->width(3)->name;
                 $show->width(5)->email;
             });*/
+            $show->field('category.name');
             $show->field('name');
             $show->field('model');
             $show->field('norms');
@@ -158,6 +161,7 @@ class ProductController extends AdminController
     {
         return Form::make(new Product(), function (Form $form) {
             $form->column(6,function (Form $form){
+                $form->select('category_id',"品类")->options(\App\Models\Category::query()->pluck('name','id'))->required();
                 $form->text('name')->required();
                 $form->text('model')->required();
                 $form->textarea('norms');
@@ -166,7 +170,6 @@ class ProductController extends AdminController
                 $form->text('color');
                 $form->decimal('price');
                 $form->text('remarks');
-                $form->text('priority');
             });
             $form->column(6,function (Form $form){
                 $form->multipleImage('product_images')->autoUpload()->uniqueName()->saving(function ($paths){

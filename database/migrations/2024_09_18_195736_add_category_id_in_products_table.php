@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddPriorityInProductsTable extends Migration
+class AddCategoryIdInProductsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +14,7 @@ class AddPriorityInProductsTable extends Migration
     public function up()
     {
         Schema::table('products', function (Blueprint $table) {
-            $table->integer('priority')->default(0);
+            $table->unsignedInteger('category_id')->nullable();
         });
     }
 
@@ -26,7 +26,7 @@ class AddPriorityInProductsTable extends Migration
     public function down()
     {
         Schema::table('products', function (Blueprint $table) {
-            $table->dropColumn('priority');
+            $table->dropColumn('category_id');
         });
     }
 }

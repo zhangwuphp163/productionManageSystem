@@ -14,6 +14,9 @@ class Product extends Model
     public function store(){
         return $this->belongsTo(Store::class);
     }
+    public function category(){
+        return $this->belongsTo(Category::class);
+    }
 
     public function getPriceAttribute($value){
         if (!empty(Admin::user()) && Admin::user()->can('product-price')){
