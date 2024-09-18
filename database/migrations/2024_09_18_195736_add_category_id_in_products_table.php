@@ -14,7 +14,7 @@ class AddCategoryIdInProductsTable extends Migration
     public function up()
     {
         Schema::table('products', function (Blueprint $table) {
-            $table->unsignedInteger('category_id')->nullable();
+            $table->unsignedInteger('category_id')->nullable()->index();
         });
     }
 
