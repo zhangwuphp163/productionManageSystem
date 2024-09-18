@@ -11,7 +11,8 @@ use Dcat\Admin\Widgets\Modal;
 class NewOrderResignImageUpload extends RowAction
 {
 
-    protected $title = '<a href="#" class="btn btn-cyan btn-xs"><i class="fa fa-image"></i> 上传设计图</a>';
+    //protected $title = '<a href="#" class="btn btn-cyan btn-xs"><i class="fa fa-image"></i> 上传设计图</a>';
+    protected $title = '<a href="#" ><i class="fa fa-image" title="上传设计图"></i></a>';
     //protected $title = '<br/><i class="fa fa-image"></i>';
 
     public function render()
@@ -19,7 +20,7 @@ class NewOrderResignImageUpload extends RowAction
         $form = self::form($this->getKey())->edit($this->getKey())->action("new-orders/update-design-image/{$this->getKey()}");
         return Modal::make()
             ->scrollable()
-            ->xl()
+            ->lg()
             ->title("上传设计图")
             ->body($form)->button($this->title);
     }
