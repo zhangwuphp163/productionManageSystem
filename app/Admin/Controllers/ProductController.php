@@ -83,7 +83,7 @@ class ProductController extends AdminController
                 $filter->equal('model')->width(3);
             });
             $grid->showColumnSelector();
-            $grid->column('priority')->editable()->width("50");
+            $grid->column('priority','优先级')->editable()->width("50");
         });
 
         $grid->actions(function (Grid\Displayers\Actions $actions) {
