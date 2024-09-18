@@ -83,31 +83,65 @@ class NewOrderController extends AdminController
             $grid->column('payment_at');
             $grid->column('delivery_deadline');
             $grid->column('delivery_at');
-            $grid->column('currency');
+
+            $grid->column('订单金额')->display(function(){
+                return "币种：".$this->currency."<br/>".
+                "订单总金额：".$this->total_amount."<br/>".
+                "订单商品金额：".$this->total_sku_amount."<br/>".
+                "客付运费：".$this->customer_paid_freight."<br/>".
+                "订单出库成本：".$this->outbound_cost."<br/>";
+            });
+            /*$grid->column('currency');
             $grid->column('total_amount');
             $grid->column('total_sku_amount');
             $grid->column('customer_paid_freight');
-            $grid->column('outbound_cost');
-
-            $grid->column('sku');
+            $grid->column('outbound_cost');*/
+            $grid->column('SKU')->display(function(){
+                return "SKU：".$this->sku."<br/>".
+                    "品名：".$this->sku_name."<br/>".
+                    "MSKU：".$this->m_sku."<br/>".
+                    "单价：".$this->unit_price."<br/>".
+                    "数量：".$this->qty."<br/>";
+            });
+            /*$grid->column('sku');
             $grid->column('sku_name');
-            $grid->column('m_sku');
-            $grid->column('asin');
-            $grid->column('order_sku_id');
+            $grid->column('m_sku');*/
+            $grid->column('商品ID')->display(function(){
+                return "ASIN/商品ID：".$this->asin."<br/>".
+                    "订单商品ID：".$this->order_sku_id;
+            });
+            /*$grid->column('asin');
+            $grid->column('order_sku_id');*/
             $grid->column('sku_title')->limit(50);
             $grid->column('variant_attribute');
-            $grid->column('unit_price');
-            $grid->column('qty');
-            $grid->column('sku_remarks',"备注")->display(function ($remarks){
-                return str_replace("\n","<br/>",$remarks);
+            /*$grid->column('unit_price');
+            $grid->column('qty');*/
+
+            $grid->column('买家信息')->display(function(){
+                return "买家姓名：".$this->receiver_username."<br/>".
+                    "买家邮箱：".$this->receiver_email."<br/>".
+                    "收件人：".$this->receiver_name."<br/>".
+                    "收件人电话：".$this->receiver_phone."<br/>".
+                    "买家留言：".$this->receiver_remarks;
             });
 
-            $grid->column('receiver_username');
+            /*$grid->column('receiver_username');
             $grid->column('receiver_email');
             $grid->column('receiver_remarks');
             $grid->column('receiver_name');
-            $grid->column('receiver_phone');
-            $grid->column('receiver_country');
+            $grid->column('receiver_phone');*/
+            $grid->column('地址信息')->display(function(){
+                return "国家：".$this->receiver_country."<br/>".
+                    "省/州：".$this->receiver_provider."<br/>".
+                    "城市：".$this->receiver_city."<br/>".
+                    "区/县：".$this->receiver_district."<br/>".
+                    "邮编：".$this->receiver_postcode."<br/>".
+                    "门牌号：".$this->receiver_house_number."<br/>".
+                    "地址类型：".$this->receiver_address_type."<br/>".
+                    "地址行123：".implode("/",[$this->receiver_address1,$this->receiver_address2,$this->receiver_address3])."<br/>".
+                    "公司名：".$this->receiver_remarks;
+            });
+            /*$grid->column('receiver_country');
             $grid->column('receiver_provider');
             $grid->column('receiver_city');
             $grid->column('receiver_district');
@@ -117,30 +151,45 @@ class NewOrderController extends AdminController
             $grid->column('receiver_company');
             $grid->column('receiver_address1');
             $grid->column('receiver_address2');
-            $grid->column('receiver_address3');
-            $grid->column('logistics_provider');
+            $grid->column('receiver_address3');*/
+            /*$grid->column('logistics_provider');
             $grid->column('delivery_warehouse');
             $grid->column('logistics_method');
             $grid->column('waybill_number');
             $grid->column('tracking_number');
-            $grid->column('tag_number');
-            $grid->column('预估-重量(kg)<br/>尺寸-长*宽*高(cm)')->display(function(){
-                return $this->estimated_weight."<br/>".implode("*",[$this->estimated_length,$this->estimated_width,$this->estimated_height]);
+            $grid->column('tag_number');*/
+            $grid->column('发货信息')->display(function(){
+                return '物流渠道：'.$this->logistics_provider."<br/>".
+                    '发货仓库：'.$this->estimated_weight."<br/>".
+                    '物流方式：'.implode("*",[$this->estimated_length,$this->estimated_width,$this->estimated_height])."<br/>".
+                    '运单号：'.$this->waybill_number."<br/>".
+                    '跟踪号：'.$this->tracking_number."<br/>".
+                    '标发号：'.$this->tag_number;
 
             });
+            $grid->column('包裹信息')->display(function(){
+                return '重量：'.$this->estimated_weight."<br/>".
+                    '尺寸：'.implode("*",[$this->estimated_length,$this->estimated_width,$this->estimated_height])."<br/>".
+                    '预估计费重：'.$this->estimated_cost_weight."<br/>".
+                    '预估运费：'.$this->estimated_shipping_cost;
+
+            });
+
            /* $grid->column('estimated_weight');
             $grid->column('estimated_length');
             $grid->column('estimated_width');
-            $grid->column('estimated_height');*/
+            $grid->column('estimated_height');
             $grid->column('estimated_cost_weight');
-            $grid->column('estimated_shipping_cost');
+            $grid->column('estimated_shipping_cost');*/
 
 
 
 
 
             $grid->column('customer_remarks');
-
+            $grid->column('sku_remarks',"备注")->display(function ($remarks){
+                return str_replace("\n","<br/>",$remarks);
+            });
             $grid->showColumnSelector();
             $grid->disableCreateButton();
             if (!Admin::user()->can('order-edit')){
