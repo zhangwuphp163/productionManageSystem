@@ -96,6 +96,8 @@ class ProductController extends AdminController
                     $actions->append("<a href='".$url."' target='_blank'><i class='fa fa-book'></i> 说明书</a>");
                 }
             }
+            $actions->disableEdit();
+            $actions->quickEdit();
 
 
             /*if (Admin::user()->can('order-edit')){
@@ -160,45 +162,61 @@ class ProductController extends AdminController
     protected function form()
     {
         return Form::make(new Product(), function (Form $form) {
-            $form->column(6,function (Form $form){
-                $form->select('category_id',"品类")->options(\App\Models\Category::query()->pluck('name','id'))->required();
-                $form->text('name')->required();
-                $form->text('model')->required();
-                $form->textarea('norms');
-                $form->text('material');
-                $form->text('technology');
-                $form->text('color');
-                $form->decimal('price');
-                $form->text('remarks');
-            });
-            $form->column(6,function (Form $form){
-                $form->multipleImage('product_images')->autoUpload()->uniqueName()->saving(function ($paths){
-                    return json_encode($paths);
+            $form->tab('基本信息',function (Form $form){
+                $form->column(6,function (Form $form){
+                    $form->select('category_id',"品类")->options(\App\Models\Category::query()->pluck('name','id'))->required();
+                    $form->text('name')->required();
+                    $form->text('model')->required();
+                    $form->textarea('norms');
                 });
-                $form->multipleImage('size_images')->autoUpload()->uniqueName()->saving(function ($paths){
-                    return json_encode($paths);
+                $form->column(6,function (Form $form){
+                    $form->text('material');
+                    $form->text('technology');
+                    $form->text('color');
+                    $form->decimal('price');
+                    $form->text('remarks');
                 });
-                $form->multipleImage('production_detail_images')->autoUpload()->uniqueName()->saving(function ($paths){
-                    return json_encode($paths);
+
+
+            });
+            $form->tab('图片',function (Form $form){
+                $form->column(6,function (Form $form){
+                    $form->multipleImage('product_images')->autoUpload()->uniqueName()->saving(function ($paths){
+                        return json_encode($paths);
+                    });
+                    $form->multipleImage('size_images')->autoUpload()->uniqueName()->saving(function ($paths){
+                        return json_encode($paths);
+                    });
                 });
-                $form->multipleFile('attachment')->accept('pdf')->autoUpload()->uniqueName()->saving(function ($paths){
-                    return json_encode($paths);
+                $form->column(6,function (Form $form){
+                    $form->multipleImage('production_detail_images')->autoUpload()->uniqueName()->saving(function ($paths){
+                        return json_encode($paths);
+                    });
+                    $form->multipleFile('attachment')->accept('pdf')->autoUpload()->uniqueName()->saving(function ($paths){
+                        return json_encode($paths);
+                    });
+                });
+
+
+            });
+            $form->tab('重量尺寸',function (Form $form){
+                $form->column(6,function (Form $form){
+                    $form->decimal('inner_box_length');
+                    $form->decimal('inner_box_width');
+                    $form->decimal('inner_box_height');
+                    $form->decimal('inner_box_gross_weight');
+                    $form->number('inner_box_packing_qty');
+                });
+                $form->column(6,function (Form $form){
+                    $form->decimal('outer_box_length');
+                    $form->decimal('outer_box_width');
+                    $form->decimal('outer_box_height');
+                    $form->decimal('outer_box_gross_weight');
+                    $form->number('outer_box_packing_qty');
                 });
             });
-            $form->column(6,function (Form $form){
-                $form->decimal('inner_box_length');
-                $form->decimal('inner_box_width');
-                $form->decimal('inner_box_height');
-                $form->decimal('inner_box_gross_weight');
-                $form->number('inner_box_packing_qty');
-            });
-            $form->column(6,function (Form $form){
-                $form->decimal('outer_box_length');
-                $form->decimal('outer_box_width');
-                $form->decimal('outer_box_height');
-                $form->decimal('outer_box_gross_weight');
-                $form->number('outer_box_packing_qty');
-            });
+
+
         });
     }
 
