@@ -83,7 +83,7 @@ class ProductController extends AdminController
                 $filter->equal('model')->width(3);
             });
             $grid->showColumnSelector();
-            $grid->column('priority','优先级')->editable()->width("50");
+            $grid->column('priority')->editable()->width("50");
         });
 
         $grid->actions(function (Grid\Displayers\Actions $actions) {
@@ -166,6 +166,7 @@ class ProductController extends AdminController
                 $form->text('color');
                 $form->decimal('price');
                 $form->text('remarks');
+                $form->text('priority');
             });
             $form->column(6,function (Form $form){
                 $form->multipleImage('product_images')->autoUpload()->uniqueName()->saving(function ($paths){

@@ -30,6 +30,7 @@ return [
         'outer_box_height' => '外箱高CM',
         'outer_box_gross_weight' => '外箱毛重KG',
         'outer_box_packing_qty' => '外箱装箱数',
+        'priority' => '优先级',
 
 
     ],
