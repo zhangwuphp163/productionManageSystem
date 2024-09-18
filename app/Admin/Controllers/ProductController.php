@@ -96,8 +96,7 @@ class ProductController extends AdminController
                     $actions->append("<a href='".$url."' target='_blank'><i class='fa fa-book'></i> 说明书</a>");
                 }
             }
-            $actions->disableEdit();
-            $actions->quickEdit();
+            
 
 
             /*if (Admin::user()->can('order-edit')){
