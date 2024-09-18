@@ -41,6 +41,7 @@ class ProductController extends AdminController
     protected function grid()
     {
         $grid =  Grid::make(new Product(['store']), function (Grid $grid) {
+            $grid->model()->orderBy('priority', 'desc');
             $grid->column('name')->editable()->width("80");
             $grid->column('band-stores','已绑的店铺')->display(function (){
                 $storeIds = \App\Models\StoreSku::query()->where('product_id',$this->id)->pluck('store_id')->toArray();
@@ -82,6 +83,7 @@ class ProductController extends AdminController
                 $filter->equal('model')->width(3);
             });
             $grid->showColumnSelector();
+            $grid->column('priority')->editable()->width("50");
         });
 
         $grid->actions(function (Grid\Displayers\Actions $actions) {
