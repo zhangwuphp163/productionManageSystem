@@ -44,7 +44,7 @@ class OrderExport implements FromCollection,WithHeadings
                 (string)$order->receiver_provider,
                 (string)$order->receiver_city,
                 (string)implode(",",array_filter([$order->receiver_address1,$order->receiver_address2,$order->receiver_address3])),
-                (string)$order->receiver_phone,
+                (string)$order->receiver_phone."\t",
                 (string)$order->receiver_email,
                 (string)$order->receiver_postcode,
                 $order->estimated_weight,
