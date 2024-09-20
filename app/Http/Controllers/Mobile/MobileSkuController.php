@@ -28,7 +28,7 @@ class MobileSkuController
             ->header('')
             ->description('')
             ->row(Form::make(null,function (Form $form) use ($barcode){
-                $form->text("barcode","产品型号")->default($barcode);
+                $form->text("barcode","产品型号")->default($barcode)->autofocus();
                 $form->button("<i class='fa fa-search'> 查 询</i>");
                 $form->disableResetButton();
                 $form->disableSubmitButton();

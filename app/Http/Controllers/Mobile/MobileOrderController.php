@@ -28,7 +28,7 @@ class MobileOrderController
             ->header('')
             ->description('')
             ->row(Form::make(null,function (Form $form) use ($orderNumber){
-                $form->text("order_number","平台单号")->default($orderNumber);
+                $form->text("order_number","平台单号")->default($orderNumber)->autofocus();
                 $form->button("<i class='fa fa-search'> 查 询</i>");
 
 
