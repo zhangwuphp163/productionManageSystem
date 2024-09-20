@@ -3,7 +3,6 @@
     <div class="content-body" id="app" >
         {!! $content !!}
     </div>
-    <input type="file" name="123">
 </div>
 <script>
     $().ready(function(){
