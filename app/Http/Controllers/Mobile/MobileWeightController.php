@@ -26,7 +26,6 @@ class MobileWeightController
             ->row(Form::make(null,function (Form $form) use ($platform_number){
                 $form->text("platform_number","平台单号")->default($platform_number)->attribute(['id'=>'platform_number'])->required()->autofocus();
                 $form->decimal('weight','重量（KG）')->attribute(['id'=>'weight'])->required();
-                $form->multipleImage('image');
                 $form->decimal('length','长（cm）')->attribute(['id'=>'length']);
                 $form->decimal('width','宽（cm）')->attribute(['id'=>'width']);
                 $form->decimal('height','高（cm）')->attribute(['id'=>'height']);
