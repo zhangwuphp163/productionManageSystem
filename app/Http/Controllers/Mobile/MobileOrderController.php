@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Mobile;
 
+use App\Admin\Repositories\NewOrder;
 use App\Admin\Repositories\Order;
 use Dcat\Admin\Form;
 use Dcat\Admin\Layout\Content;
@@ -16,7 +17,7 @@ class MobileOrderController
     {
         $orderNumber = $request->get('order_number','');
         $orderNumber = trim($orderNumber);
-        $order = \App\Models\Order::query()->where('order_number',$orderNumber)->first();
+        $order = \App\Models\NewOrder::query()->where('platform_number',$orderNumber)->first();
         if(empty($order)){
             $body = "<div style='text-align: center'>找不到订单数据</div>";
         }else{
@@ -27,7 +28,7 @@ class MobileOrderController
             ->header('')
             ->description('')
             ->row(Form::make(null,function (Form $form) use ($orderNumber){
-                $form->text("order_number","订单号")->default($orderNumber);
+                $form->text("order_number","平台单号")->default($orderNumber);
                 $form->button("<i class='fa fa-search'> 查 询</i>");
 
 
@@ -35,11 +36,13 @@ class MobileOrderController
                 $form->disableSubmitButton();
             })->disableHeader())
             ->body($body)
-            ->view('mobile.order');
+            ->view('mobile.order')->with(['title' => '订单详情']);
     }
     public function detail($id)
     {
-        return Show::make($id,new \App\Models\Order(), function (Show $show) {
+        return (new NewOrder())->detail($id);
+        /*return NewOrder::make($id,new \App\Models\NewOrder())->detail();
+        return Show::make($id,new \App\Models\NewOrder(), function (Show $show) {
             $show->with(['attr']);
             $show->field('images','订单图片')->image();
             $show->field('design_images','设计图')->image();
@@ -64,6 +67,6 @@ class MobileOrderController
             $show->disableDeleteButton();
             $show->disableEditButton();
             $show->disableListButton();
-        });
+        });*/
     }
 }

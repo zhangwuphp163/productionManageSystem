@@ -9,6 +9,7 @@ use App\Admin\Controllers\UploadController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Mobile\MobileOrderController;
 use App\Http\Controllers\Mobile\MobileSkuController;
+use App\Http\Controllers\Mobile\MobileWeightController;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,8 +26,11 @@ Route::get('/', function () {
     return redirect('/admin');
 });
 Route::group(['namespace' => 'Admin', 'prefix' => 'mobile'], function () {
+    Route::get('/', [MobileOrderController::class,'index'])->name('mobile.index');
     Route::get('/order', [MobileOrderController::class,'index'])->name('mobile.order');
     Route::get('/sku', [MobileSkuController::class,'index'])->name('mobile.sku');
+    Route::get('/weight', [MobileWeightController::class,'index'])->name('mobile.weight');
+    Route::post('/weight', [MobileWeightController::class,'weight'])->name('mobile.weight.post');
 });
 
 

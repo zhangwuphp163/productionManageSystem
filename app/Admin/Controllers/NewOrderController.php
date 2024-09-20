@@ -260,7 +260,7 @@ class NewOrderController extends AdminController
      *
      * @return Show
      */
-    protected function detail($id)
+    /*protected function detail($id)
     {
         return Show::make($id, new NewOrder(), function (Show $show) {
             $show->field('id');
@@ -268,7 +268,7 @@ class NewOrderController extends AdminController
             $show->field('created_at');
             $show->field('updated_at');
         });
-    }
+    }*/
 
     /**
      * Make a form builder.
