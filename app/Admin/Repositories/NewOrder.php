@@ -83,6 +83,9 @@ class NewOrder extends EloquentRepository
             $show->field('estimated_height');
             $show->field('estimated_cost_weight');
             $show->field('estimated_shipping_cost');
+            $show->disableListButton();
+            $show->disableDeleteButton();
+            $show->disableEditButton();
         });
     }
 }

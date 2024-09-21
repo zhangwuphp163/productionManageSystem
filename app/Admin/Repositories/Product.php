@@ -46,6 +46,9 @@ class Product extends EloquentRepository
             $show->field("size_images")->image();
             $show->field("production_detail_images")->image();
             $show->field("attachment")->image();
+            $show->disableListButton();
+            $show->disableDeleteButton();
+            $show->disableEditButton();
 
         });
     }
