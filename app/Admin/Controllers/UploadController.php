@@ -23,11 +23,14 @@ class UploadController
                 if(empty($path)){
                     return $this->responseErrorMessage('自定义上传请先设置path存储路径');
                 }
-                $url = Storage::url($path);
+                $url = Storage::disk('admin')->url("images/".$uniqueName);
                 return $this->responseUploaded("images/".$uniqueName, $url);
             } catch (\Exception $e) {
                 return $this->responseErrorMessage('上传失败：' . $e->getMessage());
             }
+        }elseif($this->isDeleteRequest()){
+            $this->disk('admin')->delete($request->get('key'));
+            return $this->responseDeleted();
         }
         return $this->responseErrorMessage('文件上传失败');
     }
