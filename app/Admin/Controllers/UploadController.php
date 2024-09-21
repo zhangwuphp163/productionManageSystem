@@ -19,7 +19,7 @@ class UploadController
             try {
                 $image = $request->file('_file_');
                 $uniqueName = Uuid::uuid4() . '.' . $image->getClientOriginalExtension();
-                $path = Storage::disk('local')->putFileAs('/uploads/images', $image, $uniqueName);
+                $path = Storage::disk('admin')->putFileAs('uploads/images', $image, $uniqueName);
                 if(empty($path)){
                     return $this->responseErrorMessage('自定义上传请先设置path存储路径');
                 }
