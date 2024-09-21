@@ -2,21 +2,35 @@
 
 namespace App\Admin\Controllers;
 
-use App\Labels\OrderLabel;
-use App\Labels\ProductLabel;
 use App\Labels\SkuLabel;
-use App\Labels\StoreSkuBoxLabel;
-use App\Models\Product;
-use App\Models\Sku;
-use Dcat\Admin\Http\Controllers\AdminController;
 use Dcat\Admin\Layout\Content;
 use Dcat\Admin\Traits\HasUploadedFile;
-use Faker\Core\Uuid;
-use Psy\Util\Str;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Ramsey\Uuid\Uuid;
 
-class UploadController extends AdminController
+class UploadController
 {
     use HasUploadedFile;
+
+    public function image(Request $request)
+    {
+        if ($request->hasFile('_file_')) {
+            try {
+                $image = $request->file('_file_');
+                $uniqueName = Uuid::uuid4() . '.' . $image->getClientOriginalExtension();
+                $path = Storage::putFileAs('/uploads/images', $image, $uniqueName);
+                if(empty($path)){
+                    return $this->responseErrorMessage('自定义上传请先设置path存储路径');
+                }
+                $url = Storage::url($path);
+                return $this->responseUploaded("images/".$uniqueName, $url);
+            } catch (\Exception $e) {
+                return $this->responseErrorMessage('上传失败：' . $e->getMessage());
+            }
+        }
+        return $this->responseErrorMessage('文件上传失败');
+    }
 
     public function index(Content $content)
     {
@@ -33,6 +47,5 @@ class UploadController extends AdminController
         $pdf->Output($filepath, 'I');
         return asset("storage/labels/" . $labelFilename);
     }
-
 
 }

@@ -174,6 +174,9 @@ class NewOrderController extends AdminController
                     '预估运费：'.$this->estimated_shipping_cost;
 
             });
+            $grid->column('shipment_images',"包裹称重图片")->display(function ($pictures){
+                return $pictures?\GuzzleHttp\json_decode($pictures, true):[];
+            })->image('',80,80);
 
            /* $grid->column('estimated_weight');
             $grid->column('estimated_length');

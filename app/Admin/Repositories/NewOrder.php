@@ -19,6 +19,7 @@ class NewOrder extends EloquentRepository
     public function detail($id)
     {
         return Show::make($id, new \App\Models\NewOrder(), function (Show $show) {
+
             $show->field('system_number');
             $show->field('platform_number');
             /*
@@ -52,6 +53,7 @@ class NewOrder extends EloquentRepository
             $show->field('order_remarks');
             $show->field('images')->image();
             $show->field('design_images')->image();
+            $show->field('shipment_images','包裹图片')->image();
             $show->field('qty');
             $show->field('receiver_username');
             $show->field('receiver_email');

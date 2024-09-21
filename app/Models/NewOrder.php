@@ -68,6 +68,7 @@ class NewOrder extends Model
         'logistics_method',
         'waybill_number',
         'tracking_number',
+        'shipment_images',
         'tag_number',
         'estimated_weight',
         'estimated_length',

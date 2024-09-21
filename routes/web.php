@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Mobile\MobileOrderController;
 use App\Http\Controllers\Mobile\MobileSkuController;
 use App\Http\Controllers\Mobile\MobileWeightController;
+use App\Admin\Controllers\MobileController;
 
 /*
 |--------------------------------------------------------------------------
@@ -73,5 +74,13 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin','middleware' => 'admin
     Route::put('/orders/update-design-image/{id}', [OrderController::class,'updateDesignImage'])->name('admin.upload.update-design-image');
 
     Route::get('/upload', [UploadController::class,'index'])->name('admin.upload.index');
+    Route::post('/upload/image', [UploadController::class,'image'])->name('admin.upload.image');
+    Route::post('/upload/upload', [UploadController::class,'upload'])->name('admin.upload.upload');
+
+    Route::post('/mobile', [MobileController::class,'store'])->name('admin.mobile.store');
+    Route::get('/mobile/order', [MobileController::class,'order'])->name('admin.mobile.order');
+    Route::get('/mobile/sku', [MobileController::class,'sku'])->name('admin.mobile.sku');
+    Route::get('/mobile/weight', [MobileController::class,'weight'])->name('admin.mobile.weight');
+    Route::post('/mobile/weight/save', [MobileController::class,'weightSave'])->name('admin.mobile.weight-save');
 
 });
