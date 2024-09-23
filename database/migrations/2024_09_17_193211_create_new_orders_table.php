@@ -29,10 +29,10 @@ class CreateNewOrdersTable extends Migration
             $table->timestamp('delivery_at')->nullable()->comment('发货时间')->index();
             $table->string('platform_number')->index()->comment('平台订单号');
             $table->string('currency')->nullable()->comment('币种');
-            $table->decimal('total_amount',8,2)->default(0)->comment('订单总金额');
-            $table->decimal('total_sku_amount',8,2)->default(0)->comment('订单商品金额');
-            $table->decimal('customer_paid_freight',8,2)->default(0)->comment('客付运费');
-            $table->decimal('outbound_cost',8,2)->default(0)->comment('订单出库成本');
+            $table->decimal('total_amount',8,2)->default(0)->comment('订单总金额')->nullable();
+            $table->decimal('total_sku_amount',8,2)->default(0)->comment('订单商品金额')->nullable();
+            $table->decimal('customer_paid_freight',8,2)->default(0)->comment('客付运费')->nullable();
+            $table->decimal('outbound_cost',8,2)->default(0)->comment('订单出库成本')->nullable();
             $table->text('order_remarks')->nullable()->comment('订单备注');
             $table->json('images')->nullable()->comment('订单图片');
             $table->json('design_images')->nullable()->comment('设计图');
@@ -43,8 +43,8 @@ class CreateNewOrdersTable extends Migration
             $table->string('order_sku_id')->nullable()->comment('订单商品ID');
             $table->string('sku_title')->nullable()->comment('商品标题');
             $table->string('variant_attribute')->nullable()->comment('变体属性');
-            $table->decimal('unit_price',8,2)->default(0)->comment('单价');
-            $table->integer('qty')->default(1)->comment('数量');
+            $table->decimal('unit_price',8,2)->default(0)->comment('单价')->nullable();
+            $table->integer('qty')->default(1)->comment('数量')->nullable();
             $table->text('sku_remarks')->nullable()->comment('商品备注');
             $table->string('receiver_username')->nullable()->comment('买家姓名');
             $table->string('receiver_email')->nullable()->comment('买家邮件');
@@ -68,12 +68,12 @@ class CreateNewOrdersTable extends Migration
             $table->string('waybill_number')->nullable()->index()->comment('运单号');
             $table->string('tracking_number')->nullable()->index()->comment('跟踪号');
             $table->string('tag_number')->nullable()->index()->comment('标发号');
-            $table->integer('estimated_weight')->default(0)->comment('预估重量(g)');
-            $table->decimal('estimated_length',6,1)->default(0)->comment('预估尺寸长(cm)');
-            $table->decimal('estimated_width',6,1)->default(0)->comment('预估尺寸宽(cm)');
-            $table->decimal('estimated_height',6,1)->default(0)->comment('预估尺寸高(cm)');
-            $table->integer('estimated_cost_weight')->default(0)->comment('预估计费重(g)');
-            $table->decimal('estimated_shipping_cost',8,2)->default(0)->comment('预估运费(CNY)');
+            $table->integer('estimated_weight')->default(0)->comment('预估重量(g)')->nullable();
+            $table->decimal('estimated_length',6,1)->default(0)->comment('预估尺寸长(cm)')->nullable();
+            $table->decimal('estimated_width',6,1)->default(0)->comment('预估尺寸宽(cm)')->nullable();
+            $table->decimal('estimated_height',6,1)->default(0)->comment('预估尺寸高(cm)')->nullable();
+            $table->integer('estimated_cost_weight')->default(0)->comment('预估计费重(g)')->nullable();
+            $table->decimal('estimated_shipping_cost',8,2)->default(0)->comment('预估运费(CNY)')->nullable();
 
             $table->timestamps();
             $table->softDeletes();
