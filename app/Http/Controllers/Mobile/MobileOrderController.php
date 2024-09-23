@@ -17,7 +17,7 @@ class MobileOrderController
     {
         $orderNumber = $request->get('order_number','');
         $orderNumber = trim($orderNumber);
-        $order = \App\Models\NewOrder::query()->where('platform_number',$orderNumber)->first();
+        $order = \App\Models\Order::query()->where('order_number',$orderNumber)->first();
         if(empty($order)){
             $body = "<div style='text-align: center'>找不到订单数据</div>";
         }else{
@@ -40,8 +40,6 @@ class MobileOrderController
     }
     public function detail($id)
     {
-        return (new NewOrder())->detail($id);
-        /*return NewOrder::make($id,new \App\Models\NewOrder())->detail();
         return Show::make($id,new \App\Models\NewOrder(), function (Show $show) {
             $show->with(['attr']);
             $show->field('images','订单图片')->image();
@@ -67,6 +65,6 @@ class MobileOrderController
             $show->disableDeleteButton();
             $show->disableEditButton();
             $show->disableListButton();
-        });*/
+        });
     }
 }
