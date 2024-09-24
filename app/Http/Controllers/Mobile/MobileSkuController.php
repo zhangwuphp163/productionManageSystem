@@ -34,6 +34,6 @@ class MobileSkuController
     }
     public function detail($id)
     {
-        return (new Product())->detail($id);
+        return (new Product(['category']))->detail($id);
     }
 }
