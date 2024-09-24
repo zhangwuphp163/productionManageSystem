@@ -18,12 +18,13 @@ class Product extends EloquentRepository
     public function detail($id)
     {
         return Show::make($id, new Model(['category']), function (Show $show) {
+
             /*$show->row(function (Show\Row $show) {
                 $show->width(3)->id;
                 $show->width(3)->name;
                 $show->width(5)->email;
             });*/
-            $show->field('category.name','品类');
+            $show->field('category.name','品类')->value($show->model()->category->name);
             $show->field('name');
             $show->field('model');
             $show->field('norms');
