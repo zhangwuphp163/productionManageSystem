@@ -2,14 +2,10 @@
 
 namespace App\Http\Controllers\Mobile;
 
-use App\Admin\Repositories\Order;
 use App\Admin\Repositories\Product;
 use Dcat\Admin\Form;
 use Dcat\Admin\Layout\Content;
-use Dcat\Admin\Show;
-use Dcat\Admin\Widgets\Modal;
 use Illuminate\Http\Request;
-use Illuminate\View\View;
 
 class MobileSkuController
 {
@@ -17,7 +13,7 @@ class MobileSkuController
     {
         $barcode = $request->get('barcode','');
         $barcode = trim($barcode);
-        $sku = \App\Models\Sku::query()->where('barcode',$barcode)->first();
+        $sku = \App\Models\StoreSku::query()->where('barcode',$barcode)->first();
         if(empty($sku)){
             $body = "<div style='text-align: center'>找不到产品数据</div>";
         }else{
