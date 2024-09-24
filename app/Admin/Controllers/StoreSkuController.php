@@ -38,24 +38,24 @@ class StoreSkuController extends AdminController
         return Grid::make(new StoreSku(['store','product']), function (Grid $grid) {
             //$grid->column('id')->sortable();
             $grid->column('store.name','店铺')->sortable()->width("80");
-            $grid->column('title',trans('product.fields.title'))->editable();
-            $grid->column('barcode',trans('product.fields.barcode'))->editable();
-            $grid->column('product.name',trans('product.fields.name'))->copyable()->filter()->width("80");
-            $grid->column('product.model',trans('product.fields.model'))->filter()->width("100");
+            $grid->column('title',trans('product.fields.title'))->editable()->width(120);
+            $grid->column('barcode',trans('product.fields.barcode'))->editable()->width(120);
+            $grid->column('product.name',trans('product.fields.name'))->copyable()->filter()->width(120);
+            $grid->column('product.model',trans('product.fields.model'))->filter()->width(120);
             $grid->column('product.product_images',trans('product.fields.product_images'))->display(function ($pictures){
                 return $pictures?\GuzzleHttp\json_decode($pictures, true):[];
-            })->image('',100,100);;
+            })->image('',80,80);;
             $grid->column('product.size_images',trans('product.fields.size_images'))->display(function ($pictures){
                 return $pictures?\GuzzleHttp\json_decode($pictures, true):[];
-            })->image('',100,100);;
+            })->image('',80,80);;
             $grid->column('product.norms',trans('product.fields.norms'))->display(function ($norms){
                 return str_replace("\r\n","<br/>",$norms);
             })->width("120");
-            $grid->column('product.material',trans('product.fields.material'))->width("80");
-            $grid->column('product.technology',trans('product.fields.technology'))->width("80");
-            $grid->column('product.color',trans('product.fields.color'))->width("80");
-            $grid->column('product.price',trans('product.fields.price'))->width("80");
-            $grid->column('product.remarks',trans('product.fields.remarks'))->width("80");
+            $grid->column('product.material',trans('product.fields.material'))->width(80);
+            $grid->column('product.technology',trans('product.fields.technology'))->width(80);
+            $grid->column('product.color',trans('product.fields.color'))->width(80);
+            $grid->column('product.price',trans('product.fields.price'))->width(80);
+            $grid->column('product.remarks',trans('product.fields.remarks'))->width(80);
             /*$grid->column('attachment')->display(function ($pictures){
                 return $pictures?\GuzzleHttp\json_decode($pictures, true):[];
             })->image('',100,100);*/
@@ -67,7 +67,7 @@ class StoreSkuController extends AdminController
             })->width("120");
             $grid->column('product.production_detail_images',trans('product.fields.production_detail_images'))->display(function ($pictures){
                 return $pictures?\GuzzleHttp\json_decode($pictures, true):[];
-            })->image('',100,100);
+            })->image('',80,80);
 
             /*$grid->filter(function (Grid\Filter $filter) {
                 $filter->equal('id');
