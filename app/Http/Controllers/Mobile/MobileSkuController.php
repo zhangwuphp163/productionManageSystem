@@ -17,11 +17,11 @@ class MobileSkuController
     {
         $barcode = $request->get('barcode','');
         $barcode = trim($barcode);
-        $sku = \App\Models\Product::query()->where('model',$barcode)->first();
+        $sku = \App\Models\Sku::query()->where('barcode',$barcode)->first();
         if(empty($sku)){
             $body = "<div style='text-align: center'>找不到产品数据</div>";
         }else{
-            $body = $this->detail($sku->id);
+            $body = $this->detail($sku->product_id);
         }
         return $content
             ->title("产品详情")
