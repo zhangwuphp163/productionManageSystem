@@ -31,6 +31,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Symfony\Component\Console\Input\Input;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class NewOrderController extends AdminController
@@ -82,7 +83,7 @@ class NewOrderController extends AdminController
             $grid->column('order_at');
             $grid->column('payment_at');
             $grid->column('delivery_deadline');
-            $grid->column('delivery_at');
+            $grid->column('delivery_at')->editable();
 
             $grid->column('订单金额')->display(function(){
                 return "币种：".$this->currency."<br/>".
@@ -227,7 +228,7 @@ class NewOrderController extends AdminController
                     // 弹窗标题
                     ->title('上传订单')
                     // 按钮
-                    ->button('<button class="btn btn-primary"><i class="feather icon-upload"></i> 导入数据</button>')
+                    ->button('<button class="btn btn-warning"><i class="feather icon-upload"></i> 导入订单</button>')
                     // 弹窗内容
                     ->body(OrderImportForm::make()));
                 $tools->append(Modal::make()
@@ -243,7 +244,7 @@ class NewOrderController extends AdminController
                 //$tools->append('<a href="javascript:void(0);" class="btn btn-outline-primary btn-export" data-batch-type="inbound" data-title="导出数据">&nbsp;&nbsp;&nbsp;<i class="fa fa-download"></i> 导出数据&nbsp;&nbsp;&nbsp;</a>');
 
                 // $tools->append(DownloadOrderTemplate::make()->setKey('test_question'));
-                $tools->append('<button class="btn btn-outline-danger btn-export" >&nbsp;&nbsp;&nbsp;<i class="fa fa-download"></i> 导出勾选的订单&nbsp;&nbsp;&nbsp;</button>');
+                $tools->append('<button class="btn btn-danger btn-export" >&nbsp;&nbsp;&nbsp;<i class="fa fa-download"></i> 导出勾选的订单&nbsp;&nbsp;&nbsp;</button>');
 
 
             });
@@ -285,7 +286,9 @@ class NewOrderController extends AdminController
                 $form->multipleImage("images","订单图片")->uniqueName()->saving(function ($paths){
                     return json_encode($paths);
                 })->autoUpload();
-                $form->select("status","生产进度")->options(\App\Models\NewOrder::$statues)->default($form->model()->status);
+                
+                $form->select("status","生产进度")->options(NewOrder::$statues)->default($form->model()->status);
+
                 $form->datetime("order_at","订购日期");
                 $form->datetime("delivery_at","发货日期");
                 $form->text("order_remarks","订单备注");
@@ -293,7 +296,7 @@ class NewOrderController extends AdminController
             $form->tab('订单地址信息', function (Form $form) {
                 $form->text("receiver_name","收货人");
                 $form->text("receiver_phone","收货人电话");
-                //$form->text("receiver_address1","收货地址");
+                $form->text("receiver_address1","收货地址");
             });
             $form->tab('订单发货信息', function (Form $form) {
                 $form->text("tracking_number","发货单号");
