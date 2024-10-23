@@ -51,15 +51,18 @@ class OrderController extends AdminController
     {
         return Grid::make(new \App\Models\Order(), function (Grid $grid) {
             $grid->model()->orderBy('id','desc');
+            $grid->selector(function (Grid\Tools\Selector $selector) {
+                $selector->select('status', '订单状态', \App\Models\Order::$statues);
+            });
             $grid->column('id')->sortable();
             $grid->column('order_date',"订单日期")->sortable()->filter(Grid\Column\Filter\Equal::make()->date());
             $grid->column('order_number',"订单号")->sortable()->filter();
             $grid->column('images',"订单图片")->display(function ($pictures){
                 return $pictures?\GuzzleHttp\json_decode($pictures, true):[];
-            })->image('',100,100);
+            })->image('',80,80);
             $grid->column('design_images',"设计图片")->display(function ($pictures){
                 return $pictures?\GuzzleHttp\json_decode($pictures, true):[];
-            })->image('',100,100);
+            })->image('',80,80);
             $grid->column('status',"订单进度")->sortable()->select(\App\Models\Order::$statues,true)->filter(
                 Grid\Column\Filter\In::make(\App\Models\Order::$statues)
             )->display(function ($status) {
@@ -94,7 +97,9 @@ class OrderController extends AdminController
                 $filter->equal('id');
             });
             $grid->actions(function (Grid\Displayers\Actions $actions) {
+                $actions->append("<br/>");
                 $actions->append(new \App\Admin\Actions\Grid\OrderDetail());
+                $actions->append("<br/>");
                 $actions->append(new \App\Admin\Actions\Grid\ResignImageUpload());
             });
 
@@ -129,6 +134,7 @@ class OrderController extends AdminController
 
             $grid->option("quick_edit_button",'编辑');
             $grid->scrollbarX();
+            $grid->fixColumns(0,-1);
 
         });
 

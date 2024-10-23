@@ -10,7 +10,7 @@ use Dcat\Admin\Widgets\Modal;
 class ResignImageUpload extends RowAction
 {
 
-    protected $title = '<button href="#" class="btn btn-cyan btn-xs" style="width: 150px;"><i class="fa fa-image"></i> 上传设计图</button>';
+    protected $title = '<button href="#" class="btn btn-cyan btn-sm" style="width: 95px;"><i class="fa fa-image"></i> 上传设计图</button>';
     //protected $title = '<br/><i class="fa fa-image"></i>';
 
     public function render()

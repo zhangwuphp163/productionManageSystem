@@ -10,7 +10,7 @@ use Dcat\Admin\Widgets\Modal;
 class OrderDetail extends RowAction
 {
 
-    protected $title = '<button href="#" class="btn btn-info btn-xs" style="width: 150px;"><i class="fa fa-info"></i> 订单详情</button>';
+    protected $title = '<button href="#" class="btn btn-info btn-sm" style="width: 95px;margin-top: 5px;margin-bottom: 5px;"><i class="fa fa-info"></i> 订单详情</button>';
     //protected $title = '<i class="fa fa-info"></i>';
 
     public function render()
