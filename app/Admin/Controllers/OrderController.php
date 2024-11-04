@@ -73,6 +73,7 @@ class OrderController extends AdminController
             $grid->column('quantity',"数量")->sortable()->filter();
             $grid->column('receive_name',"收货人")->filter();
             $grid->column('remarks',"备注");
+            $grid->column('specify_remarks',"特殊要求");
             /*$grid->column('status',"订单进度")->sortable()->using(\App\Models\Order::$statues)->label([
                 'new' => 'default',
                 'opening_board' => 'yellow',
@@ -172,6 +173,7 @@ class OrderController extends AdminController
             $form->date("order_date","订单日期");
             $form->date("delivery_date","发货日期");
             $form->text("remarks","备注");
+            $form->text("specify_remarks","特殊要求");
             $form->text("receive_name","收货人");
             $form->text("receive_phone","收货人电话");
             $form->textarea("receive_address","收货地址");

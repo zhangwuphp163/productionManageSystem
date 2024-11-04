@@ -36,21 +36,27 @@ class OrderLabel
         return $pdf;
     }
 
-    public function setContents(\TCPDF &$pdf,$order)
+    public function setContents(\TCPDF &$pdf,\App\Models\Order $order)
     {
         $data = self::getAttributes($order);
 
         $pdf->writeHTMLCell(45,15,0,5,"订单日期",0,0,false,true,"C");
         $pdf->writeHTMLCell(90,15,120,5,"设计图",0,0,false,true,"C");
         $pdf->writeHTMLCell(45,15,0,20,"亚马逊订单号",0,0,false,true,"C");
-        $pdf->writeHTMLCell(45,15,0,35,"电压",0,0,false,true,"C");
-        $pdf->writeHTMLCell(45,15,0,50,"颜色",0,0,false,true,"C");
-        $pdf->writeHTMLCell(45,15,0,65,"适配器",0,0,false,true,"C");
-        $pdf->writeHTMLCell(45,15,0,80,"安装配件",0,0,false,true,"C");
-        $pdf->writeHTMLCell(45,15,0,95,"特殊要求",0,0,false,true,"C");
-        $pdf->writeHTMLCell(45,15,0,110,"形状",0,0,false,true,"C");
-        $pdf->writeHTMLCell(45,15,0,125,"硅胶",0,0,false,true,"C");
-        $pdf->writeHTMLCell(45,15,0,140,"产品尺寸",0,0,false,true,"C");
+        $height = 35;
+        foreach (['颜色','安装配件','形状','硅胶','产品尺寸'] as $value){
+            $pdf->writeHTMLCell(45,15,0,$height,$value,0,0,false,true,"C");
+            $height += 15;
+        }
+        $height = 35;
+        foreach ([$data['color'],"标准安装包",$data['shape'],"6MM",$data['size']] as $value){
+            $pdf->writeHTMLCell(75,15,45,$height,$value,0,0,false,true,"C");
+            $height += 15;
+        }
+
+        $pdf->writeHTMLCell(45,15,0,140,'特殊要求',0,0,false,true,"C");
+        $pdf->writeHTMLCell(160,15,45,140,$order->specify_remarks,0,0,false,true,"C");
+
         $pdf->writeHTMLCell(45,15,0,155,"打包完成日期",0,0,false,true,"C");
         $pdf->writeHTMLCell(45,15,0,170,"收货人",0,0,false,true,"C");
         $pdf->writeHTMLCell(45,15,0,185,"电话",0,0,false,true,"C");
@@ -58,11 +64,11 @@ class OrderLabel
         $pdf->writeHTMLCell(45,15,0,245,"客户备注",0,0,false,true,"C");
         $pdf->writeHTMLCell(45,15,0,260,"快递单号",0,0,false,true,"C");
 
-        $pdf->writeHTMLCell(75,15,45,35,"6V",0,0,false,true,"C");
-        $pdf->writeHTMLCell(75,15,45,65,"USB",0,0,false,true,"C");
-        $pdf->writeHTMLCell(75,15,45,80,"标准安装包",0,0,false,true,"C");
-        $pdf->writeHTMLCell(75,15,45,95,"邀评卡（暂无）",0,0,false,true,"C");
-        $pdf->writeHTMLCell(75,15,45,125,"6MM",0,0,false,true,"C");
+        //$pdf->writeHTMLCell(75,15,45,35,"6V",0,0,false,true,"C");
+        //$pdf->writeHTMLCell(75,15,45,65,"USB",0,0,false,true,"C");
+
+        //$pdf->writeHTMLCell(75,15,45,95,"邀评卡（暂无）",0,0,false,true,"C");
+
 
         $pdf->writeHTMLCell(75,15,45,5,$order->order_date,0,0,false,true,"C");
         $pdf->writeHTMLCell(75,15,45,20,$order->order_number,0,0,false,true,"C");
@@ -73,9 +79,8 @@ class OrderLabel
         $pdf->writeHTMLCell(165,15,45,195,$address,0,0,false,true,"C");
         $pdf->writeHTMLCell(165,15,45,245,$order->remarks,0,0,false,true,"C");
 
-        $pdf->writeHTMLCell(75,15,45,50,$data['color'],0,0,false,true,"C");
-        $pdf->writeHTMLCell(75,15,45,140,$data['size'],0,0,false,true,"C");
-        $pdf->writeHTMLCell(75,15,45,110,$data['shape'],0,0,false,true,"C");
+
+
 
         if(!empty($order->design_images)){
             $images = json_decode($order->design_images);
@@ -125,8 +130,8 @@ class OrderLabel
         $pdf->Line(0,60,120,60);
         $pdf->Line(0,75,120,75);
         $pdf->Line(0,90,120,90);
-        $pdf->Line(0,105,120,105);
-        $pdf->Line(0,120,120,120);
+        //$pdf->Line(0,105,120,105);
+        //$pdf->Line(0,120,120,120);
         $pdf->Line(0,135,210,135);
         $pdf->Line(0,150,210,150);
         $pdf->Line(0,165,210,165);

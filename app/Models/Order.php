@@ -26,6 +26,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property \Illuminate\Support\Carbon|null $deleted_at
  * @property string|null $remarks
+ * @property string|null $specify_remarks
  * @property mixed|null $design_images
  * @property-read \App\Models\OrderAttribute|null $attr
  * @method static \Illuminate\Database\Eloquent\Builder|Order newModelQuery()
@@ -71,7 +72,8 @@ class Order extends Model
         "delivery_date",
         "tracking_number",
         "remarks",
-        "design_images"
+        "design_images",
+        "specify_remarks"
     ];
     public static $statues = [
         'new' => '可生产',
