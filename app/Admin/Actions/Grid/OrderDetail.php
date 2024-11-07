@@ -81,7 +81,9 @@ class OrderDetail extends RowAction
                                 foreach ($c['children'] as $c1){
                                     if($c1['type'] == "PlacementContainerCustomization"){
                                         foreach ($c1['children'] as $c2){
-                                            $show->field($c2['label'])->value($c2["inputValue"]);
+                                            if(!empty($c2['label'])){
+                                                $show->field($c2['label'])->value($c2["inputValue"]);
+                                            }
                                         }
                                     }
                                 }
