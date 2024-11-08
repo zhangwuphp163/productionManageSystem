@@ -89,7 +89,7 @@ class OrderController extends AdminController
             /*$grid->column('updated_at')->sortable()->filter(Grid\Column\Filter\Gt::make()->datetime());*/
             //$grid->enableDialogCreate();
             $grid->showColumnSelector();
-            $grid->disableCreateButton();
+            //$grid->disableCreateButton();
             if (!Admin::user()->can('order-edit')){
                 $grid->disableRowSelector();
             }
