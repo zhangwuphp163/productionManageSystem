@@ -166,18 +166,31 @@ class OrderController extends AdminController
     protected function form()
     {
         return Form::make(new Order(), function (Form $form) {
-            $form->multipleImage("images","订单图片")->uniqueName()->saving(function ($paths){
-                return json_encode($paths);
-            })->autoUpload();
-            $form->select("status","生产进度")->options(\App\Models\Order::$statues)->default($form->model()->status);
-            $form->date("order_date","订单日期");
-            $form->date("delivery_date","发货日期");
-            $form->text("remarks","备注");
-            $form->text("specify_remarks","特殊要求");
-            $form->text("receive_name","收货人");
-            $form->text("receive_phone","收货人电话");
-            $form->textarea("receive_address","收货地址");
-            $form->text("tracking_number","发货单号");
+
+            $form->tab('订单信息', function (Form $form) {
+                $form->multipleImage("images","订单图片")->uniqueName()->saving(function ($paths){
+                    return json_encode($paths);
+                })->autoUpload();
+                $form->select("status","生产进度")->options(\App\Models\Order::$statues)->default($form->model()->status);
+                
+                    $form->date("order_date","订单日期");
+                    $form->date("delivery_date","发货日期");
+
+
+                $form->text("remarks","备注");
+                $form->text("specify_remarks","特殊要求");
+            });
+            $form->tab('订单地址信息', function (Form $form) {
+                $form->text("receive_name","收货人");
+                $form->text("receive_phone","收货人电话");
+                $form->textarea("receive_address","收货地址");
+            });
+            $form->tab('订单发货信息', function (Form $form) {
+                $form->text("tracking_number","发货单号");
+            });
+
+
+
         });
     }
     public function upload(Request $request)
