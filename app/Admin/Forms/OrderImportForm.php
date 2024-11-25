@@ -25,8 +25,28 @@ class OrderImportForm extends Form
             DB::beginTransaction();
             $file_path = storage_path('app/public/' . $input['import_file']);
             $data = Excel::import($file_path)->toArray();
+
+            $ordersData = [];
             foreach ($data['sheet1'] as $row){
-                self::generateOrder($row);
+                $data = self::generateOrder($row);
+                $skus = $ordersData[$data['order_number']]['skus']??[];
+
+                if(!empty($data['order']['system_number'])){
+                    $ordersData[$data['order_number']] = $data['order'];
+                }
+                if(empty($skus)){
+                    $skus = [$data['sku']];
+                }else{
+                    array_push($skus,$data['sku']);
+                }
+                $ordersData[$data['order_number']]['skus'] = $skus;
+            }
+            foreach ($ordersData as $order){
+                foreach ($order['skus'] as  $sku){
+                    $createOrderData =  array_merge($order,$sku);
+                    unset($createOrderData['skus']);
+                    NewOrder::create($createOrderData);
+                }
             }
             DB::commit();
             return $this->response()->success('ok')->refresh();
@@ -54,17 +74,6 @@ class OrderImportForm extends Form
             'total_sku_amount' => !empty($row['订单商品金额'])?$row['订单商品金额']:0,
             'customer_paid_freight' => !empty($row['客付运费'])?$row['客付运费']:0,
             'outbound_cost' => !empty($row['订单出库成本(CNY)'])?$row['订单出库成本(CNY)']:0,
-
-            'sku' => $row['SKU']??null,
-            'sku_name' => $row['品名']??null,
-            'm_sku' => $row['MSKU']??null,
-            'asin' => $row['ASIN/商品Id']??null,
-            'order_sku_id' => $row['订单商品ID']??null,
-            'sku_title' => $row['商品标题']??null,
-            'variant_attribute' => $row['变体属性']??null,
-            'unit_price' => !empty($row['单价'])?$row['单价']:null,
-            'qty' => !empty($row['数量'])?$row['数量']:1,
-            'remarks' => $row['商品备注']??null,
 
             'receiver_username' => $row['买家姓名']??null,
             'receiver_email' => $row['买家邮箱']??null,
@@ -96,7 +105,20 @@ class OrderImportForm extends Form
             'estimated_cost_weight' => !empty($row["预估计费重(g)"])?$row["预估计费重(g)"]:0,
             'estimated_shipping_cost' => !empty($row["预估运费(CNY)"])?$row["预估运费(CNY)"]:0,
         ];
-        return NewOrder::create($orderData);
+        $sku = [
+            'sku' => $row['SKU']??null,
+            'sku_name' => $row['品名']??null,
+            'm_sku' => $row['MSKU']??null,
+            'asin' => $row['ASIN/商品Id']??null,
+            'order_sku_id' => $row['订单商品ID']??null,
+            'sku_title' => $row['商品标题']??null,
+            'variant_attribute' => $row['变体属性']??null,
+            'unit_price' => !empty($row['单价'])?$row['单价']:null,
+            'qty' => !empty($row['数量'])?$row['数量']:1,
+            'remarks' => $row['商品备注']??null
+        ];
+        return ['order' => $orderData,'sku' => $sku,'order_number' => $orderData['platform_number']];
+        //return NewOrder::create($orderData);
     }
     private static function generateOrderItem($order,$row){
         $itemData = [
