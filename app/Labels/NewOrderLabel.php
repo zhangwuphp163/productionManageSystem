@@ -71,7 +71,22 @@ class NewOrderLabel
         $pdf->writeHTMLCell(165,15,45,155,$order->delivery_at,0,0,false,true,"C");
         $pdf->writeHTMLCell(165,15,45,170,$order->receiver_name,0,0,false,true,"C");
         $pdf->writeHTMLCell(165,15,45,185,$order->receiver_phone,0,0,false,true,"C");
-        $address = str_replace("\r\n","<br>",$order->receiver_address1);
+
+        $addresses = [
+            $order->receiver_country,
+            $order->receiver_provider,
+            $order->receiver_city,
+            $order->receiver_district,
+            $order->receiver_postcode,
+            $order->receiver_house_number,
+            $order->receiver_address1,
+            $order->receiver_address2,
+            $order->receiver_address3,
+        ];
+        $addresses = array_filter($addresses);
+
+        $address = implode("<br/>",$addresses);
+
         $pdf->writeHTMLCell(165,15,45,195,$address,0,0,false,true,"C");
         $pdf->writeHTMLCell(165,15,45,245,$order->order_remarks,0,0,false,true,"C");
 
