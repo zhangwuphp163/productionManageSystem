@@ -65,6 +65,8 @@ class NewOrderController extends AdminController
             $grid->column('平台/店铺/站点')->display(function(){
                 return $this->platform.'<br/>'.$this->store.'<br/>'.$this->site;
             });
+            $grid->column('specify_remarks',"特殊要求")->editable();
+            $grid->column('order_remarks',"订单备注")->editable();
             $grid->column('订单操作时间')->display(function(){
                 return "订购：".$this->order_at."<br/>".
                     "付款：".$this->payment_at."<br/>".
@@ -124,10 +126,7 @@ class NewOrderController extends AdminController
             })->image('',80,80);
 
 
-            $grid->column('specify_remarks',"特殊要求");
-            $grid->column('order_remarks',"订单备注")->display(function ($remarks){
-                return str_replace("\n","<br/>",$remarks);
-            });
+
             $grid->showColumnSelector();
             $grid->disableCreateButton();
             if (!Admin::user()->can('order-edit')){
