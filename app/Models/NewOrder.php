@@ -32,6 +32,7 @@ class NewOrder extends Model
         'total_sku_amount',
         'customer_paid_freight',
         'outbound_cost',
+        'order_remarks',
 
         'images',
         'design_images',
@@ -76,6 +77,8 @@ class NewOrder extends Model
         'estimated_height',
         'estimated_cost_weight',
         'estimated_shipping_cost',
+        'order_data',
+        'specify_remarks'
     ];
 
     public static $statues = [

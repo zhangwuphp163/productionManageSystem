@@ -2,37 +2,26 @@
 
 namespace App\Admin\Controllers;
 
-use App\Admin\Actions\DownloadOrderTemplate;
 use App\Admin\Actions\Grid\NewOrderResignImageUpload;
-use App\Admin\Actions\Grid\ResignImageUpload;
 use App\Admin\Exports\OrderExport;
 use App\Admin\Forms\OrderImageImportForm;
 use App\Admin\Forms\OrderImportForm;
 use App\Admin\Repositories\Order;
+use App\Labels\NewOrderLabel;
 use App\Labels\OrderLabel;
 use App\Libraries\RouteServer;
 use App\Models\NewOrder;
-use Dcat\Admin\Actions\Action;
 use Dcat\Admin\Admin;
 use Dcat\Admin\Form;
 use Dcat\Admin\Grid;
-use Dcat\Admin\Http\Auth\Permission;
 use Dcat\Admin\Http\JsonResponse;
 use Dcat\Admin\Layout\Content;
 use Dcat\Admin\Show;
 use Dcat\Admin\Http\Controllers\AdminController;
-use Dcat\Admin\Support\Zip;
 use Dcat\Admin\Traits\HasUploadedFile;
 use Dcat\Admin\Widgets\Modal;
-use Dcat\EasyExcel\Excel;
-use Faker\Core\Uuid;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
-use Symfony\Component\Console\Input\Input;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class NewOrderController extends AdminController
 {
@@ -45,7 +34,7 @@ class NewOrderController extends AdminController
             ->title($this->title())
             //->description("列表")
             ->body($this->grid())
-            ->view("admin.order.index");
+            ->view("admin.order.new_order");
     }
 
     /**
@@ -58,32 +47,29 @@ class NewOrderController extends AdminController
         return Grid::make(new \App\Models\NewOrder(), function (Grid $grid) {
             $grid->model()->orderBy('id','desc');
             $grid->column('id')->sortable();
-            $grid->column('平台/系统单号')->display(function(){
+            $grid->column('platform_number','平台/系统单号')->display(function(){
                 return $this->platform_number.'<br/>'.$this->system_number;
-            });
-            /*$grid->column('platform_number');
-            $grid->column('system_number');*/
+            })->filter();
             $grid->column('images',"订单图片")->display(function ($pictures){
                 return $pictures?\GuzzleHttp\json_decode($pictures, true):[];
             })->image('',80,80);
             $grid->column('design_images',"设计图片")->display(function ($pictures){
                 return $pictures?\GuzzleHttp\json_decode($pictures, true):[];
             })->image('',80,80);
-            $grid->column('status',"订单进度")->sortable()->select(\App\Models\NewOrder::$statues,true)->filter(
+            /*$grid->column('status',"订单进度")->sortable()->select(\App\Models\NewOrder::$statues,true)->filter(
                 Grid\Column\Filter\In::make(\App\Models\NewOrder::$statues)
             )->display(function ($status) {
                 return $status;
-            });
+            });*/
+            $grid->column('status',"订单进度")->editable()->filter();
             $grid->column('平台/店铺/站点')->display(function(){
                 return $this->platform.'<br/>'.$this->store.'<br/>'.$this->site;
             });
-            /*$grid->column('platform');
-            $grid->column('store');
-            $grid->column('site');*/
-            $grid->column('order_at');
-            $grid->column('payment_at');
-            $grid->column('delivery_deadline');
-            $grid->column('delivery_at')->editable();
+            $grid->column('订单操作时间')->display(function(){
+                return "订购：".$this->order_at."<br/>".
+                    "付款：".$this->payment_at."<br/>".
+                    "时限：".$this->delivery_deadline."<br/>";
+            });
 
             $grid->column('订单金额')->display(function(){
                 return "币种：".$this->currency."<br/>".
@@ -92,31 +78,11 @@ class NewOrderController extends AdminController
                 "客付运费：".$this->customer_paid_freight."<br/>".
                 "订单出库成本：".$this->outbound_cost."<br/>";
             });
-            /*$grid->column('currency');
-            $grid->column('total_amount');
-            $grid->column('total_sku_amount');
-            $grid->column('customer_paid_freight');
-            $grid->column('outbound_cost');*/
-            $grid->column('SKU')->display(function(){
-                return "SKU：".$this->sku."<br/>".
-                    "品名：".$this->sku_name."<br/>".
-                    "MSKU：".$this->m_sku."<br/>".
-                    "单价：".$this->unit_price."<br/>".
-                    "数量：".$this->qty."<br/>";
-            });
-            /*$grid->column('sku');
-            $grid->column('sku_name');
-            $grid->column('m_sku');*/
             $grid->column('商品ID')->display(function(){
-                return "ASIN/商品ID：".$this->asin."<br/>".
-                    "订单商品ID：".$this->order_sku_id;
+                return "".$this->asin."<br/>".
+                    "".$this->order_sku_id;
             });
-            /*$grid->column('asin');
-            $grid->column('order_sku_id');*/
-            $grid->column('sku_title')->limit(50);
-            $grid->column('variant_attribute');
-            /*$grid->column('unit_price');
-            $grid->column('qty');*/
+
 
             $grid->column('买家信息')->display(function(){
                 return "买家姓名：".$this->receiver_username."<br/>".
@@ -126,11 +92,6 @@ class NewOrderController extends AdminController
                     "买家留言：".$this->receiver_remarks;
             });
 
-            /*$grid->column('receiver_username');
-            $grid->column('receiver_email');
-            $grid->column('receiver_remarks');
-            $grid->column('receiver_name');
-            $grid->column('receiver_phone');*/
             $grid->column('地址信息')->display(function(){
                 return "国家：".$this->receiver_country."<br/>".
                     "省/州：".$this->receiver_provider."<br/>".
@@ -142,23 +103,6 @@ class NewOrderController extends AdminController
                     "地址行123：".implode("/",[$this->receiver_address1,$this->receiver_address2,$this->receiver_address3])."<br/>".
                     "公司名：".$this->receiver_remarks;
             });
-            /*$grid->column('receiver_country');
-            $grid->column('receiver_provider');
-            $grid->column('receiver_city');
-            $grid->column('receiver_district');
-            $grid->column('receiver_postcode');
-            $grid->column('receiver_house_number');
-            $grid->column('receiver_address_type');
-            $grid->column('receiver_company');
-            $grid->column('receiver_address1');
-            $grid->column('receiver_address2');
-            $grid->column('receiver_address3');*/
-            /*$grid->column('logistics_provider');
-            $grid->column('delivery_warehouse');
-            $grid->column('logistics_method');
-            $grid->column('waybill_number');
-            $grid->column('tracking_number');
-            $grid->column('tag_number');*/
             $grid->column('发货信息')->display(function(){
                 return '物流渠道：'.$this->logistics_provider."<br/>".
                     '发货仓库：'.$this->estimated_weight."<br/>".
@@ -179,16 +123,6 @@ class NewOrderController extends AdminController
                 return $pictures?\GuzzleHttp\json_decode($pictures, true):[];
             })->image('',80,80);
 
-           /* $grid->column('estimated_weight');
-            $grid->column('estimated_length');
-            $grid->column('estimated_width');
-            $grid->column('estimated_height');
-            $grid->column('estimated_cost_weight');
-            $grid->column('estimated_shipping_cost');*/
-
-
-
-
 
             $grid->column('customer_remarks');
             $grid->column('sku_remarks',"备注")->display(function ($remarks){
@@ -200,8 +134,14 @@ class NewOrderController extends AdminController
                 $grid->disableRowSelector();
             }
 
+
             $grid->filter(function (Grid\Filter $filter) {
-                $filter->equal('id');
+                $filter->expand(false);
+                $filter->panel();
+
+                $filter->like('platform_number', '平台单号')->width(3); // 这里的标签可以自定义
+                $filter->like('system_number', '系统单号')->width(3); // 这里的标签可以自定义
+                $filter->like('order_sku_id', '订单商品ID')->width(3); // 这里的标签可以自定义
             });
             $grid->actions(function (Grid\Displayers\Actions $actions) {
                 $actions->append("<br/>");
@@ -245,8 +185,7 @@ class NewOrderController extends AdminController
 
                 // $tools->append(DownloadOrderTemplate::make()->setKey('test_question'));
                 $tools->append('<button class="btn btn-danger btn-export" >&nbsp;&nbsp;&nbsp;<i class="fa fa-download"></i> 导出勾选的订单&nbsp;&nbsp;&nbsp;</button>');
-
-
+                $tools->append('<a href="javascript:void(0);" class="btn btn-outline-primary batch-print" data-batch-type="inbound" data-title="批量打印出库单">&nbsp;&nbsp;&nbsp;<i class="fa fa-print"></i> 批量打印出库单&nbsp;&nbsp;&nbsp;</a>');
             });
 
             //$grid->option("quick_edit_button",'编辑');
@@ -286,12 +225,13 @@ class NewOrderController extends AdminController
                 $form->multipleImage("images","订单图片")->uniqueName()->saving(function ($paths){
                     return json_encode($paths);
                 })->autoUpload();
-                
+
                 $form->select("status","生产进度")->options(NewOrder::$statues)->default($form->model()->status);
 
                 $form->datetime("order_at","订购日期");
                 $form->datetime("delivery_at","发货日期");
                 $form->text("order_remarks","订单备注");
+                $form->text("specify_remarks","特殊要求");
             });
             $form->tab('订单地址信息', function (Form $form) {
                 $form->text("receiver_name","收货人");
@@ -380,7 +320,7 @@ class NewOrderController extends AdminController
 
     public function printLabel(Request $request)
     {
-        $label = new OrderLabel(['ids' => $request->get('ids')]);
+        $label = new NewOrderLabel(['ids' => $request->get('ids')]);
         $pdf = $label->generate();
         $labelFilename = \Illuminate\Support\Str::uuid();
         $labelFilename =  $labelFilename . ".pdf";
