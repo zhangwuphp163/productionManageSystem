@@ -160,6 +160,45 @@ class NewOrderLabel
             'shape' => '',
             'color' => '',
         ];
+        $orderData = json_decode($order->order_data,true);
+        foreach ($orderData['customizationData']['children'] as $row){
+            if($row['type'] == "PreviewContainerCustomization"){
+                foreach ($row["children"] as $child){
+                    if($child['type'] == "FlatContainerCustomization"){
+                        foreach ($child["children"] as $child2){
+                            if($child2['type'] == "ContainerCustomization"){
+                                $attrData['color'] = $child2["children"];
+                            }elseif ($child2['label'] == 'Light Type'){
+                                $attrData['light_type'] = json_encode($child2);
+                            }elseif ($child2['label'] == 'Acrylic Board Shape'){
+                                $attrData['shape'] = $child2;
+                            }elseif ($child2['label'] == 'ADD ICONS'){
+                                $attrData['icons'] = json_encode($child2);
+                            }elseif ($child2['label'] == 'Special Notes'){
+                                $attrData['notes'] = json_encode($child2);
+                            }elseif (strpos($child2["label"], "Sign Length") !== false){
+                                $attrData['size'] = $child2;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        foreach ($attrData['color']??[] as $color) {
+            if($color['type'] == "ColorCustomization"){
+                $data['color'] = $color['colorSelection']['name'];
+            }
+        }
+        $shape = $attrData['shape']??[];
+        $data['shape'] = $shape['displayValue']??'';
+        $size = $attrData['size']??[];
+        $data['size'] = $size['displayValue']??'';
+
+
+        return $data;
+
+
         if(!empty($order->order_data)){
             $orderData = json_decode($order->order_data,true);
             foreach ($orderData['customizationInfo']['version3.0']['surfaces'][0]['areas'] as $row) {

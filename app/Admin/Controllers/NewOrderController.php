@@ -124,8 +124,8 @@ class NewOrderController extends AdminController
             })->image('',80,80);
 
 
-            $grid->column('customer_remarks');
-            $grid->column('sku_remarks',"备注")->display(function ($remarks){
+            $grid->column('specify_remarks',"特殊要求");
+            $grid->column('order_remarks',"订单备注")->display(function ($remarks){
                 return str_replace("\n","<br/>",$remarks);
             });
             $grid->showColumnSelector();
