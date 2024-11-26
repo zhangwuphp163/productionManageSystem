@@ -62,31 +62,31 @@ class NewOrderController extends AdminController
                 return $status;
             });*/
             $grid->column('status',"订单进度")->editable()->filter();
-            $grid->column('平台/店铺/站点')->display(function(){
+            $grid->column('platform','平台/店铺/站点')->display(function(){
                 return $this->platform.'<br/>'.$this->store.'<br/>'.$this->site;
             });
             $grid->column('specify_remarks',"特殊要求")->editable();
             $grid->column('order_remarks',"订单备注")->editable();
-            $grid->column('订单操作时间')->display(function(){
+            $grid->column('date','订单操作时间')->display(function(){
                 return "订购：".$this->order_at."<br/>".
                     "付款：".$this->payment_at."<br/>".
                     "时限：".$this->delivery_deadline."<br/>";
             });
 
-            $grid->column('订单金额')->display(function(){
+            $grid->column('amount','订单金额')->display(function(){
                 return "币种：".$this->currency."<br/>".
                 "订单总金额：".$this->total_amount."<br/>".
                 "订单商品金额：".$this->total_sku_amount."<br/>".
                 "客付运费：".$this->customer_paid_freight."<br/>".
                 "订单出库成本：".$this->outbound_cost."<br/>";
             });
-            $grid->column('商品ID')->display(function(){
+            $grid->column('sku_id','商品ID')->display(function(){
                 return "".$this->asin."<br/>".
                     "".$this->order_sku_id;
             });
 
 
-            $grid->column('买家信息')->display(function(){
+            $grid->column('receiver','买家信息')->display(function(){
                 return "买家姓名：".$this->receiver_username."<br/>".
                     "买家邮箱：".$this->receiver_email."<br/>".
                     "收件人：".$this->receiver_name."<br/>".
@@ -94,7 +94,7 @@ class NewOrderController extends AdminController
                     "买家留言：".$this->receiver_remarks;
             });
 
-            $grid->column('地址信息')->display(function(){
+            $grid->column('addresses','地址信息')->display(function(){
                 return "国家：".$this->receiver_country."<br/>".
                     "省/州：".$this->receiver_provider."<br/>".
                     "城市：".$this->receiver_city."<br/>".
@@ -105,7 +105,7 @@ class NewOrderController extends AdminController
                     "地址行123：".implode("/",[$this->receiver_address1,$this->receiver_address2,$this->receiver_address3])."<br/>".
                     "公司名：".$this->receiver_remarks;
             });
-            $grid->column('发货信息')->display(function(){
+            $grid->column('sender','发货信息')->display(function(){
                 return '物流渠道：'.$this->logistics_provider."<br/>".
                     '发货仓库：'.$this->estimated_weight."<br/>".
                     '物流方式：'.implode("*",[$this->estimated_length,$this->estimated_width,$this->estimated_height])."<br/>".
@@ -114,7 +114,7 @@ class NewOrderController extends AdminController
                     '标发号：'.$this->tag_number;
 
             });
-            $grid->column('包裹信息')->display(function(){
+            $grid->column('package','包裹信息')->display(function(){
                 return '重量：'.$this->estimated_weight."<br/>".
                     '尺寸：'.implode("*",[$this->estimated_length,$this->estimated_width,$this->estimated_height])."<br/>".
                     '预估计费重：'.$this->estimated_cost_weight."<br/>".
