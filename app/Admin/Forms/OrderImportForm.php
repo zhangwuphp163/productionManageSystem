@@ -45,7 +45,12 @@ class OrderImportForm extends Form
                 foreach ($order['skus'] as  $sku){
                     $createOrderData =  array_merge($order,$sku);
                     unset($createOrderData['skus']);
-                    NewOrder::create($createOrderData);
+
+                    //NewOrder::create($createOrderData);
+                    NewOrder::query()->updateOrCreate([
+                        'platform_number' => $createOrderData['platform_number'],
+                        'order_sku_id' => $createOrderData['order_sku_id'],
+                    ],$createOrderData);
                 }
             }
             DB::commit();
