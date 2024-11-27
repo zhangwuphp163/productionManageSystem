@@ -1,6 +1,16 @@
 @include('admin::layouts.content')
 <script type="text/javascript">
-
+    var url = new URL(window.location.href);
+    var columns = url.searchParams.get('_columns_');
+    if(columns == null){
+        //获取本地缓存的columns
+        var localColumns = localStorage.getItem('dcat-admin-new-order-columns');
+        if(localColumns != null){
+            window.location.href = url + "?_columns_="+localColumns
+        }
+    }else{
+        localStorage.setItem('dcat-admin-new-order-columns',columns);
+    }
     $('.batch-print').on('click', function () {
         var ids = [];
         $('.grid-row-checkbox').each(function () {
