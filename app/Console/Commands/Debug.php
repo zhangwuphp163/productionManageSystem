@@ -37,8 +37,8 @@ class Debug extends Command
      */
     public function handle()
     {
-        $amount = $this->generate(33000);
-        return 0;
+        $this->generate(33000);
+        /*return 0;
         $data = [];
         for ($i=2000;$i<=5000;$i++){
             if($i%100 != 0) continue;
@@ -49,7 +49,7 @@ class Debug extends Command
             return $a['1'] <=> $b['1'];
         });
 
-        dd($data);
+        dd($data);*/
 
         return 0;
     }
@@ -62,8 +62,8 @@ class Debug extends Command
 
         $percents = [
             //[0.09,0.07],
-            [0.15,0.09],
-            [0.19,0.12],
+            [0.16,0.09],
+            [0.18,0.13],
             //[0.30,0.22],
             //[0.32,0.28],
         ];
@@ -71,7 +71,7 @@ class Debug extends Command
             $this->getAmount($amount,$percent[0],$percent[1],$key + 1,$totalAmount);
         }
         $this->info("总投入金额：".$totalAmount);
-        $this->info("股价总计下跌：".((0.15 + 0.1) * 100)."%");
+        $this->info("股价总计下跌：".((0.16 + 0.09) * 100)."%");
 
 
         $this->info("这个时候股价开始反弹：假设25%");
