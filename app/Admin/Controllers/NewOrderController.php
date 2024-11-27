@@ -144,6 +144,8 @@ class NewOrderController extends AdminController
             });
             $grid->actions(function (Grid\Displayers\Actions $actions) {
                 $actions->append("<br/>");
+                $actions->append(new \App\Admin\Actions\Grid\NewOrderDetail());
+                $actions->append("<br/>");
                 $actions->append(new \App\Admin\Actions\Grid\NewOrderResignImageUpload());
             });
 
