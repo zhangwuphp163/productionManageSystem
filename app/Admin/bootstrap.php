@@ -24,3 +24,6 @@ use Dcat\Admin\Show;
  * Admin::js('/packages/prettydocs/js/main.js');
  *
  */
+/*Grid::resolving(function (Grid $grid) {
+    $grid->model()->orderBy("id", "desc");
+});*/

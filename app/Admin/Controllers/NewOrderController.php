@@ -46,10 +46,11 @@ class NewOrderController extends AdminController
     {
         return Grid::make(new \App\Models\NewOrder(), function (Grid $grid) {
             $grid->model()->orderBy('order_at','desc');
-            $grid->column('id')->sortable();
+            //$grid->model()->resetOrderBy();
+            //$grid->column('id')->sortable();
             $grid->column('platform_number','平台/系统单号')->display(function(){
                 return $this->platform_number.'<br/>'.$this->system_number;
-            })->filter();
+            })->filter();//->sortable();
             $grid->column('images',"订单图片")->display(function ($pictures){
                 return $pictures?\GuzzleHttp\json_decode($pictures, true):[];
             })->image('',80,80);
@@ -67,11 +68,11 @@ class NewOrderController extends AdminController
             });
             $grid->column('specify_remarks',"特殊要求")->editable();
             $grid->column('order_remarks',"订单备注")->editable();
-            $grid->column('date','订单操作时间')->display(function(){
+            $grid->column('order_at','订单操作时间')->display(function(){
                 return "订购：".$this->order_at."<br/>".
                     "付款：".$this->payment_at."<br/>".
                     "时限：".$this->delivery_deadline."<br/>";
-            });
+            });//->sortable();
 
             $grid->column('amount','订单金额')->display(function(){
                 return "币种：".$this->currency."<br/>".
