@@ -39,6 +39,8 @@ class OrderImageImportForm extends Form
                     $pathData = explode('/', $dir);
                     $systemNumber = end($pathData);
 
+
+
                     foreach (File::files($dir) as $file) {
                         $zip = new \ZipArchive();
                         if ($zip->open($file) === TRUE){
@@ -48,12 +50,14 @@ class OrderImageImportForm extends Form
                             $images = [];
                             $skuId = "";
                             $orderData = null;
+
                             foreach (File::files($subExtractPath) as $subFile) {
+
                                 $basename = basename($subFile);
+
                                 $extension = pathinfo($basename, PATHINFO_EXTENSION);
                                 if ($extension === 'json') {
                                     $skuId = pathinfo($basename, PATHINFO_FILENAME);
-
                                     $jsonData = json_decode(File::get($subFile), true);
                                     $orderData = json_encode($jsonData);
                                     continue;
@@ -65,6 +69,7 @@ class OrderImageImportForm extends Form
                                     File::copy($subFile, $targetPath);
                                     $images[] = "images/".$filename;
                                 }
+
                             }
 
                             if(!empty($images)){

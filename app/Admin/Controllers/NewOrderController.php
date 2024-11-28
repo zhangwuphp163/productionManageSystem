@@ -45,7 +45,7 @@ class NewOrderController extends AdminController
     protected function grid()
     {
         return Grid::make(new \App\Models\NewOrder(), function (Grid $grid) {
-            $grid->model()->orderBy('id','desc');
+            $grid->model()->orderBy('order_at','desc');
             $grid->column('id')->sortable();
             $grid->column('platform_number','平台/系统单号')->display(function(){
                 return $this->platform_number.'<br/>'.$this->system_number;
