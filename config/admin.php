@@ -326,7 +326,7 @@ return [
         'sidebar_style' => 'light',
 
         //'dark_mode_switch' => false,
-        'dark_mode_switch' => true,
+        'dark_mode_switch' => false,
 
         // bg-primary, bg-info, bg-warning, bg-success, bg-danger, bg-dark
         //'navbar_color' => 'bg-dark',
