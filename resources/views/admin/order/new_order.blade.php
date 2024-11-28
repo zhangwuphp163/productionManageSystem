@@ -1,7 +1,7 @@
 @include('admin::layouts.content')
 <script type="text/javascript">
-    var url = new URL(window.location.href);
-    var columns = url.searchParams.get('_columns_');
+    //var url = new URL(window.location.href);
+    /*var columns = url.searchParams.get('_columns_');
     if(columns == null){
         //获取本地缓存的columns
         var localColumns = localStorage.getItem('dcat-admin-new-order-columns');
@@ -10,7 +10,7 @@
         }
     }else{
         localStorage.setItem('dcat-admin-new-order-columns',columns);
-    }
+    }*/
     $('.batch-print').on('click', function () {
         var ids = [];
         $('.grid-row-checkbox').each(function () {

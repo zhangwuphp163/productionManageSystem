@@ -21,14 +21,31 @@ use Dcat\Admin\Http\Controllers\AdminController;
 use Dcat\Admin\Traits\HasUploadedFile;
 use Dcat\Admin\Widgets\Modal;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\File;
+use Symfony\Component\Console\Input\Input;
 
 class NewOrderController extends AdminController
 {
     use HasUploadedFile;
     use RouteServer;
+    protected $hideColumns = [];
     public function index(Content $content)
     {
+        $params = $_GET;
+        $key = "new_order".Auth::id();
+        if(!empty($params['_columns_'])){
+            Cache::forever($key,$params['_columns_']);
+        }else{
+            $cacheColumns = Cache::get($key);
+
+            $inUseColumns = explode(",",$cacheColumns);
+            $columns = explode(',',"addresses,amount,design_images,images,order_at,order_remarks,package,platform,platform_number,receiver,sender,shipment_images,sku_id,specify_remarks,status");
+            $diff = array_diff($columns,$inUseColumns);
+            $this->hideColumns = $diff;
+        }
+
         return $content
             ->translation($this->translation())
             ->title($this->title())
@@ -129,6 +146,9 @@ class NewOrderController extends AdminController
 
 
             $grid->showColumnSelector();
+            // 设置默认隐藏字段
+            //$grid->hideColumns(['field1', ...]);
+
             $grid->disableCreateButton();
             if (!Admin::user()->can('order-edit')){
                 $grid->disableRowSelector();
@@ -195,7 +215,13 @@ class NewOrderController extends AdminController
             $grid->fixColumns(0,-1);
             $grid->toolsWithOutline(false);
             $grid->paginate(6);
+            //$grid->withBorder();
+            //$grid->tableCollapse();
             //$grid->addTableClass(['table-text-center']);
+            //$grid->enableDialogCreate();
+            //$grid->setDialogFormDimensions('50%', '50%');
+
+            $grid->hideColumns($this->hideColumns);
 
         });
 
