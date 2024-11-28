@@ -61,21 +61,23 @@ class Debug extends Command
         $totalAmount = $amount;
 
         $percents = [
-            //[0.09,0.07],
-            [0.16,0.09],
-            [0.18,0.13],
-            //[0.30,0.22],
+            [0.09,0.07],
+            [0.18,0.12],
+            [0.22,0.15],
+            //[0.22,0.15],
+            //[0.22,0.15],
+            //[0.25,0.15],
             //[0.32,0.28],
         ];
         foreach ($percents as $key => $percent) {
             $this->getAmount($amount,$percent[0],$percent[1],$key + 1,$totalAmount);
         }
         $this->info("总投入金额：".$totalAmount);
-        $this->info("股价总计下跌：".((0.16 + 0.09) * 100)."%");
+        $this->info("股价总计下跌：".((0.09 + 0.11 + 0.1 ) * 100)."%");
 
 
-        $this->info("这个时候股价开始反弹：假设25%");
-        $endAmount = round($amount * 0.25 + $amount,2);
+        $this->info("这个时候股价开始反弹：假设20%");
+        $endAmount = round($amount * 0.2 + $amount,2);
         $this->info("反弹后金额来到：".$endAmount);
         $billAmount = round($endAmount - $totalAmount,2);
         $this->info("卖出后盈利：".$billAmount);
@@ -89,9 +91,9 @@ class Debug extends Command
         $this->info("当前持仓金额({$key}):".$currentAmount);
         $this->info("当下跌百分比".$start * 100 ."%");
 
-        $diffAmount = $totalAmount * $start;
+        $diffAmount = $totalAmount  * $start;
         $this->info("当前亏损金额:".$diffAmount);
-        $currentAmount -= $diffAmount;
+        $currentAmount = $totalAmount - $diffAmount;
         $nextAmount = $this->amount($totalAmount,$currentAmount,1-$end);
         $currentAmount += $nextAmount;
         $totalAmount += $nextAmount;
