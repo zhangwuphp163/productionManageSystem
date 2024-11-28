@@ -187,12 +187,15 @@ class NewOrderController extends AdminController
 
                 // $tools->append(DownloadOrderTemplate::make()->setKey('test_question'));
                 $tools->append('<button class="btn btn-danger btn-export" >&nbsp;&nbsp;&nbsp;<i class="fa fa-download"></i> 导出勾选的订单&nbsp;&nbsp;&nbsp;</button>');
-                $tools->append('<a href="javascript:void(0);" class="btn btn-outline-primary batch-print" data-batch-type="inbound" data-title="批量打印出库单">&nbsp;&nbsp;&nbsp;<i class="fa fa-print"></i> 批量打印出库单&nbsp;&nbsp;&nbsp;</a>');
+                $tools->append('<a href="javascript:void(0);" class="btn btn-info batch-print" data-batch-type="inbound" data-title="批量打印出库单">&nbsp;&nbsp;&nbsp;<i class="fa fa-print"></i> 批量打印出库单&nbsp;&nbsp;&nbsp;</a>');
             });
 
             //$grid->option("quick_edit_button",'编辑');
             $grid->scrollbarX();
             $grid->fixColumns(0,-1);
+            $grid->toolsWithOutline(false);
+            $grid->paginate(6);
+            //$grid->addTableClass(['table-text-center']);
 
         });
 
