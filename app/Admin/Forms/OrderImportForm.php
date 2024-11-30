@@ -27,20 +27,27 @@ class OrderImportForm extends Form
             $dirname = \Ramsey\Uuid\Uuid::uuid4()->toString();
             $file_path = storage_path('app/public' . $input['import_file']);
             $extractPath  = 'storage/uploads/unzipped/'.$dirname;
-
-            $zip = new \ZipArchive();
-            if ($zip->open($file_path) === TRUE) {
-                $zip->extractTo($extractPath);
-                $zip->close();
-                foreach (File::files($extractPath) as $dir) {
-                    $extension = pathinfo($dir, PATHINFO_EXTENSION);
-                    if(in_array($extension, ['csv', 'xls', 'xlsx'])) {
-                        $data = Excel::import($dir)->toArray();
-                        break;
+            $extension = pathinfo($file_path, PATHINFO_EXTENSION);
+            if($extension == 'zip'){
+                $zip = new \ZipArchive();
+                if ($zip->open($file_path) === TRUE) {
+                    $zip->extractTo($extractPath);
+                    $zip->close();
+                    foreach (File::files($extractPath) as $dir) {
+                        $extension = pathinfo($dir, PATHINFO_EXTENSION);
+                        if(in_array($extension, ['csv', 'xls', 'xlsx'])) {
+                            $data = Excel::import($dir)->toArray();
+                            break;
+                        }
                     }
+                }else{
+                    throw new \Exception("打开文件失败");
                 }
-            }else{
+            } else{
                 $data = Excel::import($file_path)->toArray();
+            }
+            if(empty($data)){
+                throw new \Exception("读取文件内容失败");
             }
 
             $ordersData = [];
