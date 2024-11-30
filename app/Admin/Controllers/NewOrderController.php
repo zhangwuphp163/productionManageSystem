@@ -256,7 +256,7 @@ class NewOrderController extends AdminController
                 $form->multipleImage("images","订单图片")->uniqueName()->saving(function ($paths){
                     return json_encode($paths);
                 })->autoUpload();
-
+                $form->text("status","生产进度");
                 //$form->select("status","生产进度")->options(NewOrder::$statues)->default($form->model()->status);
 
                 $form->datetime("order_at","订购日期");
