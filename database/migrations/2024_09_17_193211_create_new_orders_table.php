@@ -16,7 +16,7 @@ class CreateNewOrdersTable extends Migration
         Schema::create('new_orders', function (Blueprint $table) {
             $table->id();
             $table->string('system_number')->index()->comment('系统单号');
-            $table->string('status')->index()->default("可生产");
+            $table->string('status')->index()->default("可生产")->nullable();
             $table->string('platform')->index()->default("Amazon")->comment('平台');
             $table->string('store')->index()->nullable()->comment('店铺');
             $table->string('site')->index()->nullable()->comment('站点');
