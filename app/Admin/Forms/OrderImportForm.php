@@ -9,6 +9,7 @@ use App\Models\OrderShipment;
 use Dcat\EasyExcel\Excel;
 use Dcat\Admin\Widgets\Form;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
 
 class OrderImportForm extends Form
 {
@@ -23,8 +24,24 @@ class OrderImportForm extends Form
     {
         try {
             DB::beginTransaction();
-            $file_path = storage_path('app/public/' . $input['import_file']);
-            $data = Excel::import($file_path)->toArray();
+            $dirname = \Ramsey\Uuid\Uuid::uuid4()->toString();
+            $file_path = storage_path('app/public' . $input['import_file']);
+            $extractPath  = 'storage/uploads/unzipped/'.$dirname;
+
+            $zip = new \ZipArchive();
+            if ($zip->open($file_path) === TRUE) {
+                $zip->extractTo($extractPath);
+                $zip->close();
+                foreach (File::files($extractPath) as $dir) {
+                    $extension = pathinfo($dir, PATHINFO_EXTENSION);
+                    if(in_array($extension, ['csv', 'xls', 'xlsx'])) {
+                        $data = Excel::import($dir)->toArray();
+                        break;
+                    }
+                }
+            }else{
+                $data = Excel::import($file_path)->toArray();
+            }
 
             $ordersData = [];
             foreach ($data['sheet1'] as $row){
@@ -194,10 +211,10 @@ class OrderImportForm extends Form
         // 文件上传
         $this->file('import_file', ' ')
             ->disk('public')
-            ->accept('xls,xlsx,csv')
+            ->accept('zip,xls,xlsx,csv')
             ->uniqueName()
             ->autoUpload()
             ->move('/import')
-            ->help('支持xls,xlsx,csv');
+            ->help('支持zip,xls,xlsx,csv');
     }
 }
