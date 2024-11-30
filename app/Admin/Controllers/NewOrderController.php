@@ -257,7 +257,7 @@ class NewOrderController extends AdminController
                     return json_encode($paths);
                 })->autoUpload();
 
-                $form->select("status","生产进度")->options(NewOrder::$statues)->default($form->model()->status);
+                //$form->select("status","生产进度")->options(NewOrder::$statues)->default($form->model()->status);
 
                 $form->datetime("order_at","订购日期");
                 $form->datetime("delivery_at","发货日期");
