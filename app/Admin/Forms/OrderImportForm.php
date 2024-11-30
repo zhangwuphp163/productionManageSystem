@@ -109,6 +109,7 @@ class OrderImportForm extends Form
             'estimated_height' => !empty($row["预估尺寸高(cm)"])?$row["预估尺寸高(cm)"]:0,
             'estimated_cost_weight' => !empty($row["预估计费重(g)"])?$row["预估计费重(g)"]:0,
             'estimated_shipping_cost' => !empty($row["预估运费(CNY)"])?$row["预估运费(CNY)"]:0,
+            'order_remarks' => ($row['国家/地区']??"") . "，5V USB"
         ];
         $sku = [
             'sku' => $row['SKU']??null,
