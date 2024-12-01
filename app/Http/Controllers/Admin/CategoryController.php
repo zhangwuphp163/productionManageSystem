@@ -57,7 +57,7 @@ class CategoryController extends AdminController
                 $actions->disableDelete();
             });
         });
-
+        $grid->toolsWithOutline(false);
         return $grid;
     }
     public function form()

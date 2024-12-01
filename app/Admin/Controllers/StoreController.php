@@ -31,6 +31,7 @@ class StoreController extends AdminController
                 $filter->equal('id');
 
             });
+            $grid->toolsWithOutline(false);
         });
     }
 

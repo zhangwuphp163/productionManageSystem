@@ -136,6 +136,7 @@ class OrderController extends AdminController
             $grid->option("quick_edit_button",'编辑');
             $grid->scrollbarX();
             $grid->fixColumns(0,-1);
+            $grid->toolsWithOutline(false);
 
         });
 
@@ -172,7 +173,7 @@ class OrderController extends AdminController
                     return json_encode($paths);
                 })->autoUpload();
                 $form->select("status","生产进度")->options(\App\Models\Order::$statues)->default($form->model()->status);
-                
+
                     $form->date("order_date","订单日期");
                     $form->date("delivery_date","发货日期");
 
