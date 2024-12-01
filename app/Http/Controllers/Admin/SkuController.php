@@ -140,7 +140,7 @@ return  '<div class="vs-checkbox-con vs-checkbox-primary checkbox-grid checkbox-
         });
         $grid->tableCollapse(false);
         //$grid->simplePaginate();
-
+        $grid->toolsWithOutline(false);
         //Form::make()
         return $grid;
     }

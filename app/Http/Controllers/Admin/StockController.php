@@ -95,7 +95,7 @@ class StockController extends AdminController
         });
         //$grid->export();
 
-
+        $grid->toolsWithOutline(false);
 
         return $grid;
     }
