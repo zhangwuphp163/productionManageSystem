@@ -115,7 +115,7 @@ class OrderController extends AdminController
                 }
             });
             $grid->tools(function (Grid\Tools $tools) {
-                $tools->append('<a href="javascript:void(0);" class="btn btn-outline-primary batch-print" data-batch-type="inbound" data-title="批量打印出库单">&nbsp;&nbsp;&nbsp;<i class="fa fa-print"></i> 批量打印出库单&nbsp;&nbsp;&nbsp;</a>');
+                $tools->append('<a href="javascript:void(0);" class="btn btn-primary batch-print" data-batch-type="inbound" data-title="批量打印出库单">&nbsp;&nbsp;&nbsp;<i class="fa fa-print"></i> 批量打印出库单&nbsp;&nbsp;&nbsp;</a>');
             });
             /*$grid->tools(function (Grid\Tools $tools) {
                 $tools->append(Modal::make()
