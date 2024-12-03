@@ -38,6 +38,9 @@ class NewOrderResignImageUpload extends RowAction
             $form->disableEditingCheck();
             $form->disableViewCheck();
             $form->disableHeader();
+            $form->saving(function (Form $form) {
+                $form->status = '发稿图给客人确认';
+            });
         });
     }
 
