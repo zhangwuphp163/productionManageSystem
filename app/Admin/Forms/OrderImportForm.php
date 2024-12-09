@@ -70,11 +70,22 @@ class OrderImportForm extends Form
                     $createOrderData =  array_merge($order,$sku);
                     unset($createOrderData['skus']);
 
+                    $newOrder = NewOrder::query()->where("platform_number", $createOrderData['platform_number'])
+                        ->where("order_sku_id", $createOrderData['order_sku_id'])->first();
+                    if(empty($newOrder)){
+                        NewOrder::query()->create($createOrderData);
+                    }else{
+                        unset($createOrderData['order_remarks']);
+                        unset($createOrderData['tracking_number']);
+                        unset($createOrderData['specify_remarks']);
+                        unset($createOrderData['status']);
+                        NewOrder::query()->updateOrCreate([
+                            'platform_number' => $createOrderData['platform_number'],
+                            'order_sku_id' => $createOrderData['order_sku_id'],
+                        ],$createOrderData);
+                    }
                     //NewOrder::create($createOrderData);
-                    NewOrder::query()->updateOrCreate([
-                        'platform_number' => $createOrderData['platform_number'],
-                        'order_sku_id' => $createOrderData['order_sku_id'],
-                    ],$createOrderData);
+
                 }
             }
             DB::commit();
@@ -125,7 +136,6 @@ class OrderImportForm extends Form
             'delivery_warehouse' => $row["发货仓库"]??null,
             'logistics_method' => $row["物流方式"]??null,
             'waybill_number' => $row["运单号"]??null,
-            'tracking_number' => $row["跟踪号"]??null,
             'tag_number' => $row["标发号"]??null,
             'estimated_weight' => !empty($row["预估重量(g)"])?$row["预估重量(g)"]:0,
             'estimated_length' => !empty($row["预估尺寸长(cm)"])?$row["预估尺寸长(cm)"]:0,
@@ -133,7 +143,9 @@ class OrderImportForm extends Form
             'estimated_height' => !empty($row["预估尺寸高(cm)"])?$row["预估尺寸高(cm)"]:0,
             'estimated_cost_weight' => !empty($row["预估计费重(g)"])?$row["预估计费重(g)"]:0,
             'estimated_shipping_cost' => !empty($row["预估运费(CNY)"])?$row["预估运费(CNY)"]:0,
-            'order_remarks' => ($row['国家/地区']??"") . "，5V USB"
+
+            'order_remarks' => ($row['国家/地区']??"") . "，5V USB",
+            //'tracking_number' => $row["跟踪号"]??null,
         ];
         $sku = [
             'sku' => $row['SKU']??null,
