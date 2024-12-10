@@ -79,7 +79,7 @@ class NewOrderController extends AdminController
             )->display(function ($status) {
                 return $status;
             });*/
-            $grid->column('status',"订单进度")->editable(true)->filter();
+            $grid->column('status',"订单进度")->editable(true)->filter(Grid\Column\Filter\Like::make());
             $grid->column('platform','平台/店铺/站点')->display(function(){
                 return $this->platform.'<br/>'.$this->store.'<br/>'.$this->site;
             });
@@ -161,6 +161,7 @@ class NewOrderController extends AdminController
 
                 $filter->like('platform_number', '平台单号')->width(3); // 这里的标签可以自定义
                 $filter->like('system_number', '系统单号')->width(3); // 这里的标签可以自定义
+                $filter->like('status', '订单状态')->width(3); // 这里的标签可以自定义
                 $filter->like('order_sku_id', '订单商品ID')->width(3); // 这里的标签可以自定义
             });
             $grid->actions(function (Grid\Displayers\Actions $actions) {
