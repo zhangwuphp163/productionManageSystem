@@ -149,7 +149,7 @@ class NewOrderController extends AdminController
             // 设置默认隐藏字段
             //$grid->hideColumns(['field1', ...]);
 
-            $grid->disableCreateButton();
+            //$grid->disableCreateButton();
             if (!Admin::user()->can('order-edit')){
                 $grid->disableRowSelector();
             }
@@ -254,21 +254,48 @@ class NewOrderController extends AdminController
     {
         return Form::make(new NewOrder(), function (Form $form) {
             $form->tab('订单信息', function (Form $form) {
+                $form->text('system_number','系统单号')->default(time())->required();
+                $form->text('platform_number','平台单号')->required();
+                $form->text('store','店铺');
+                $form->text('site','站点');
                 $form->multipleImage("images","订单图片")->uniqueName()->saving(function ($paths){
                     return json_encode($paths);
                 })->autoUpload();
-                $form->text("status","生产进度");
+                $form->text("status","生产进度")->required();
                 //$form->select("status","生产进度")->options(NewOrder::$statues)->default($form->model()->status);
 
-                $form->datetime("order_at","订购日期");
+                $form->datetime("order_at","订购日期")->required();
+                $form->datetime("payment_at","付款时间");
+                $form->datetime("delivery_deadline","订单时限");
                 $form->datetime("delivery_at","发货日期");
                 $form->text("order_remarks","订单备注");
                 $form->text("specify_remarks","特殊要求");
             });
-            $form->tab('订单地址信息', function (Form $form) {
-                $form->text("receiver_name","收货人");
-                $form->text("receiver_phone","收货人电话");
-                $form->text("receiver_address1","收货地址");
+       /*     `receiver_username` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '买家姓名',
+  `receiver_email` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '买家邮件',
+  `receiver_remarks` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '买家留言',
+  `receiver_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '收件人',
+  `receiver_phone` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '电话',
+  `receiver_country`*/
+            $form->tab('地址信息', function (Form $form) {
+                $form->text("receiver_username","买家姓名");
+                $form->text("receiver_email","买家邮件");
+                $form->text("receiver_name","收件人");
+                $form->text("receiver_country","国家/地区");
+                $form->text("receiver_provider","省/州");
+                $form->text("receiver_city","城市");
+                $form->text("receiver_district","区/县");
+                $form->text("receiver_postcode","邮编");
+                $form->text("receiver_house_number","门牌号");
+                $form->text("receiver_phone","电话");
+                $form->text("receiver_address1","地址");
+            });
+            $form->tab('订单金额', function (Form $form) {
+                $form->text("currency","币种");
+                $form->number("total_amount","订单总金额");
+                $form->number("total_sku_amount","订单商品金额");
+                $form->number("customer_paid_freight","客付运费");
+                $form->number("outbound_cost","订单出库成本");
             });
             $form->tab('订单发货信息', function (Form $form) {
                 $form->text("tracking_number","发货单号");
