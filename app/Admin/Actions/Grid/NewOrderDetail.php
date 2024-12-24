@@ -39,68 +39,76 @@ class NewOrderDetail extends RowAction
 
             }*/
 //dd($data["customizationData"]["children"][0]['children'][0]['children']);
-            foreach ($data["customizationData"]["children"][0]['children'][0]['children']??[] as $row){
-                if($row["type"] == "OptionCustomization"){
-                    if(!empty($row["optionSelection"])){
-                        $show->field(mb_substr($row["label"],0,64)."\r\n".$row["name"])->value($row["optionSelection"]["label"].($row["optionSelection"]['additionalCost']['amount']?(" $".$row["optionSelection"]['additionalCost']['amount']):""));
-                    }else{
-                        $show->field(mb_substr($row["label"],0,64)."\r\n".$row["name"])->value($row["displayValue"]);
-                    }
-                    //$show->field($row["optionValue"]);
-                }elseif ($row["type"] == "TextPrinting" && isset($row["text"])){
-                    $show->field(mb_substr($row["label"],0,64)."\r\n".$row["name"])->value($row["text"]);
-                }elseif ($row["type"] == "ContainerCustomization" ){
-                    if(!empty($row['children']) && is_array($row['children'])){
-                        foreach ($row['children'] as $c){
-                            if($c['type'] == "ColorCustomization"){
+            if($show->model()->platform == 'Manual'){
 
-                                $show->field(mb_substr($c["label"],0,64)."\r\n".$c["name"])->unescape()->as(function ($avatar) use($c){
+                foreach ($data??[] as $key => $value){
+                    $show->field($key)->value($value);
+                }
+            }else{
+                foreach ($data["customizationData"]["children"][0]['children'][0]['children']??[] as $row){
+                    if($row["type"] == "OptionCustomization"){
+                        if(!empty($row["optionSelection"])){
+                            $show->field(mb_substr($row["label"],0,64)."\r\n".$row["name"])->value($row["optionSelection"]["label"].($row["optionSelection"]['additionalCost']['amount']?(" $".$row["optionSelection"]['additionalCost']['amount']):""));
+                        }else{
+                            $show->field(mb_substr($row["label"],0,64)."\r\n".$row["name"])->value($row["displayValue"]);
+                        }
+                        //$show->field($row["optionValue"]);
+                    }elseif ($row["type"] == "TextPrinting" && isset($row["text"])){
+                        $show->field(mb_substr($row["label"],0,64)."\r\n".$row["name"])->value($row["text"]);
+                    }elseif ($row["type"] == "ContainerCustomization" ){
+                        if(!empty($row['children']) && is_array($row['children'])){
+                            foreach ($row['children'] as $c){
+                                if($c['type'] == "ColorCustomization"){
 
-                                    $hex = str_replace("#", "", $c["colorSelection"]['value']);
+                                    $show->field(mb_substr($c["label"],0,64)."\r\n".$c["name"])->unescape()->as(function ($avatar) use($c){
 
-                                    // 检查是否为3位简写颜色代码
-                                    if (strlen($hex) == 3) {
-                                        $r = hexdec(substr($hex, 0, 1) . substr($hex, 0, 1));
-                                        $g = hexdec(substr($hex, 1, 1) . substr($hex, 1, 1));
-                                        $b = hexdec(substr($hex, 2, 1) . substr($hex, 2, 1));
-                                    } else {
-                                        $r = hexdec(substr($hex, 0, 2));
-                                        $g = hexdec(substr($hex, 2, 2));
-                                        $b = hexdec(substr($hex, 4, 2));
-                                    }
+                                        $hex = str_replace("#", "", $c["colorSelection"]['value']);
 
-                                    $rgb = array($r, $g, $b);
+                                        // 检查是否为3位简写颜色代码
+                                        if (strlen($hex) == 3) {
+                                            $r = hexdec(substr($hex, 0, 1) . substr($hex, 0, 1));
+                                            $g = hexdec(substr($hex, 1, 1) . substr($hex, 1, 1));
+                                            $b = hexdec(substr($hex, 2, 1) . substr($hex, 2, 1));
+                                        } else {
+                                            $r = hexdec(substr($hex, 0, 2));
+                                            $g = hexdec(substr($hex, 2, 2));
+                                            $b = hexdec(substr($hex, 4, 2));
+                                        }
 
-                                    $rgb =  implode('/', $rgb);
-                                    return "<div style='background: {$c["colorSelection"]['value']};width:20px;height:20px;'></div>{$c["colorSelection"]['name']}({$c["colorSelection"]['value']} or RGB {$rgb})";
+                                        $rgb = array($r, $g, $b);
 
-                                });//->value($c["colorSelection"]['name']."(".$c["colorSelection"]['value'].")");
+                                        $rgb =  implode('/', $rgb);
+                                        return "<div style='background: {$c["colorSelection"]['value']};width:20px;height:20px;'></div>{$c["colorSelection"]['name']}({$c["colorSelection"]['value']} or RGB {$rgb})";
+
+                                    });//->value($c["colorSelection"]['name']."(".$c["colorSelection"]['value'].")");
 
 
-                            }elseif($c['type'] == 'ContainerCustomization'){
-                                foreach ($c['children'] as $c1){
-                                    if($c1['type'] == "PlacementContainerCustomization"){
-                                        foreach ($c1['children'] as $c2){
-                                            foreach ($c2['children'] as $c3){
-                                                if(!empty($c3['label'])){
-                                                    $show->field($c3['label']."\r\n".$c3["name"])->value($c3["inputValue"]);
+                                }elseif($c['type'] == 'ContainerCustomization'){
+                                    foreach ($c['children'] as $c1){
+                                        if($c1['type'] == "PlacementContainerCustomization"){
+                                            foreach ($c1['children'] as $c2){
+                                                foreach ($c2['children'] as $c3){
+                                                    if(!empty($c3['label'])){
+                                                        $show->field($c3['label']."\r\n".$c3["name"])->value($c3["inputValue"]);
+                                                    }
                                                 }
                                             }
                                         }
                                     }
                                 }
-                            }
 
+                            }
+                        }else{
+                            $show->field(mb_substr($row["label"],0,64)."\r\n".$row["name"])->value($row["displayValue"]);
                         }
-                    }else{
-                        $show->field(mb_substr($row["label"],0,64)."\r\n".$row["name"])->value($row["displayValue"]);
+                    }elseif ($row["type"] == "TextCustomization"){
+                        $show->field(mb_substr($row["label"],0,64)."\r\n".$row['name'])->value($row["inputValue"]);
+                    }elseif ($row['type'] == 'FlatRatePriceDeltaContainerCustomization'){
+                        $show->field($row['children'][0]["label"]."\r\n".$row['children'][0]["name"])->value($row['children'][0]["inputValue"]);
                     }
-                }elseif ($row["type"] == "TextCustomization"){
-                    $show->field(mb_substr($row["label"],0,64)."\r\n".$row['name'])->value($row["inputValue"]);
-                }elseif ($row['type'] == 'FlatRatePriceDeltaContainerCustomization'){
-                    $show->field($row['children'][0]["label"]."\r\n".$row['children'][0]["name"])->value($row['children'][0]["inputValue"]);
                 }
             }
+
             $show->disableEditButton();
             $show->disableDeleteButton();
             $show->disableListButton();

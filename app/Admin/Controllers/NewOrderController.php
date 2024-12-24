@@ -256,6 +256,7 @@ class NewOrderController extends AdminController
             $form->tab('订单信息', function (Form $form) {
                 $form->text('system_number','系统单号')->default(time())->required();
                 $form->text('platform_number','平台单号')->required();
+                $form->text('platform','平台')->default('Manual')->readOnly();
                 $form->text('store','店铺');
                 $form->text('site','站点');
                 $form->multipleImage("images","订单图片")->uniqueName()->saving(function ($paths){
@@ -300,7 +301,21 @@ class NewOrderController extends AdminController
             $form->tab('订单发货信息', function (Form $form) {
                 $form->text("tracking_number","发货单号");
             });
-
+            if(!$form->model()->exists || ($form->model()->exists && $form->model()->platform =='Manual')){
+                $form->tab('定制内容', function (Form $form) {
+                    $form->keyValue('order_data',"定制内容")->default([
+                        "Sign Length" => "",
+                        "Color of Sign" => "",
+                        "1 Line Text" => "",
+                        "2 or 3 Lines Sign Text" => "",
+                        "Acrylic Board Shape" => "",
+                        "Light Type" => "",
+                        "Extra Operating" => "",
+                    ])->saving(function ($v) {
+                        return json_encode($v);
+                    })->setKeyLabel("名称")->setValueLabel("备注");
+                });
+            }
         });
     }
     public function upload(Request $request)
