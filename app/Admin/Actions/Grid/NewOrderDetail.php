@@ -83,12 +83,12 @@ class NewOrderDetail extends RowAction
                                         });//->value($c["colorSelection"]['name']."(".$c["colorSelection"]['value'].")");
 
                                     }
-                                    
+
                                 }elseif($c['type'] == 'ContainerCustomization'){
                                     foreach ($c['children'] as $c1){
                                         if($c1['type'] == "PlacementContainerCustomization"){
                                             foreach ($c1['children'] as $c2){
-                                                foreach ($c2['children'] as $c3){
+                                                foreach ($c2['children']??[] as $c3){
                                                     if(!empty($c3['label'])){
                                                         $show->field($c3['label']."\r\n".$c3["name"])->value($c3["inputValue"]);
                                                     }
