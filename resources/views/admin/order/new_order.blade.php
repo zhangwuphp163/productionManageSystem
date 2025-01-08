@@ -57,6 +57,40 @@
         }
         window.open('/admin/new-orders/export?ids='+ids.join(","))
     });
+    var ids = [];
+    $('.batch-copy').on('click', function () {
+        var ids = [];
+        $('.grid-row-checkbox').each(function () {
+            if($(this).is(':checked')){
+                ids.push($(this).data('id'));
+            }
+        });
+        if(ids.length === 0){
+            toastr.error("请选择要复制的订单");
+            return;
+        }
+        $.ajax({
+            method:'POST',
+            url:"/admin/new-orders/batch-copy",
+            data:{
+                ids:ids
+            },
+            beforeSend:function(){
+                $("btn").attr("disabled",true);
+            },
+            success:function (res) {
+                if(res.status === 0){
+                    toastr.success(res.msg);
+                    window.location.reload()
+                }else{
+                    toastr.error(res.msg);
+                }
+            },
+            complete:function(){
+                $("btn").attr("disabled",false);
+            }
+        })
+    });
 </script>
 
 

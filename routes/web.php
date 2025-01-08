@@ -63,6 +63,7 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin','middleware' => 'admin
     Route::put('/new-orders/update-design-image/{id}', [NewOrderController::class,'updateDesignImage'])->name('admin.new-orders.update-design-image');
     Route::get('/new-orders/export', [NewOrderController::class,'export'])->name('admin.new-orders.export');
     Route::post('/new-orders/print-label', [NewOrderController::class,'printLabel'])->name('admin.new-orders.print-label');
+    Route::post('/new-orders/batch-copy', [\App\Admin\Controllers\NewOrderController::class,'batchCopy'])->name('admin.new-orders.batch-copy');
 
     NewOrderController::routes('/new-orders', '\App\Admin\Controllers\NewOrderController');
 

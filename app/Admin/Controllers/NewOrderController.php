@@ -209,6 +209,8 @@ class NewOrderController extends AdminController
                 // $tools->append(DownloadOrderTemplate::make()->setKey('test_question'));
                 $tools->append('<button class="btn btn-danger btn-export" >&nbsp;&nbsp;&nbsp;<i class="fa fa-download"></i> 导出勾选的订单&nbsp;&nbsp;&nbsp;</button>');
                 $tools->append('<a href="javascript:void(0);" class="btn btn-info batch-print" data-batch-type="inbound" data-title="批量打印出库单">&nbsp;&nbsp;&nbsp;<i class="fa fa-print"></i> 批量打印出库单&nbsp;&nbsp;&nbsp;</a>');
+                $tools->append('<a href="javascript:void(0);" class="btn btn-cyan batch-copy" data-title="批量复制订单">&nbsp;&nbsp;&nbsp;<i class="fa fa-copy"></i> 批量复制订单&nbsp;&nbsp;&nbsp;</a>');
+
             });
 
             //$grid->option("quick_edit_button",'编辑');
@@ -405,6 +407,30 @@ class NewOrderController extends AdminController
             'msg' => 'success',
             'url' => asset("storage/labels/" . $labelFilename)
         ];
+    }
+
+    public function batchCopy(Request $request)
+    {
+        try {
+            $ids = $request->get('ids');
+            $orders = \App\Models\NewOrder::query()->whereIn('id',$ids)->get();
+            foreach ($orders as $order){
+                $newOrder = $order->replicate([
+                    'system_number'
+                ]);
+                $newOrder->system_number = time().rand(0,10000);
+                $newOrder->save();
+            }
+            return [
+                'status' => 0,
+                'msg' => 'success'
+            ];
+        }catch (\Exception $exception){
+            return [
+                'status' => 1,
+                'msg' => $exception->getMessage()
+            ];
+        }
     }
 
     public function uploadDesignImage($id)
