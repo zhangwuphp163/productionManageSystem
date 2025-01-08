@@ -59,30 +59,31 @@ class NewOrderDetail extends RowAction
                         if(!empty($row['children']) && is_array($row['children'])){
                             foreach ($row['children'] as $c){
                                 if($c['type'] == "ColorCustomization"){
+                                    if(!empty($c['name'])){
+                                        $show->field(mb_substr($c["label"],0,64)."\r\n".$c["name"])->unescape()->as(function ($avatar) use($c){
 
-                                    $show->field(mb_substr($c["label"],0,64)."\r\n".$c["name"])->unescape()->as(function ($avatar) use($c){
+                                            $hex = str_replace("#", "", $c["colorSelection"]['value']);
 
-                                        $hex = str_replace("#", "", $c["colorSelection"]['value']);
+                                            // 检查是否为3位简写颜色代码
+                                            if (strlen($hex) == 3) {
+                                                $r = hexdec(substr($hex, 0, 1) . substr($hex, 0, 1));
+                                                $g = hexdec(substr($hex, 1, 1) . substr($hex, 1, 1));
+                                                $b = hexdec(substr($hex, 2, 1) . substr($hex, 2, 1));
+                                            } else {
+                                                $r = hexdec(substr($hex, 0, 2));
+                                                $g = hexdec(substr($hex, 2, 2));
+                                                $b = hexdec(substr($hex, 4, 2));
+                                            }
 
-                                        // 检查是否为3位简写颜色代码
-                                        if (strlen($hex) == 3) {
-                                            $r = hexdec(substr($hex, 0, 1) . substr($hex, 0, 1));
-                                            $g = hexdec(substr($hex, 1, 1) . substr($hex, 1, 1));
-                                            $b = hexdec(substr($hex, 2, 1) . substr($hex, 2, 1));
-                                        } else {
-                                            $r = hexdec(substr($hex, 0, 2));
-                                            $g = hexdec(substr($hex, 2, 2));
-                                            $b = hexdec(substr($hex, 4, 2));
-                                        }
+                                            $rgb = array($r, $g, $b);
 
-                                        $rgb = array($r, $g, $b);
+                                            $rgb =  implode('/', $rgb);
+                                            return "<div style='background: {$c["colorSelection"]['value']};width:20px;height:20px;'></div>{$c["colorSelection"]['name']}({$c["colorSelection"]['value']} or RGB {$rgb})";
 
-                                        $rgb =  implode('/', $rgb);
-                                        return "<div style='background: {$c["colorSelection"]['value']};width:20px;height:20px;'></div>{$c["colorSelection"]['name']}({$c["colorSelection"]['value']} or RGB {$rgb})";
+                                        });//->value($c["colorSelection"]['name']."(".$c["colorSelection"]['value'].")");
 
-                                    });//->value($c["colorSelection"]['name']."(".$c["colorSelection"]['value'].")");
-
-
+                                    }
+                                    
                                 }elseif($c['type'] == 'ContainerCustomization'){
                                     foreach ($c['children'] as $c1){
                                         if($c1['type'] == "PlacementContainerCustomization"){
