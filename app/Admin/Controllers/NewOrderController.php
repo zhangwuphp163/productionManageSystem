@@ -325,14 +325,14 @@ class NewOrderController extends AdminController
                 $status = $form->model()->getOriginal("status");
                 $currentStatus = $form->input('status');
                 if($status != $currentStatus && $currentStatus == '可生产'){
-                    OrderMonitor::orderUpdate("订单可生产【{$form->model()->platform_number}】","跟单");
+                    OrderMonitor::orderUpdate("订单可生产【{$form->model()->platform_number}】，订单连接：http://123.249.25.241/admin/mobile/order?order_number=".$form->model()->platform_number,"跟单");
                 }
             }
         })->saved(function(Form $form){
             $data = $form->updates();
             if($form->isCreating()){
                 //设计
-                OrderMonitor::orderUpdate("订单创建【{$data["platform_number"]}】","设计");
+                OrderMonitor::orderUpdate("订单创建【{$data["platform_number"]}】，订单连接：http://123.249.25.241/admin/mobile/order?order_number=".$data["platform_number"],"设计");
             }
         });
     }

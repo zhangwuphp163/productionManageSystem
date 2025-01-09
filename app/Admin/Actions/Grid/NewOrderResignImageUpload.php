@@ -44,7 +44,7 @@ class NewOrderResignImageUpload extends RowAction
                 $form->status = '发稿图给客人确认';
                 $data = $form->input();
                 if(key_exists('file',$data)){
-                    OrderMonitor::orderUpdate("设计图已上传【{$form->model()->platform_number}】","运营");
+                    OrderMonitor::orderUpdate("设计图已上传【{$form->model()->platform_number}】，订单连接：http://123.249.25.241/admin/mobile/order?order_number=".$form->model()->platform_number,"运营");
                 }
             });
             $form->text('status','状态')->display(false);
