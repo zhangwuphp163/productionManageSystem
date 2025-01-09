@@ -4,6 +4,7 @@ namespace App\Admin\Actions\Grid;
 
 use App\Models\NewOrder;
 use App\Models\Order;
+use App\Services\OrderMonitor;
 use Dcat\Admin\Grid\RowAction;
 use Dcat\Admin\Form;
 use Dcat\Admin\Widgets\Modal;
@@ -40,6 +41,7 @@ class NewOrderResignImageUpload extends RowAction
             $form->disableHeader();
             $form->saving(function (Form $form) {
                 $form->status = '发稿图给客人确认';
+                OrderMonitor::orderUpdate("设计图已上传【{$form->model()->platform_number}】","运营");
             });
         });
     }

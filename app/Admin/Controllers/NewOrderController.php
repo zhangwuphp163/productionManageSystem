@@ -11,6 +11,7 @@ use App\Labels\NewOrderLabel;
 use App\Labels\OrderLabel;
 use App\Libraries\RouteServer;
 use App\Models\NewOrder;
+use App\Services\OrderMonitor;
 use Dcat\Admin\Admin;
 use Dcat\Admin\Form;
 use Dcat\Admin\Grid;
@@ -23,6 +24,7 @@ use Dcat\Admin\Widgets\Modal;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Symfony\Component\Console\Input\Input;
 
@@ -317,6 +319,20 @@ class NewOrderController extends AdminController
                         return json_encode($v);
                     })->setKeyLabel("名称")->setValueLabel("备注");
                 });
+            }
+        })->saving(function (Form $form){
+            if(!empty($form->model())){
+                $status = $form->model()->getOriginal("status");
+                $currentStatus = $form->input('status');
+                if($status != $currentStatus && $currentStatus == '可生产'){
+                    OrderMonitor::orderUpdate("订单可生产【{$form->model()->platform_number}】","跟单");
+                }
+            }
+        })->saved(function(Form $form){
+            $data = $form->updates();
+            if($form->isCreating()){
+                //设计
+                OrderMonitor::orderUpdate("订单创建【{$data["platform_number"]}】","设计");
             }
         });
     }
