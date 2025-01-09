@@ -39,10 +39,15 @@ class NewOrderResignImageUpload extends RowAction
             $form->disableEditingCheck();
             $form->disableViewCheck();
             $form->disableHeader();
+            //$form->disableSubmitButton();
             $form->saving(function (Form $form) {
                 $form->status = '发稿图给客人确认';
-                OrderMonitor::orderUpdate("设计图已上传【{$form->model()->platform_number}】","运营");
+                $data = $form->input();
+                if(key_exists('file',$data)){
+                    OrderMonitor::orderUpdate("设计图已上传【{$form->model()->platform_number}】","运营");
+                }
             });
+            $form->text('status','状态')->display(false);
         });
     }
 
