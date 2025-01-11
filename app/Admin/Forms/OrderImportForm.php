@@ -6,6 +6,7 @@ use App\Models\NewOrder;
 use App\Models\OrderAddress;
 use App\Models\OrderItem;
 use App\Models\OrderShipment;
+use App\Services\OrderMonitor;
 use Dcat\EasyExcel\Excel;
 use Dcat\Admin\Widgets\Form;
 use Illuminate\Support\Facades\DB;
@@ -75,6 +76,9 @@ class OrderImportForm extends Form
                         ->where("order_sku_id", $createOrderData['order_sku_id'])->first();
                     if(empty($newOrder)){
                         NewOrder::query()->create($createOrderData);
+                        //设计
+                        OrderMonitor::orderUpdate("订单创建【{$data["platform_number"]}】，订单链接：http://123.249.25.241/admin/mobile/order?order_number=".$createOrderData["platform_number"],"设计");
+
                     }else{
                         unset($createOrderData['order_remarks']);
                         unset($createOrderData['tracking_number']);
