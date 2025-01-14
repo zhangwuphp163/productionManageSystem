@@ -90,7 +90,7 @@ class NewOrderDetail extends RowAction
                                             foreach ($c1['children'] as $c2){
                                                 foreach ($c2['children']??[] as $c3){
                                                     if(!empty($c3['label'])){
-                                                        $show->field($c3['label']."\r\n".$c3["name"])->value($c3["inputValue"]);
+                                                        $show->field($c3['label']."\r\n".($c3["name"]??''))->value($c3["inputValue"]);
                                                     }
                                                 }
                                             }
