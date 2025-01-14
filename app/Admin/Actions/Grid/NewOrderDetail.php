@@ -105,7 +105,7 @@ class NewOrderDetail extends RowAction
                     }elseif ($row["type"] == "TextCustomization"){
                         $show->field(mb_substr($row["label"],0,64)."\r\n".$row['name'])->value($row["inputValue"]);
                     }elseif ($row['type'] == 'FlatRatePriceDeltaContainerCustomization'){
-                        $show->field($row['children'][0]["label"]."\r\n".$row['children'][0]["name"])->value($row['children'][0]["inputValue"]);
+                        $show->field($row['children'][0]["label"]."\r\n".($row['children'][0]["name"]??""))->value($row['children'][0]["inputValue"]);
                     }
                 }
             }
