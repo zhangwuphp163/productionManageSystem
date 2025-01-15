@@ -68,7 +68,7 @@ class NewOrderController extends AdminController
             //$grid->model()->resetOrderBy();
             //$grid->column('id')->sortable();
             $grid->column('platform_number','平台/系统单号')->display(function(){
-                return $this->platform_number.'<br/>'.$this->system_number;
+                return "<a href='https://t.17track.net/zh-cn#nums={$this->platform_number}' target='_blank'>".$this->platform_number."</a>".'<br/>'.$this->system_number;
             })->filter();//->sortable();
             $grid->column('images',"订单图片")->display(function ($pictures){
                 return $pictures?\GuzzleHttp\json_decode($pictures, true):[];

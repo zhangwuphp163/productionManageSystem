@@ -59,8 +59,7 @@ class NewOrderDetail extends RowAction
                         if(!empty($row['children']) && is_array($row['children'])){
                             foreach ($row['children'] as $c){
                                 if($c['type'] == "ColorCustomization"){
-                                    if(!empty($c['name'])){
-                                        $show->field(mb_substr($c["label"],0,64)."\r\n".$c["name"])->unescape()->as(function ($avatar) use($c){
+                                    $show->field(mb_substr($c["label"],0,64))->unescape()->as(function ($avatar) use($c){
 
                                             $hex = str_replace("#", "", $c["colorSelection"]['value']);
 
@@ -82,8 +81,6 @@ class NewOrderDetail extends RowAction
 
                                         });//->value($c["colorSelection"]['name']."(".$c["colorSelection"]['value'].")");
 
-                                    }
-
                                 }elseif($c['type'] == 'ContainerCustomization'){
                                     foreach ($c['children'] as $c1){
                                         if($c1['type'] == "PlacementContainerCustomization"){
@@ -96,6 +93,8 @@ class NewOrderDetail extends RowAction
                                             }
                                         }
                                     }
+                                }elseif ($c['type'] == 'FontCustomization'){
+                                    $show->field($c3['label']."\r\n".($c3["name"]??''))->value($c3['fontSelection']["family"]??"");
                                 }
 
                             }
