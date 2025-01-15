@@ -94,7 +94,7 @@ class NewOrderDetail extends RowAction
                                         }
                                     }
                                 }elseif ($c['type'] == 'FontCustomization'){
-                                    $show->field($c3['label']."\r\n".($c3["name"]??''))->value($c3['fontSelection']["family"]??"");
+                                    $show->field($c['label']."\r\n".($c["name"]??''))->value($c['fontSelection']["family"]??"");
                                 }
 
                             }
