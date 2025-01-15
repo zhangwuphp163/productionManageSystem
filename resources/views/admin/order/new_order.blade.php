@@ -91,6 +91,10 @@
             }
         })
     });
+    $(".btn-search-track").click(function(){
+        alert($(this).data('href'))
+        window.open($(this).data('href'));
+    });
 </script>
 
 

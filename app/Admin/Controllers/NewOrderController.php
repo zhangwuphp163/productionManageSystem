@@ -67,8 +67,8 @@ class NewOrderController extends AdminController
             $grid->model()->orderBy('order_at','desc');
             //$grid->model()->resetOrderBy();
             //$grid->column('id')->sortable();
-            $grid->column('platform_number','平台/系统/运单')->display(function(){
-                return $this->platform_number."<br/>".$this->system_number."<br/><a href='https://t.17track.net/zh-cn#nums={$this->tracking_number}' target='_blank'>".$this->tracking_number."</a>";
+            $grid->column('platform_number','平台/系统单号')->display(function(){
+                return $this->platform_number."<br/>".$this->system_number;
             })->filter();//->sortable();
             $grid->column('images',"订单图片")->display(function ($pictures){
                 return $pictures?\GuzzleHttp\json_decode($pictures, true):[];
@@ -84,6 +84,9 @@ class NewOrderController extends AdminController
             $grid->column('status',"订单进度")->editable(true)->filter(Grid\Column\Filter\Like::make());
             $grid->column('platform','平台/店铺/站点')->display(function(){
                 return $this->platform.'<br/>'.$this->store.'<br/>'.$this->site;
+            });
+            $grid->column('tracking_number',"快递单号")->editable(true)->display(function ($row){
+                return $row." &nbsp;<button class='btn btn-sm btn-search-track' title='17track 查询' data-href='https://t.17track.net/zh-cn#nums={$this->tracking_number}'><i class='fa fa-search'></i></button>";
             });
             $grid->column('specify_remarks',"特殊要求")->editable(true);
             $grid->column('order_remarks',"订单备注")->editable(true);
