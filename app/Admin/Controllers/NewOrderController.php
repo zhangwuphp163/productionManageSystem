@@ -334,6 +334,7 @@ class NewOrderController extends AdminController
                         OrderMonitor::orderUpdate("订单改图【{$form->model()->platform_number}】，订单链接：http://123.249.25.241/admin/mobile/order?order_number=".$form->model()->platform_number,"设计");
                     }elseif ($currentStatus == '可生产'){
                         OrderMonitor::orderUpdate("订单可生产【{$form->model()->platform_number}】，订单链接：http://123.249.25.241/admin/mobile/order?order_number=".$form->model()->platform_number,"跟单");
+                        OrderMonitor::orderUpdate("订单可生产，上传生产稿图到共享【{$form->model()->platform_number}】，订单链接：http://123.249.25.241/admin/mobile/order?order_number=".$form->model()->platform_number,"设计");
                     }
                 }
 
