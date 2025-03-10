@@ -55,8 +55,8 @@ class OrderImportForm extends Form
             foreach ($data['sheet1'] as $row){
                 if (strtoupper($row["线上状态"]) == "CANCELED") continue;
                 $data = self::generateOrder($row);
-                if($data['status'] === '未付款') continue;
-                unset($data['status']);
+                if($row['status'] === '未付款') continue;
+                unset($row['status']);
                 $skus = $ordersData[$data['order_number']]['skus']??[];
 
                 if(!empty($data['order']['system_number'])){
