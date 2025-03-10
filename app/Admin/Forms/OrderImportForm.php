@@ -56,7 +56,6 @@ class OrderImportForm extends Form
                 if (strtoupper($row["线上状态"]) == "CANCELED") continue;
                 $data = self::generateOrder($row);
                 if($row['status'] === '未付款') continue;
-                unset($row['status']);
                 $skus = $ordersData[$data['order_number']]['skus']??[];
 
                 if(!empty($data['order']['system_number'])){
@@ -78,6 +77,7 @@ class OrderImportForm extends Form
                         ->where("order_sku_id", $createOrderData['order_sku_id'])->first();
                     if(empty($newOrder)){
                         NewOrder::query()->create($createOrderData);
+                        unset($createOrderData['status']);
                         //设计
                         OrderMonitor::orderUpdate("订单创建【{$createOrderData["platform_number"]}】，订单链接：http://123.249.25.241/admin/mobile/order?order_number=".$createOrderData["platform_number"],"设计");
 
