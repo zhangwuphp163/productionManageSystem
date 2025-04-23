@@ -79,7 +79,7 @@ class OrderImportForm extends Form
                         NewOrder::query()->create($createOrderData);
                         unset($createOrderData['status']);
                         //设计
-                        OrderMonitor::orderUpdate("订单创建【{$createOrderData["platform_number"]}】，订单链接：http://123.249.25.241/admin/mobile/order?order_number=".$createOrderData["platform_number"],"设计");
+                        OrderMonitor::orderUpdate("订单创建【{$createOrderData["platform_number"]}】，订单链接：http://134.175.219.101:8080/admin/mobile/order?order_number=".$createOrderData["platform_number"],"设计");
 
                     }else{
                         unset($createOrderData['order_remarks']);

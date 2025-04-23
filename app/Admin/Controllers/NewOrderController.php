@@ -329,12 +329,12 @@ class NewOrderController extends AdminController
                 $currentStatus = $form->input('status');
                 if($status != $currentStatus){
                     if(strpos($currentStatus, "补发") !== false){
-                        OrderMonitor::orderUpdate("订单补发【{$form->model()->platform_number}】，订单链接：http://123.249.25.241/admin/mobile/order?order_number=".$form->model()->platform_number,"跟单");
+                        OrderMonitor::orderUpdate("订单补发【{$form->model()->platform_number}】，订单链接：http://134.175.219.101:8080/admin/mobile/order?order_number=".$form->model()->platform_number,"跟单");
                     }elseif (strpos($currentStatus, "改图") !== false){
-                        OrderMonitor::orderUpdate("订单改图【{$form->model()->platform_number}】，订单链接：http://123.249.25.241/admin/mobile/order?order_number=".$form->model()->platform_number,"设计");
+                        OrderMonitor::orderUpdate("订单改图【{$form->model()->platform_number}】，订单链接：http://134.175.219.101:8080/admin/mobile/order?order_number=".$form->model()->platform_number,"设计");
                     }elseif ($currentStatus == '可生产'){
-                        OrderMonitor::orderUpdate("订单可生产【{$form->model()->platform_number}】，订单链接：http://123.249.25.241/admin/mobile/order?order_number=".$form->model()->platform_number,"跟单");
-                        OrderMonitor::orderUpdate("订单可生产，上传生产稿图到共享【{$form->model()->platform_number}】，订单链接：http://123.249.25.241/admin/mobile/order?order_number=".$form->model()->platform_number,"设计");
+                        OrderMonitor::orderUpdate("订单可生产【{$form->model()->platform_number}】，订单链接：http://134.175.219.101:8080/admin/mobile/order?order_number=".$form->model()->platform_number,"跟单");
+                        OrderMonitor::orderUpdate("订单可生产，上传生产稿图到共享【{$form->model()->platform_number}】，订单链接：http://134.175.219.101:8080/admin/mobile/order?order_number=".$form->model()->platform_number,"设计");
                     }
                 }
 
@@ -343,7 +343,7 @@ class NewOrderController extends AdminController
             $data = $form->updates();
             if($form->isCreating()){
                 //设计
-                OrderMonitor::orderUpdate("订单创建【{$data["platform_number"]}】，订单链接：http://123.249.25.241/admin/mobile/order?order_number=".$data["platform_number"],"设计");
+                OrderMonitor::orderUpdate("订单创建【{$data["platform_number"]}】，订单链接：http://134.175.219.101:8080/admin/mobile/order?order_number=".$data["platform_number"],"设计");
             }
         });
     }
